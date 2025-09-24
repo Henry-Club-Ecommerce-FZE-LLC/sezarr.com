@@ -1,0 +1,26 @@
+{
+  "css.validate": true,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.validate": true,
+  "scss.lint.unknownAtRules": "ignore",
+  "less.validate": true,
+  "less.lint.unknownAtRules": "ignore",
+  "tailwindCSS.validate": true,
+  "tailwindCSS.includeLanguages": {
+    "astro": "html",
+    "html": "html",
+    "javascript": "javascript",
+    "typescript": "typescript"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "([^\"'`]*)"],
+    ["className:\\s*?[\"'`]([^\"'`]*).*?[\"'`]", "([^\"'`]*)"]
+  ],
+  "emmet.includeLanguages": {
+    "astro": "html"
+  },
+  "astro.typescript.allowArbitraryAttributes": true,
+  "files.associations": {
+    "*.astro": "astro"
+  }
+}

@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+const url = 'https://www.example.com/disclaimer/';
+---
+<BaseLayout title="Disclaimer" description="Important disclaimers for Insurance Insights USA" {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 prose">
+    <h1>Disclaimer</h1>
+    <p>Insurance information is complex and varies by state and carrier. Always read your policy and consult licensed professionals.</p>
+  </section>
+</BaseLayout>

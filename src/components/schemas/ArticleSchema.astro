@@ -1,0 +1,180 @@
+---
+import { SITE } from '../../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  publishedDate: string;
+  modifiedDate?: string;
+  author?: {
+    name: string;
+    url: string;
+    image?: string;
+  };
+  category?: string;
+  tags?: string[];
+  wordCount?: number;
+  readingTime?: string;
+  image?: string;
+}
+
+const {
+  title,
+  description,
+  url,
+  publishedDate,
+  modifiedDate,
+  author = {
+    name: 'Sezarr Editorial Team',
+    url: `${SITE.URL}/authors/editorial-team/`,
+    image: `${SITE.URL}/images/editorial-team.jpg`
+  },
+  category = 'Insurance',
+  tags = [],
+  wordCount = 2500,
+  readingTime = '8-12 minutes',
+  image = `${SITE.URL}/og-default.jpg`
+} = Astro.props;
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": url,
+  "image": {
+    "@type": "ImageObject",
+    "url": image,
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Person",
+    "name": author.name,
+    "url": author.url,
+    ...(author.image && {
+      "image": {
+        "@type": "ImageObject",
+        "url": author.image
+      }
+    })
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": `${SITE.URL}/#organization`,
+    "name": SITE.NAME,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${SITE.URL}/logo-512.png`,
+      "width": 512,
+      "height": 512
+    }
+  },
+  "datePublished": new Date(publishedDate).toISOString(),
+  "dateModified": modifiedDate ? new Date(modifiedDate).toISOString() : new Date().toISOString(),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": url
+  },
+  "articleSection": category,
+  "keywords": tags.join(', '),
+  "wordCount": wordCount,
+  "timeRequired": readingTime,
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "hasPart": [
+    {
+      "@type": "WebPageElement",
+      "isAccessibleForFree": true,
+      "cssSelector": ".article-content"
+    }
+  ],
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", "h2", ".article-summary"]
+  }
+};
+
+// Add HowTo schema if it's a guide
+const howToSchema = title.toLowerCase().includes('guide') || title.toLowerCase().includes('how to') ? {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": title,
+  "description": description,
+  "image": {
+    "@type": "ImageObject",
+    "url": image
+  },
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": "0"
+  },
+  "supply": [],
+  "tool": [],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Research Insurance Options",
+      "text": "Compare different insurance providers and coverage options",
+      "url": `${url}#step-1`
+    },
+    {
+      "@type": "HowToStep", 
+      "name": "Calculate Your Needs",
+      "text": "Use our calculators to determine appropriate coverage levels",
+      "url": `${url}#step-2`
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Compare Quotes",
+      "text": "Get quotes from multiple providers to find the best rates",
+      "url": `${url}#step-3`
+    }
+  ],
+  "totalTime": readingTime,
+  "author": {
+    "@type": "Person",
+    "name": author.name
+  }
+} : null;
+
+// FAQ schema for comprehensive guides
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `What is ${category.toLowerCase()} insurance?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": description
+      }
+    },
+    {
+      "@type": "Question",
+      "name": `How much does ${category.toLowerCase()} insurance cost?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `${category} insurance costs vary based on coverage levels, deductibles, and personal factors. Use our calculator to get personalized estimates.`
+      }
+    },
+    {
+      "@type": "Question",
+      "name": `Do I need ${category.toLowerCase()} insurance?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `${category} insurance provides financial protection and may be required by law or lenders. Our guide explains when it's necessary.`
+      }
+    }
+  ]
+};
+
+// Combine schemas
+const schemas = [articleSchema, faqSchema];
+if (howToSchema) schemas.push(howToSchema);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schemas)}></script>

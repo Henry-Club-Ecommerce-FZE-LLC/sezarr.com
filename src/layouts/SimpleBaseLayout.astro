@@ -1,0 +1,78 @@
+---
+import '../styles/base.css';
+import { SITE } from "../config/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  url?: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+  publishedDate?: string;
+  modifiedDate?: string;
+  author?: {
+    name: string;
+    url: string;
+  };
+  category?: string;
+  tags?: string[];
+  breadcrumbs?: any[];
+}
+
+const {
+  title = SITE.TITLE,
+  description = SITE.DESCRIPTION,
+  url = SITE.URL,
+  image = SITE.IMAGE,
+  type = "website",
+  noindex = false,
+  publishedDate,
+  modifiedDate,
+  author,
+  category,
+  tags = [],
+  breadcrumbs = [],
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="min-h-full flex flex-col bg-white text-gray-900">
+    <header class="border-b bg-white sticky top-0 z-50">
+      <div class="mx-auto w-full max-w-6xl px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <a href="/" class="font-bold text-xl text-gray-900 no-underline hover:text-blue-600 transition-colors">
+              <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Sezarr</span>
+            </a>
+          </div>
+          <nav class="hidden md:flex gap-6 text-sm">
+            <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+            <a href="/auto-insurance/" class="hover:text-blue-600 transition-colors">Auto</a>
+            <a href="/tools/" class="hover:text-blue-600 transition-colors">Tools</a>
+            <a href="/about/" class="hover:text-blue-600 transition-colors">About</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+    
+    <main id="main" class="flex-1" role="main">
+      <div class="main-content">
+        <slot />
+      </div>
+    </main>
+    
+    <footer class="border-t mt-12" role="contentinfo">
+      <div class="mx-auto w-full max-w-6xl px-4 py-8 text-sm text-gray-600">
+        <p>&copy; 2025 {SITE.NAME}. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

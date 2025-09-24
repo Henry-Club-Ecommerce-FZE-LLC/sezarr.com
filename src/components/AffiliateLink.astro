@@ -1,0 +1,6 @@
+---
+const { href, rel = 'noopener sponsored', class: klass = '', children } = Astro.props as any;
+---
+<a href={href} rel={rel} data-affiliate="true" class={klass}>
+  <slot />
+</a>

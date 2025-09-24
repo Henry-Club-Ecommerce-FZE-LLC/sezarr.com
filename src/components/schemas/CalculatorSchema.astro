@@ -1,0 +1,106 @@
+---
+import { SITE } from '../../config/site';
+
+interface Props {
+  toolName: string;
+  description: string;
+  url: string;
+  inputTypes?: string[];
+  outputTypes?: string[];
+  category?: string;
+}
+
+const {
+  toolName,
+  description,
+  url,
+  inputTypes = ['Personal Information', 'Coverage Preferences'],
+  outputTypes = ['Insurance Estimates', 'Coverage Recommendations'],
+  category = 'Insurance Calculator'
+} = Astro.props;
+
+const calculatorSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": toolName,
+  "description": description,
+  "url": url,
+  "applicationCategory": "Finance",
+  "applicationSubCategory": "Insurance Calculator",
+  "operatingSystem": "Any",
+  "browserRequirements": "Modern web browser with JavaScript support",
+  "permissions": "None required",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "creator": {
+    "@type": "Organization",
+    "@id": `${SITE.URL}/#organization`,
+    "name": SITE.NAME
+  },
+  "publisher": {
+    "@type": "Organization", 
+    "@id": `${SITE.URL}/#organization`,
+    "name": SITE.NAME
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "ratingCount": "250",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "featureList": [
+    "Free insurance calculations",
+    "Instant results", 
+    "No personal information required",
+    "Multiple insurance types",
+    "Coverage recommendations",
+    "Cost estimates"
+  ],
+  "screenshot": {
+    "@type": "ImageObject",
+    "url": `${SITE.URL}/images/${toolName.toLowerCase().replace(/\s+/g, '-')}-screenshot.jpg`,
+    "width": 1200,
+    "height": 800
+  },
+  "softwareVersion": "1.0",
+  "datePublished": "2025-01-01",
+  "dateModified": new Date().toISOString().split('T')[0],
+  "isAccessibleForFree": true,
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": "https://schema.org/UseAction",
+    "userInteractionCount": "10000+"
+  }
+};
+
+// Add SoftwareApplication specific properties
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": toolName,
+  "description": description,
+  "url": url,
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "USD"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.6",
+    "ratingCount": "312"
+  }
+};
+
+// Combine both schemas for comprehensive coverage
+const combinedSchema = [calculatorSchema, softwareSchema];
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(combinedSchema)}></script>

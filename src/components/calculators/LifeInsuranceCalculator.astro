@@ -1,0 +1,320 @@
+---
+// Life Insurance Needs Calculator - Interactive Tool
+---
+<div class="bg-white dark:bg-gray-900 rounded-xl border shadow-lg p-6 max-w-4xl mx-auto">
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Life Insurance Needs Calculator</h2>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Calculate how much life insurance coverage your family needs</p>
+  </div>
+
+  <form id="life-calc-form" class="space-y-6">
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Financial Information -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Current Financial Situation</h3>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Annual Income</label>
+          <input type="number" id="annual-income" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="75000" min="0" max="1000000">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Savings & Investments</label>
+          <input type="number" id="current-savings" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="50000" min="0" max="10000000">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Outstanding Debts (Mortgage, Credit Cards, etc.)</label>
+          <input type="number" id="total-debts" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="250000" min="0" max="10000000">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Monthly Living Expenses</label>
+          <input type="number" id="monthly-expenses" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="4500" min="0" max="50000">
+        </div>
+      </div>
+
+      <!-- Family Information -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Family Details</h3>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Age</label>
+          <select id="your-age" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="25">20-29</option>
+            <option value="35" selected>30-39</option>
+            <option value="45">40-49</option>
+            <option value="55">50-59</option>
+            <option value="65">60+</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spouse's Annual Income</label>
+          <input type="number" id="spouse-income" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="45000" min="0" max="1000000">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Children</label>
+          <select id="num-children" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+            <option value="3">3</option>
+            <option value="4">4+</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Years Until Retirement</label>
+          <select id="years-to-retirement" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="10">10 years</option>
+            <option value="15">15 years</option>
+            <option value="20">20 years</option>
+            <option value="25" selected>25 years</option>
+            <option value="30">30 years</option>
+            <option value="35">35+ years</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">College Planning</label>
+          <select id="college-planning" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="none">No college funding needed</option>
+            <option value="partial">Partial college funding</option>
+            <option value="full" selected>Full college funding</option>
+            <option value="premium">Premium/Private college funding</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <button type="button" id="calculate-life-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors">
+        Calculate Life Insurance Needs
+      </button>
+    </div>
+  </form>
+
+  <!-- Results Section -->
+  <div id="life-results" class="hidden mt-8 space-y-6">
+    <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
+      <h3 class="text-xl font-bold text-green-900 dark:text-green-100 mb-4">Your Life Insurance Recommendation</h3>
+      
+      <div class="text-center mb-6">
+        <div class="text-4xl font-bold text-green-700 dark:text-green-300" id="total-coverage">$0</div>
+        <div class="text-sm text-green-600 dark:text-green-400">Recommended Total Coverage</div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-3">
+          <h4 class="font-semibold text-green-800 dark:text-green-200">Coverage Breakdown</h4>
+          <div class="flex justify-between py-2 border-b border-green-200">
+            <span class="text-sm">Income Replacement</span>
+            <span id="income-replacement" class="font-medium text-green-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-green-200">
+            <span class="text-sm">Debt Coverage</span>
+            <span id="debt-coverage" class="font-medium text-green-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-green-200">
+            <span class="text-sm">Education Funding</span>
+            <span id="education-funding" class="font-medium text-green-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-green-200">
+            <span class="text-sm">Final Expenses</span>
+            <span id="final-expenses" class="font-medium text-green-700"></span>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <h4 class="font-semibold text-green-800 dark:text-green-200">Policy Recommendations</h4>
+          <div class="text-sm space-y-2">
+            <div class="bg-white dark:bg-green-900/40 p-3 rounded">
+              <div class="font-medium">Term Life Insurance</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300" id="term-recommendation"></div>
+            </div>
+            <div class="bg-white dark:bg-green-900/40 p-3 rounded">
+              <div class="font-medium">Estimated Monthly Premium</div>
+              <div class="text-xs text-gray-600 dark:text-gray-300" id="premium-estimate"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">💡 Key Considerations</h4>
+        <div id="life-explanation" class="text-sm text-blue-700 dark:text-blue-300"></div>
+      </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg p-6 text-center">
+      <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Ready to Get Life Insurance Quotes?</h4>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">Compare rates from top life insurance companies with your recommended coverage amount.</p>
+      <a href="/life-insurance/" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors mr-4">
+        Compare Life Insurance
+      </a>
+      <button id="share-life-results" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+        Share Results
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('life-calc-form');
+  const calculateBtn = document.getElementById('calculate-life-btn');
+  const results = document.getElementById('life-results');
+
+  calculateBtn.addEventListener('click', function() {
+    const annualIncome = parseInt(document.getElementById('annual-income').value) || 0;
+    const currentSavings = parseInt(document.getElementById('current-savings').value) || 0;
+    const totalDebts = parseInt(document.getElementById('total-debts').value) || 0;
+    const monthlyExpenses = parseInt(document.getElementById('monthly-expenses').value) || 0;
+    const yourAge = parseInt(document.getElementById('your-age').value);
+    const spouseIncome = parseInt(document.getElementById('spouse-income').value) || 0;
+    const numChildren = parseInt(document.getElementById('num-children').value);
+    const yearsToRetirement = parseInt(document.getElementById('years-to-retirement').value);
+    const collegePlanning = document.getElementById('college-planning').value;
+
+    // Calculate life insurance needs
+    const recommendation = calculateLifeInsurance(
+      annualIncome, currentSavings, totalDebts, monthlyExpenses,
+      yourAge, spouseIncome, numChildren, yearsToRetirement, collegePlanning
+    );
+    
+    // Display results
+    displayLifeResults(recommendation);
+    
+    // Track analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'calculator_use', {
+        event_category: 'engagement',
+        event_label: 'life_insurance_calculator',
+        custom_parameters: {
+          annual_income: annualIncome,
+          num_children: numChildren,
+          coverage_amount: recommendation.totalCoverage
+        }
+      });
+    }
+  });
+
+  function calculateLifeInsurance(income, savings, debts, monthlyExpenses, age, spouseIncome, children, yearsToRetirement, collegePlanning) {
+    let incomeReplacement = 0;
+    let debtCoverage = debts;
+    let educationFunding = 0;
+    let finalExpenses = 15000; // Average funeral and final expenses
+    let explanation = [];
+
+    // Income replacement calculation (DIME method enhanced)
+    const netIncomeToReplace = Math.max(0, income - spouseIncome);
+    const incomeMultiplier = Math.min(yearsToRetirement, 20); // Cap at 20 years
+    incomeReplacement = netIncomeToReplace * incomeMultiplier;
+    
+    if (netIncomeToReplace > 0) {
+      explanation.push(`Income replacement covers ${incomeMultiplier} years of your net income contribution (${formatCurrency(netIncomeToReplace)}/year).`);
+    }
+
+    // Education funding
+    const collegeMultipliers = {
+      'none': 0,
+      'partial': 25000,
+      'full': 50000,
+      'premium': 80000
+    };
+    educationFunding = children * collegeMultipliers[collegePlanning];
+    
+    if (educationFunding > 0) {
+      explanation.push(`Education funding assumes ${formatCurrency(collegeMultipliers[collegePlanning])} per child for college expenses.`);
+    }
+
+    // Adjust for existing savings
+    const totalNeeds = incomeReplacement + debtCoverage + educationFunding + finalExpenses;
+    const totalCoverage = Math.max(0, totalNeeds - currentSavings);
+
+    // Premium estimation (rough approximation)
+    const baseRate = age < 30 ? 0.15 : age < 40 ? 0.20 : age < 50 ? 0.35 : 0.75;
+    const annualPremium = (totalCoverage / 1000) * baseRate * 12;
+    const monthlyPremium = annualPremium / 12;
+
+    // Term recommendation
+    const recommendedTerm = yearsToRetirement > 20 ? 30 : yearsToRetirement > 15 ? 20 : 15;
+    const termRecommendation = `${recommendedTerm}-year term life insurance recommended to cover dependents until retirement.`;
+
+    if (currentSavings > 0) {
+      explanation.push(`Your existing savings of ${formatCurrency(currentSavings)} reduces the coverage needed.`);
+    }
+
+    explanation.push(`Consider term life insurance as it's typically the most cost-effective for family protection.`);
+
+    return {
+      totalCoverage,
+      incomeReplacement,
+      debtCoverage,
+      educationFunding,
+      finalExpenses,
+      monthlyPremium,
+      termRecommendation,
+      explanation: explanation.join(' ')
+    };
+  }
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  }
+
+  function displayLifeResults(recommendation) {
+    document.getElementById('total-coverage').textContent = formatCurrency(recommendation.totalCoverage);
+    document.getElementById('income-replacement').textContent = formatCurrency(recommendation.incomeReplacement);
+    document.getElementById('debt-coverage').textContent = formatCurrency(recommendation.debtCoverage);
+    document.getElementById('education-funding').textContent = formatCurrency(recommendation.educationFunding);
+    document.getElementById('final-expenses').textContent = formatCurrency(recommendation.finalExpenses);
+    document.getElementById('premium-estimate').textContent = `Approximately ${formatCurrency(recommendation.monthlyPremium)}/month`;
+    document.getElementById('term-recommendation').textContent = recommendation.termRecommendation;
+    document.getElementById('life-explanation').textContent = recommendation.explanation;
+    
+    results.classList.remove('hidden');
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Share functionality
+  document.getElementById('share-life-results').addEventListener('click', function() {
+    const url = window.location.href;
+    const text = 'I just calculated my life insurance needs! This calculator helped me determine the right coverage.';
+    
+    if (navigator.share) {
+      navigator.share({ title: 'Life Insurance Calculator Results', text, url });
+    } else {
+      navigator.clipboard.writeText(text + ' ' + url).then(() => {
+        alert('Results copied to clipboard!');
+      });
+    }
+  });
+});
+</script>
+
+<style>
+  /* Enhanced styling for the life insurance calculator */
+  #life-calc-form input:focus,
+  #life-calc-form select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    #life-calc-form input,
+    #life-calc-form select {
+      background-color: rgb(31 41 55);
+      border-color: rgb(75 85 99);
+      color: rgb(243 244 246);
+    }
+  }
+</style>

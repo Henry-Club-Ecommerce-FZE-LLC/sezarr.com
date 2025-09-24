@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { 
+      category: post.data.category, 
+      slug: post.slug 
+    },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST TEMPLATE</title>
+</head>
+<body>
+  <div>
+    <h1>TEMPLATE TEST - SHOULD RENDER</h1>
+    <p>This is a test to see if the template renders at all.</p>
+    <Content />
+  </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+---
+const { src, alt = '', width, height, class: klass = '' } = Astro.props as { src: string; alt?: string; width?: number; height?: number; class?: string };
+---
+<img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" class={klass} />

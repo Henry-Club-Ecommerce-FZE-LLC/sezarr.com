@@ -1,0 +1,38 @@
+---
+interface Props {
+  items: {
+    label: string;
+    href: string;
+  }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="py-2 text-sm" role="navigation">
+  <ol class="list-none p-0 inline-flex items-center space-x-1" role="list" itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li class="inline-flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1" itemprop="item">
+        <span itemprop="name">Home</span>
+      </a>
+      <meta itemprop="position" content="1" />
+      <span class="mx-1 text-gray-500 dark:text-gray-400" aria-hidden="true">/</span>
+    </li>
+    {items.map((item, index) => (
+      <li class="inline-flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a 
+          href={item.href} 
+          class={`${index === items.length - 1 ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1`}
+          itemprop="item"
+          aria-current={index === items.length - 1 ? 'page' : undefined}
+        >
+          <span itemprop="name">{item.label}</span>
+        </a>
+        <meta itemprop="position" content={`${index + 2}`} />
+        {index < items.length - 1 && (
+          <span class="mx-1 text-gray-500 dark:text-gray-400" aria-hidden="true">/</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

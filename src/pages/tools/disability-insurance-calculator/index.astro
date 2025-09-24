@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DisabilityInsuranceCalculator from '../../../components/calculators/DisabilityInsuranceCalculator.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import FAQ from '../../../components/FAQ.astro';
+import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
+import NewsletterCallout from '../../../components/NewsletterCallout.astro';
+
+const title = "Disability Insurance Calculator - Calculate Your Coverage Needs";
+const description = "Free disability insurance calculator to determine how much coverage you need. Calculate premiums, coverage gaps, and get personalized recommendations for income protection.";
+const keywords = "disability insurance calculator, coverage calculator, disability benefits, income protection, premium calculator";
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Disability Insurance Calculator', href: '/tools/disability-insurance-calculator/' }
+];
+
+const faqs = [
+  {
+    question: "How much of my income should disability insurance replace?",
+    answer: "Most experts recommend replacing 60-70% of your pre-tax income. This amount, combined with the fact that benefits are often tax-free, should cover most of your essential expenses during a disability."
+  },
+  {
+    question: "What factors affect my disability insurance premiums?",
+    answer: "Key factors include your age, gender, occupation, health status, benefit amount, waiting period, and benefit period. Younger, healthier individuals in low-risk occupations typically pay less."
+  },
+  {
+    question: "Should I get short-term or long-term disability insurance?",
+    answer: "Ideally, you should have both. Short-term covers immediate needs (first 3-12 months), while long-term provides protection for extended disabilities. Many people start with long-term and add short-term later."
+  },
+  {
+    question: "Can I get disability insurance if I have health conditions?",
+    answer: "It depends on the condition and severity. Some conditions may be excluded, result in higher premiums, or prevent coverage entirely. It's always best to apply while you're healthy."
+  },
+  {
+    question: "How accurate is this disability insurance calculator?",
+    answer: "This calculator provides reasonable estimates based on industry averages and standard formulas. However, actual premiums and coverage needs vary by insurer and individual circumstances. Always get professional quotes for accurate pricing."
+  }
+];
+---
+
+<BaseLayout 
+  title={title} 
+  description={description} 
+  keywords={keywords}
+  ogImage="/images/disability-calculator-tool.jpg"
+>
+  <main class="flex-1">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          Disability Insurance Calculator
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+          Calculate how much disability insurance coverage you need to protect your income and lifestyle. 
+          Get personalized recommendations and premium estimates in minutes.
+        </p>
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md inline-block">
+          <div class="text-sm text-gray-600 dark:text-gray-300">Quick Fact:</div>
+          <div class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">1 in 4</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">people will become disabled during their career</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="py-12 bg-white dark:bg-gray-800">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <DisabilityInsuranceCalculator />
+      </div>
+    </section>
+
+    <!-- Understanding the Results -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Understanding Your Results
+        </h2>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Coverage Amount</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              The recommended coverage is calculated based on 60-70% of your income, which is the standard 
+              replacement ratio that balances adequate protection with affordable premiums.
+            </p>
+            <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+              <li>• Most insurers limit total benefits to 60-80% of income</li>
+              <li>• Benefits are often tax-free if you pay premiums</li>
+              <li>• Consider your essential expenses when choosing coverage</li>
+            </ul>
+          </div>
+
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Premium Estimates</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Premium estimates are based on industry averages and may vary significantly between insurers. 
+              Actual rates depend on detailed underwriting and policy features.
+            </p>
+            <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+              <li>• Premiums typically range from 1-3% of income</li>
+              <li>• Longer waiting periods reduce costs</li>
+              <li>• Group coverage is usually cheaper than individual</li>
+            </ul>
+          </div>
+
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Coverage Gap</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              The coverage gap shows how much additional protection you need beyond your current coverage 
+              (including group benefits and Social Security estimates).
+            </p>
+            <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+              <li>• Social Security disability is limited and hard to qualify for</li>
+              <li>• Group coverage may not be sufficient for higher earners</li>
+              <li>• Individual policies fill gaps in employer coverage</li>
+            </ul>
+          </div>
+
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Next Steps</h3>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">
+              Use these results as a starting point for discussions with insurance professionals. 
+              Get quotes from multiple insurers to find the best coverage and rates.
+            </p>
+            <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-2">
+              <li>• Compare quotes from 3-5 different insurers</li>
+              <li>• Review policy definitions and exclusions</li>
+              <li>• Consider working with an independent agent</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Important Considerations -->
+    <section class="py-12 bg-white dark:bg-gray-800">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Important Considerations
+        </h2>
+        
+        <div class="space-y-6">
+          <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-300 mb-3">
+              Own-Occupation vs Any-Occupation
+            </h3>
+            <p class="text-blue-800 dark:text-blue-200">
+              Own-occupation policies pay if you can't perform your specific job, even if you could work elsewhere. 
+              Any-occupation policies only pay if you can't work in any suitable job. Own-occupation is more expensive but provides better protection.
+            </p>
+          </div>
+
+          <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-green-900 dark:text-green-300 mb-3">
+              Benefit Period Options
+            </h3>
+            <p class="text-green-800 dark:text-green-200">
+              You can choose benefit periods from 2 years to age 65-67. Longer benefit periods cost more but provide 
+              protection against long-term disabilities. Most disabilities are short-term, but the financial impact of 
+              long-term disabilities is much greater.
+            </p>
+          </div>
+
+          <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-yellow-900 dark:text-yellow-300 mb-3">
+              Waiting Period (Elimination Period)
+            </h3>
+            <p class="text-yellow-800 dark:text-yellow-200">
+              The waiting period is how long you must be disabled before benefits begin. Common options are 30, 60, 90, 
+              180, or 365 days. Longer waiting periods significantly reduce premiums but require you to have enough 
+              savings to bridge the gap.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Affiliate Disclosure -->
+    <AffiliateDisclosure />
+
+    <!-- FAQ Section -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Frequently Asked Questions
+        </h2>
+        <FAQ items={faqs} />
+      </div>
+    </section>
+
+    <!-- Newsletter Callout -->
+    <NewsletterCallout />
+  </main>
+</BaseLayout>

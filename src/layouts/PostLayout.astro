@@ -1,0 +1,266 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AdSenseBlock from '../components/AdSenseBlock.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import AuthorBadge from '../components/AuthorBadge.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from "../config/site";
+import ResponsivePicture from "../components/ResponsivePicture.astro";
+import NewsletterCallout from "../components/NewsletterCallout.astro";
+
+// Import all new enhancement components
+import SocialShare from '../components/SocialShare.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import CategoryTag from '../components/CategoryTag.astro';
+import ReadingProgressBar from '../components/ReadingProgressBar.astro';
+import ArticleHeader from '../components/ArticleHeader.astro';
+import ArticleSummary from '../components/ArticleSummary.astro';
+import ContentBox from '../components/ContentBox.astro';
+import InteractiveElements from '../components/InteractiveElements.astro';
+import TextHighlighting from '../components/TextHighlighting.astro';
+import RelatedArticles from '../components/RelatedArticles.astro';
+import RecommendedTools from '../components/RecommendedTools.astro';
+import TrustIndicators from '../components/TrustIndicators.astro';
+import EnhancedSchema from '../components/EnhancedSchema.astro';
+import MobileEnhancements from '../components/MobileEnhancements.astro';
+
+interface Props {
+  frontmatter: any;
+  breadcrumbs?: { label: string; href: string; }[];
+  url?: string;
+}
+
+const { frontmatter, breadcrumbs, url: propUrl } = Astro.props;
+const authors = await getCollection('authors');
+const posts = await getCollection('posts'); // For related articles
+
+// Try to get tools collection, fallback to empty array if it doesn't exist
+let tools = [];
+try {
+  tools = await getCollection('tools');
+} catch (error) {
+  // Tools collection doesn't exist, use empty array
+  tools = [];
+}
+const authorEntry = authors.find((a) => a.slug === frontmatter.author?.slug || a.slug === frontmatter.author);
+const reviewerEntry = frontmatter.reviewedBy ? authors.find((a) => a.slug === frontmatter.reviewedBy?.slug || a.slug === frontmatter.reviewedBy) : undefined;
+const siteUrl = SITE.URL;
+const url = propUrl || `${siteUrl}/${frontmatter.category}/${Astro.url.pathname.split('/').pop()?.replace('.html', '') || ''}`;
+
+// Get related content
+const relatedPosts = posts?.filter(post => 
+  post.data.category === frontmatter.category && 
+  post.slug !== Astro.params.slug
+).slice(0, 3) || [];
+
+const relatedTools = tools?.filter(tool => 
+  tool.data.category === frontmatter.category
+).slice(0, 3) || [];
+
+// Generate breadcrumbs if not provided
+const defaultBreadcrumbs = [
+  { label: 'Home', href: '/' },
+  { 
+    label: frontmatter.category.charAt(0).toUpperCase() + frontmatter.category.slice(1) + ' Insurance', 
+    href: `/${frontmatter.category}-insurance` 
+  },
+  { 
+    label: frontmatter.title, 
+    href: `/${frontmatter.category}/${frontmatter.slug || Astro.params.slug}`
+  }
+];
+
+const finalBreadcrumbs = breadcrumbs || defaultBreadcrumbs;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: frontmatter.title,
+    description: frontmatter.description,
+    datePublished: frontmatter.pubDate,
+    dateModified: frontmatter.updatedDate || frontmatter.pubDate,
+    author: authorEntry ? [{"@type":"Person","name": authorEntry.data.name, url: `${siteUrl}/authors/${authorEntry.slug}/`, sameAs: authorEntry.data.sameAs}] : undefined,
+    reviewedBy: reviewerEntry ? {"@type":"Person","name": reviewerEntry.data.name, url: `${siteUrl}/authors/${reviewerEntry.slug}/`, sameAs: reviewerEntry.data.sameAs } : undefined,
+    mainEntityOfPage: url,
+    image: frontmatter.heroImage ? `${siteUrl}${frontmatter.heroImage}` : `${siteUrl}/og-default.jpg`,
+    publisher: {"@type":"Organization","name":"Sezarr","logo":{"@type":"ImageObject","url":`${siteUrl}/logo-512.png`}}
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: finalBreadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": crumb.label,
+      "item": siteUrl + crumb.href
+    }))
+  }
+];
+---
+<BaseLayout title={frontmatter.title} description={frontmatter.description} url={url} image={frontmatter.heroImage || '/og-default.jpg'} type="article" {schema}>
+  <!-- Reading Progress Bar -->
+  <ReadingProgressBar />
+  
+  <!-- Mobile Enhancements -->
+  <MobileEnhancements />
+  
+  <!-- Text Highlighting -->
+  <TextHighlighting />
+  
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 grid lg:grid-cols-[1fr_280px] gap-8">
+    <article class="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 prose-a:font-medium relative">
+      <!-- Breadcrumbs -->
+      <Breadcrumbs items={finalBreadcrumbs.map(crumb => ({
+        name: crumb.label,
+        url: crumb.href
+      }))} />
+
+      <!-- Article Header with Enhanced Info -->
+      <div class="article-header-section mb-8">
+        <h1 class="mb-4">{frontmatter.title}</h1>
+        
+        <!-- Category and Reading Time -->
+        <div class="flex flex-wrap items-center gap-4 mb-4">
+          <CategoryTag category={frontmatter.category} />
+          <ReadingTime />
+        </div>
+
+        <!-- Enhanced Article Header -->
+        <ArticleHeader 
+          author={authorEntry}
+          reviewer={reviewerEntry}
+          pubDate={frontmatter.pubDate}
+          updatedDate={frontmatter.updatedDate}
+          reviewedDate={frontmatter.reviewedDate}
+        />
+
+        <!-- Trust Indicators -->
+        <TrustIndicators 
+          author={authorEntry}
+          updatedDate={frontmatter.updatedDate}
+          factChecked={frontmatter.factChecked}
+          sources={frontmatter.sources}
+        />
+      </div>
+
+      <!-- Hero Image -->
+      {frontmatter.heroImage && (
+        <div class="mt-4 mb-8">
+          <ResponsivePicture 
+            src={frontmatter.heroImage} 
+            alt={frontmatter.title} 
+            width={1200} 
+            height={630} 
+            class="w-full h-auto rounded" 
+            priority={true} 
+          />
+        </div>
+      )}
+
+      <!-- Article Summary -->
+      {frontmatter.summary && (
+        <ArticleSummary 
+          summary={frontmatter.summary}
+          keyPoints={frontmatter.keyPoints}
+        />
+      )}
+
+      <!-- Social Share (Top) -->
+      <div class="mb-8">
+        <SocialShare 
+          url={url}
+          title={frontmatter.title}
+          description={frontmatter.description}
+          position="top"
+        />
+      </div>
+
+      <!-- Affiliate Disclosure -->
+      {frontmatter.affiliate && <AffiliateDisclosure compact={true} />}
+      
+      <!-- Article Content -->
+      <div class="article-content">
+        <slot />
+      </div>
+
+      <!-- Interactive Elements -->
+      <div class="my-8">
+        <InteractiveElements 
+          articleId={frontmatter.slug || Astro.params.slug}
+          title={frontmatter.title}
+          url={url}
+        />
+      </div>
+
+      <!-- Related Tools Recommendations -->
+      {relatedTools?.length > 0 && (
+        <div class="my-8">
+          <RecommendedTools 
+            tools={relatedTools}
+            category={frontmatter.category}
+          />
+        </div>
+      )}
+
+      <!-- Social Share (Bottom) -->
+      <div class="my-8">
+        <SocialShare 
+          url={url}
+          title={frontmatter.title}
+          description={frontmatter.description}
+          position="bottom"
+        />
+      </div>
+
+      <!-- Author Card -->
+      {authorEntry && <AuthorCard author={authorEntry} />}
+
+      <!-- Related Articles -->
+      {relatedPosts?.length > 0 && (
+        <div class="my-8">
+          <RelatedArticles 
+            articles={relatedPosts}
+            currentSlug={frontmatter.slug || Astro.params.slug}
+          />
+        </div>
+      )}
+
+      <!-- Newsletter -->
+      <NewsletterCallout />
+      
+      <!-- AdSense -->
+      <AdSenseBlock />
+    </article>
+
+    <!-- Sidebar with Table of Contents -->
+    <aside class="relative">
+      <div class="sticky top-8">
+        <TableOfContents />
+      </div>
+    </aside>
+  </section>
+
+  <!-- Enhanced Schema -->
+  <EnhancedSchema 
+    title={frontmatter.title}
+    description={frontmatter.description}
+    url={url}
+    publishedDate={frontmatter.pubDate || '2025-01-01'}
+    modifiedDate={frontmatter.updatedDate}
+    author={authorEntry ? {
+      name: authorEntry.data.name,
+      url: `${siteUrl}/authors/${authorEntry.slug}/`,
+      image: authorEntry.data.image
+    } : undefined}
+    category={frontmatter.category}
+    tags={frontmatter.tags}
+    image={frontmatter.heroImage}
+    faqs={frontmatter.faqs}
+    howToSteps={frontmatter.howToSteps}
+    breadcrumbs={finalBreadcrumbs}
+  />
+</BaseLayout>

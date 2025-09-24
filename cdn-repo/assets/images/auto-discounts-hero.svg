@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Smart Auto Insurance Discounts Illustration</title>
+  <desc id="desc">A car with percentage tags representing common auto insurance discounts like safe driver, bundling, and telematics.</desc>
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0b1220"/>
+  <g transform="translate(80,80)">
+    <rect x="0" y="380" width="1040" height="8" rx="4" fill="#1f2937"/>
+    <g transform="translate(120,220)">
+      <rect x="0" y="90" width="680" height="80" rx="40" fill="#111827" stroke="#374151" stroke-width="2"/>
+      <rect x="30" y="40" width="620" height="60" rx="30" fill="url(#g1)"/>
+      <circle cx="120" cy="160" r="46" fill="#0f172a" stroke="#64748b" stroke-width="6"/>
+      <circle cx="560" cy="160" r="46" fill="#0f172a" stroke="#64748b" stroke-width="6"/>
+      <rect x="210" y="110" width="220" height="18" rx="9" fill="#93c5fd" opacity="0.8"/>
+      <rect x="450" y="110" width="90" height="18" rx="9" fill="#a7f3d0" opacity="0.8"/>
+    </g>
+    <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="600" fill="#e5e7eb" font-size="18">
+      <g>
+        <rect x="860" y="140" rx="8" ry="8" width="170" height="40" fill="#111827" stroke="#374151"/>
+        <text x="945" y="166" text-anchor="middle">Safe Driver -10%</text>
+      </g>
+      <g>
+        <rect x="840" y="210" rx="8" ry="8" width="200" height="40" fill="#111827" stroke="#374151"/>
+        <text x="940" y="236" text-anchor="middle">Telematics -12%</text>
+      </g>
+      <g>
+        <rect x="860" y="280" rx="8" ry="8" width="180" height="40" fill="#111827" stroke="#374151"/>
+        <text x="950" y="306" text-anchor="middle">Bundle -8%</text>
+      </g>
+    </g>
+  </g>
+</svg>

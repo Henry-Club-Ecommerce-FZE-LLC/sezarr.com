@@ -1,0 +1,155 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const categories = [...new Set(posts.map(post => post.data.category))];
+  
+  return categories.map((category) => ({
+    params: { category },
+    props: { 
+      category,
+      posts: posts.filter(post => post.data.category === category)
+        .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+    }
+  }));
+}
+
+const { category, posts } = Astro.props;
+
+// Category display names and descriptions
+const categoryInfo = {
+  'auto': { 
+    name: 'Auto Insurance', 
+    description: 'Expert guides and advice for car insurance, coverage options, and saving money on auto insurance.',
+    icon: '🚗'
+  },
+  'business': { 
+    name: 'Business Insurance', 
+    description: 'Comprehensive guides for protecting your business with the right insurance coverage.',
+    icon: '🏢'
+  },
+  'health': { 
+    name: 'Health Insurance', 
+    description: 'Navigate health insurance plans, coverage options, and healthcare costs with our expert guides.',
+    icon: '🏥'
+  },
+  'homeowners': { 
+    name: 'Home Insurance', 
+    description: 'Protect your home and belongings with comprehensive homeowners insurance guidance.',
+    icon: '🏠'
+  },
+  'life': { 
+    name: 'Life Insurance', 
+    description: 'Understand life insurance types, coverage amounts, and how to protect your family\'s financial future.',
+    icon: '💰'
+  },
+  'travel': { 
+    name: 'Travel Insurance', 
+    description: 'Stay protected while traveling with comprehensive travel insurance advice and tips.',
+    icon: '✈️'
+  },
+  'pets': { 
+    name: 'Pet Insurance', 
+    description: 'Keep your furry friends healthy with pet insurance guides and coverage recommendations.',
+    icon: '🐕'
+  },
+  'disability': { 
+    name: 'Disability Insurance', 
+    description: 'Protect your income with disability insurance coverage and expert guidance.',
+    icon: '🦽'
+  }
+};
+
+const currentCategory = categoryInfo[category] || { 
+  name: category.charAt(0).toUpperCase() + category.slice(1), 
+  description: `Expert guides and advice for ${category} insurance.`,
+  icon: '📄'
+};
+
+const title = `${currentCategory.name} Guides & Articles`;
+const description = currentCategory.description;
+const url = `https://www.sezarr.com/blog/${category}/`;
+---
+
+<BaseLayout {title} {description} {url}>
+  <div class="mx-auto max-w-4xl px-4 py-8">
+    <!-- Category Header -->
+    <div class="text-center mb-12">
+      <div class="text-6xl mb-4">{currentCategory.icon}</div>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        {currentCategory.name}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        {currentCategory.description}
+      </p>
+      <div class="mt-6 text-sm text-gray-500 dark:text-gray-500">
+        {posts.length} article{posts.length !== 1 ? 's' : ''} in this category
+      </div>
+    </div>
+
+    <!-- Articles List -->
+    <div class="space-y-8">
+      {posts.map(post => {
+        const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        return (
+          <article class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex-1">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  <a 
+                    href={`/posts/${post.slug}/`}
+                    class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  >
+                    {post.data.title}
+                  </a>
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-3">
+                  {post.data.description}
+                </p>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-500">
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {formattedDate}
+                  </time>
+                  <span class="mx-2">•</span>
+                  <span class="capitalize">{post.data.category}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <a 
+                href={`/posts/${post.slug}/`}
+                class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+              >
+                Read Article 
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Back to All Posts -->
+    <div class="text-center mt-12">
+      <a 
+        href="/posts/" 
+        class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+      >
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        View All Articles
+      </a>
+    </div>
+  </div>
+</BaseLayout>

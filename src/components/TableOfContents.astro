@@ -1,0 +1,139 @@
+---
+// Professional TOC component - desktop version only (mobile handled in layout)
+---
+
+<!-- Desktop TOC (shows in sidebar on desktop) -->
+<div class="sticky top-24 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
+  <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center border-b border-gray-200 dark:border-gray-600 pb-3">
+    <span class="mr-2">📋</span> Table of Contents
+  </h3>
+  <nav id="desktop-toc" class="space-y-2 text-sm">
+    <!-- TOC will be populated by JavaScript -->
+  </nav>
+</div>
+
+<script is:inline>
+(function() {
+  console.log('TableOfContents: Script starting');
+  
+  function initTOC() {
+    console.log('TableOfContents: Initializing TOC');
+    const mobileToc = document.getElementById('mobile-toc');
+    const desktopToc = document.getElementById('desktop-toc');
+    
+    console.log('TableOfContents: Found mobile TOC:', !!mobileToc);
+    console.log('TableOfContents: Found desktop TOC:', !!desktopToc);
+    
+    // Find only main section headings (H2) in the content - try multiple selectors
+    let headings = document.querySelectorAll('article h2[id]');
+    console.log('TableOfContents: Found headings with article h2[id]:', headings.length);
+    
+    // If no headings found, try alternative selectors
+    if (headings.length === 0) {
+      headings = document.querySelectorAll('main article h2[id]');
+      console.log('TableOfContents: Trying main article selector, found:', headings.length);
+    }
+    if (headings.length === 0) {
+      headings = document.querySelectorAll('h2[id]');
+      console.log('TableOfContents: Trying generic selector, found:', headings.length);
+    }
+    
+    console.log('TableOfContents: Found main section headings:', headings.length);
+    console.log('TableOfContents: Main sections found:', Array.from(headings).map(h => h.textContent));
+    
+    if (headings.length === 0) {
+      if (mobileToc) mobileToc.innerHTML = '<p class="text-gray-500 italic">No headings found</p>';
+      if (desktopToc) desktopToc.innerHTML = '<p class="text-gray-500 italic">No headings found</p>';
+      return;
+    }
+    
+    // Generate TOC HTML
+    let tocHTML = '';
+    headings.forEach((heading, index) => {
+      // Create ID if missing
+      if (!heading.id) {
+        const text = heading.textContent?.trim().toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        heading.id = text || `heading-${index}`;
+      }
+      
+      // All entries are H2 main sections - consistent styling
+      tocHTML += `
+        <div>
+          <a href="#${heading.id}" 
+             class="toc-link block py-2 px-3 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded border-l-2 border-transparent hover:border-blue-400 transition-all duration-200"
+             onclick="smoothScrollTo('${heading.id}')">
+            ${heading.textContent?.trim() || 'Untitled'}
+          </a>
+        </div>
+      `;
+    });
+    
+    console.log('TableOfContents: Generated TOC HTML length:', tocHTML.length);
+    
+    // Insert TOC into both mobile and desktop containers
+    if (mobileToc) mobileToc.innerHTML = tocHTML;
+    if (desktopToc) desktopToc.innerHTML = tocHTML;
+    
+    // Setup intersection observer for active states
+    setupActiveHighlighting(headings);
+  }
+  
+  // Smooth scroll function
+  window.smoothScrollTo = function(id) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
+      // Update URL after scroll
+      setTimeout(() => {
+        history.pushState(null, null, '#' + id);
+      }, 300);
+    }
+  };
+  
+  // Active highlighting with intersection observer
+  function setupActiveHighlighting(headings) {
+    let currentActive = null;
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Remove previous active
+          if (currentActive) {
+            document.querySelectorAll(`a[href="#${currentActive}"]`).forEach(link => {
+              link.classList.remove('text-blue-600', 'dark:text-blue-400', 'font-semibold', 'bg-blue-50', 'dark:bg-blue-900/30', 'border-blue-500');
+              link.classList.add('text-gray-700', 'dark:text-gray-300', 'border-transparent');
+            });
+          }
+          
+          // Add active to current
+          currentActive = entry.target.id;
+          document.querySelectorAll(`a[href="#${currentActive}"]`).forEach(link => {
+            link.classList.remove('text-gray-700', 'dark:text-gray-300', 'border-transparent');
+            link.classList.add('text-blue-600', 'dark:text-blue-400', 'font-semibold', 'bg-blue-50', 'dark:bg-blue-900/30', 'border-blue-500');
+          });
+        }
+      });
+    }, {
+      rootMargin: '-20% 0px -70% 0px',
+      threshold: 0.1
+    });
+    
+    headings.forEach(heading => observer.observe(heading));
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTOC);
+  } else {
+    initTOC();
+  }
+})();
+</script>

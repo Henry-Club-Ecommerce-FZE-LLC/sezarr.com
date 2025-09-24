@@ -1,0 +1,124 @@
+---
+interface Props {
+  title?: string;
+  points: string[];
+  expandable?: boolean;
+  variant?: 'summary' | 'takeaways' | 'highlights';
+  className?: string;
+}
+
+const { 
+  title, 
+  points, 
+  expandable = false, 
+  variant = 'summary', 
+  className = '' 
+} = Astro.props;
+
+const variantStyles = {
+  summary: {
+    bg: 'bg-blue-50 dark:bg-blue-900/20',
+    border: 'border-blue-200 dark:border-blue-800',
+    icon: '📋',
+    iconColor: 'text-blue-600 dark:text-blue-400',
+    defaultTitle: 'Article Summary'
+  },
+  takeaways: {
+    bg: 'bg-green-50 dark:bg-green-900/20',
+    border: 'border-green-200 dark:border-green-800',
+    icon: '💡',
+    iconColor: 'text-green-600 dark:text-green-400',
+    defaultTitle: 'Key Takeaways'
+  },
+  highlights: {
+    bg: 'bg-yellow-50 dark:bg-yellow-900/20',
+    border: 'border-yellow-200 dark:border-yellow-800',
+    icon: '⭐',
+    iconColor: 'text-yellow-600 dark:text-yellow-400',
+    defaultTitle: 'Highlights'
+  }
+};
+
+const style = variantStyles[variant];
+const displayTitle = title || style.defaultTitle;
+const itemsToShow = expandable ? 3 : points.length;
+const hasMore = expandable && points.length > itemsToShow;
+---
+
+<div class={`rounded-lg border p-6 ${style.bg} ${style.border} ${className}`}>
+  <div class="flex items-center gap-2 mb-4">
+    <span class={`text-2xl ${style.iconColor}`} role="img" aria-label={variant}>
+      {style.icon}
+    </span>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+      {displayTitle}
+    </h2>
+  </div>
+
+  <ul class="space-y-3" id={`${variant}-list`}>
+    {points.slice(0, itemsToShow).map((point, index) => (
+      <li class="flex items-start gap-3">
+        <span class={`flex-shrink-0 w-6 h-6 rounded-full bg-white dark:bg-gray-800 border-2 ${style.border} flex items-center justify-center text-sm font-semibold ${style.iconColor} mt-0.5`}>
+          {index + 1}
+        </span>
+        <span class="text-gray-800 dark:text-gray-200 leading-relaxed">
+          {point}
+        </span>
+      </li>
+    ))}
+    
+    {hasMore && (
+      <div class="hidden-items" style="display: none;">
+        {points.slice(itemsToShow).map((point, index) => (
+          <li class="flex items-start gap-3">
+            <span class={`flex-shrink-0 w-6 h-6 rounded-full bg-white dark:bg-gray-800 border-2 ${style.border} flex items-center justify-center text-sm font-semibold ${style.iconColor} mt-0.5`}>
+              {itemsToShow + index + 1}
+            </span>
+            <span class="text-gray-800 dark:text-gray-200 leading-relaxed">
+              {point}
+            </span>
+          </li>
+        ))}
+      </div>
+    )}
+  </ul>
+
+  {hasMore && (
+    <button 
+      type="button"
+      class={`mt-4 inline-flex items-center gap-2 text-sm font-medium ${style.iconColor} hover:underline transition-colors expand-button`}
+      onclick="toggleExpand(this)"
+      data-target={`${variant}-list`}
+    >
+      <span class="expand-text">Show {points.length - itemsToShow} more</span>
+      <svg class="w-4 h-4 transition-transform expand-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+  )}
+</div>
+
+<script>
+  function toggleExpand(button) {
+    const targetId = button.dataset.target;
+    const list = document.getElementById(targetId);
+    const hiddenItems = list.querySelector('.hidden-items');
+    const expandIcon = button.querySelector('.expand-icon');
+    const expandText = button.querySelector('.expand-text');
+    
+    if (hiddenItems.style.display === 'none') {
+      hiddenItems.style.display = 'block';
+      expandIcon.style.transform = 'rotate(180deg)';
+      expandText.textContent = 'Show less';
+    } else {
+      hiddenItems.style.display = 'none';
+      expandIcon.style.transform = 'rotate(0deg)';
+      const totalItems = button.closest('[class*="bg-"]').querySelectorAll('li').length;
+      const visibleItems = totalItems - hiddenItems.querySelectorAll('li').length;
+      expandText.textContent = `Show ${totalItems - visibleItems} more`;
+    }
+  }
+
+  // Make function globally available
+  window.toggleExpand = toggleExpand;
+</script>

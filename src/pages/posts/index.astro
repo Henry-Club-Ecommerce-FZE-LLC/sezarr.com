@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const posts = (await getCollection('posts')).sort((a,b)=> (b.data.pubDate?.getTime?.()||0) - (a.data.pubDate?.getTime?.()||0));
+const url = 'https://www.example.com/posts/';
+---
+<BaseLayout title="All Guides" description="Browse all insurance guides by Insurance Insights USA" {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">
+    <h1 class="text-3xl font-bold">All Guides</h1>
+    <ul class="mt-6 space-y-3">
+      {posts.map(p => (
+        <li>
+          <a href={`/posts/${p.slug}/`}>
+            <div class="font-semibold">{p.data.title}</div>
+            <div class="text-sm text-gray-600">{p.data.description}</div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

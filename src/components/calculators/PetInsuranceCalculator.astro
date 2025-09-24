@@ -1,0 +1,371 @@
+---
+---
+
+<div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+  <div class="mb-8">
+    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+      Pet Insurance Calculator
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300">
+      Estimate your pet insurance costs based on your pet's details and coverage preferences.
+    </p>
+  </div>
+
+  <form id="petInsuranceForm" class="space-y-6">
+    <!-- Pet Information -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Pet Type
+        </label>
+        <select id="petType" name="petType" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="dog">Dog</option>
+          <option value="cat">Cat</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Pet Age
+        </label>
+        <select id="petAge" name="petAge" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="puppy">Puppy/Kitten (0-1 year)</option>
+          <option value="young">Young Adult (1-3 years)</option>
+          <option value="adult">Adult (3-7 years)</option>
+          <option value="senior">Senior (7+ years)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Breed Category
+        </label>
+        <select id="breedCategory" name="breedCategory" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="mixed">Mixed Breed</option>
+          <option value="small">Small Purebred</option>
+          <option value="medium">Medium Purebred</option>
+          <option value="large">Large Purebred</option>
+          <option value="giant">Giant Breed</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Location
+        </label>
+        <select id="location" name="location" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="rural">Rural Area</option>
+          <option value="suburban">Suburban</option>
+          <option value="urban">Urban Area</option>
+          <option value="metro">Major Metro</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Coverage Options -->
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        Coverage Type
+      </label>
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <input type="radio" name="coverageType" value="accident" class="text-purple-600 focus:ring-purple-500">
+          <div class="ml-3">
+            <div class="font-medium text-gray-900 dark:text-white">Accident Only</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Basic protection for injuries</div>
+          </div>
+        </label>
+        <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800">
+          <input type="radio" name="coverageType" value="comprehensive" checked class="text-purple-600 focus:ring-purple-500">
+          <div class="ml-3">
+            <div class="font-medium text-gray-900 dark:text-white">Accident & Illness</div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">Complete medical coverage</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Deductible
+        </label>
+        <select id="deductible" name="deductible" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="100">$100 (Higher Premium)</option>
+          <option value="250" selected>$250 (Balanced)</option>
+          <option value="500">$500 (Lower Premium)</option>
+          <option value="1000">$1,000 (Lowest Premium)</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Reimbursement Rate
+        </label>
+        <select id="reimbursementRate" name="reimbursementRate" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+          <option value="70">70% (Lower Cost)</option>
+          <option value="80" selected>80% (Popular Choice)</option>
+          <option value="90">90% (Higher Cost)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Add-ons -->
+    <div>
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">
+        Additional Coverage (Optional)
+      </label>
+      <div class="space-y-3">
+        <label class="flex items-center">
+          <input type="checkbox" id="wellness" name="addons" value="wellness" class="text-purple-600 focus:ring-purple-500">
+          <span class="ml-3 text-gray-700 dark:text-gray-300">Wellness & Routine Care (+$15-25/month)</span>
+        </label>
+        <label class="flex items-center">
+          <input type="checkbox" id="dental" name="addons" value="dental" class="text-purple-600 focus:ring-purple-500">
+          <span class="ml-3 text-gray-700 dark:text-gray-300">Dental Coverage (+$10-15/month)</span>
+        </label>
+        <label class="flex items-center">
+          <input type="checkbox" id="alternative" name="addons" value="alternative" class="text-purple-600 focus:ring-purple-500">
+          <span class="ml-3 text-gray-700 dark:text-gray-300">Alternative Therapies (+$5-10/month)</span>
+        </label>
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-4 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+    >
+      Calculate Pet Insurance Cost
+    </button>
+  </form>
+
+  <!-- Results Section -->
+  <div id="results" class="hidden mt-8 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-700">
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Your Estimated Costs</h3>
+    
+    <div class="grid md:grid-cols-3 gap-6 mb-6">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400" id="monthlyPremium">$0</div>
+        <div class="text-sm text-gray-600 dark:text-gray-300">Monthly Premium</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-pink-600 dark:text-pink-400" id="annualCost">$0</div>
+        <div class="text-sm text-gray-600 dark:text-gray-300">Annual Cost</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="lifetimeSavings">$0</div>
+        <div class="text-sm text-gray-600 dark:text-gray-300">Potential Lifetime Savings</div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
+      <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Coverage Summary</h4>
+      <div id="coverageSummary" class="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+    </div>
+
+    <div class="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+      <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+        💡 Money-Saving Tips
+      </h4>
+      <ul class="text-sm text-yellow-700 dark:text-yellow-300 space-y-1" id="savingsTips">
+        <!-- Dynamic tips will be inserted here -->
+      </ul>
+    </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="mt-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+    <p class="text-xs text-gray-600 dark:text-gray-400">
+      <strong>Disclaimer:</strong> This calculator provides estimates based on industry averages and typical pricing. Actual costs may vary significantly based on your specific pet, location, chosen provider, and policy terms. This tool is for informational purposes only and does not constitute professional advice. Always obtain personalized quotes from insurance providers for accurate pricing.
+    </p>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('petInsuranceForm');
+    const results = document.getElementById('results');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      calculatePetInsurance();
+    });
+
+    function calculatePetInsurance() {
+      // Get form values
+      const petType = document.getElementById('petType').value;
+      const petAge = document.getElementById('petAge').value;
+      const breedCategory = document.getElementById('breedCategory').value;
+      const location = document.getElementById('location').value;
+      const coverageType = document.querySelector('input[name="coverageType"]:checked').value;
+      const deductible = parseInt(document.getElementById('deductible').value);
+      const reimbursementRate = parseInt(document.getElementById('reimbursementRate').value);
+      const addons = Array.from(document.querySelectorAll('input[name="addons"]:checked')).map(cb => cb.value);
+
+      // Base premium calculation
+      let basePremium = 0;
+
+      // Pet type factor
+      if (petType === 'dog') {
+        basePremium = 35;
+      } else {
+        basePremium = 25;
+      }
+
+      // Age factor
+      const ageMultipliers = {
+        'puppy': 0.8,
+        'young': 1.0,
+        'adult': 1.3,
+        'senior': 1.8
+      };
+      basePremium *= ageMultipliers[petAge];
+
+      // Breed factor
+      const breedMultipliers = {
+        'mixed': 0.9,
+        'small': 1.0,
+        'medium': 1.1,
+        'large': 1.2,
+        'giant': 1.4
+      };
+      basePremium *= breedMultipliers[breedCategory];
+
+      // Location factor
+      const locationMultipliers = {
+        'rural': 0.8,
+        'suburban': 1.0,
+        'urban': 1.2,
+        'metro': 1.4
+      };
+      basePremium *= locationMultipliers[location];
+
+      // Coverage type factor
+      if (coverageType === 'accident') {
+        basePremium *= 0.4;
+      }
+
+      // Deductible factor
+      const deductibleMultipliers = {
+        100: 1.3,
+        250: 1.0,
+        500: 0.8,
+        1000: 0.6
+      };
+      basePremium *= deductibleMultipliers[deductible];
+
+      // Reimbursement rate factor
+      const reimbursementMultipliers = {
+        70: 0.85,
+        80: 1.0,
+        90: 1.2
+      };
+      basePremium *= reimbursementMultipliers[reimbursementRate];
+
+      // Add-on costs
+      let addonCost = 0;
+      addons.forEach(addon => {
+        switch(addon) {
+          case 'wellness':
+            addonCost += 20;
+            break;
+          case 'dental':
+            addonCost += 12;
+            break;
+          case 'alternative':
+            addonCost += 7;
+            break;
+        }
+      });
+
+      const monthlyPremium = Math.round(basePremium + addonCost);
+      const annualCost = monthlyPremium * 12;
+      const lifetimeSavings = calculateLifetimeSavings(petType, coverageType, monthlyPremium);
+
+      // Update display
+      document.getElementById('monthlyPremium').textContent = `$${monthlyPremium}`;
+      document.getElementById('annualCost').textContent = `$${annualCost.toLocaleString()}`;
+      document.getElementById('lifetimeSavings').textContent = `$${lifetimeSavings.toLocaleString()}`;
+
+      // Update coverage summary
+      updateCoverageSummary(coverageType, deductible, reimbursementRate, addons);
+
+      // Update savings tips
+      updateSavingsTips(petAge, deductible, addons);
+
+      // Show results
+      results.classList.remove('hidden');
+      results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function calculateLifetimeSavings(petType, coverageType, monthlyPremium) {
+      const averageLifespan = petType === 'dog' ? 12 : 15;
+      const totalPremiums = monthlyPremium * 12 * averageLifespan;
+      
+      let potentialVetCosts = 0;
+      if (coverageType === 'comprehensive') {
+        potentialVetCosts = petType === 'dog' ? 25000 : 18000;
+      } else {
+        potentialVetCosts = petType === 'dog' ? 12000 : 8000;
+      }
+      
+      return Math.max(0, potentialVetCosts - totalPremiums);
+    }
+
+    function updateCoverageSummary(coverageType, deductible, reimbursementRate, addons) {
+      const summary = document.getElementById('coverageSummary');
+      let html = '';
+
+      if (coverageType === 'comprehensive') {
+        html += '<div>✅ Accidents and injuries covered</div>';
+        html += '<div>✅ Illnesses and chronic conditions covered</div>';
+        html += '<div>✅ Diagnostic tests and treatments covered</div>';
+        html += '<div>✅ Prescription medications covered</div>';
+      } else {
+        html += '<div>✅ Accidents and injuries covered</div>';
+        html += '<div>❌ Illnesses not covered (accident-only plan)</div>';
+      }
+
+      html += `<div>💰 $${deductible} annual deductible</div>`;
+      html += `<div>📊 ${reimbursementRate}% reimbursement rate</div>`;
+
+      if (addons.length > 0) {
+        html += '<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">';
+        html += '<div class="font-medium">Add-on Coverage:</div>';
+        if (addons.includes('wellness')) html += '<div>✅ Wellness & routine care</div>';
+        if (addons.includes('dental')) html += '<div>✅ Dental coverage</div>';
+        if (addons.includes('alternative')) html += '<div>✅ Alternative therapies</div>';
+        html += '</div>';
+      }
+
+      summary.innerHTML = html;
+    }
+
+    function updateSavingsTips(petAge, deductible, addons) {
+      const tips = document.getElementById('savingsTips');
+      let html = '';
+
+      if (petAge === 'senior') {
+        html += '<li>Consider enrolling younger pets early for better rates</li>';
+      }
+
+      if (deductible < 500) {
+        html += '<li>Higher deductibles can reduce monthly premiums significantly</li>';
+      }
+
+      if (!addons.includes('wellness')) {
+        html += '<li>Wellness coverage can save money on routine vet visits</li>';
+      }
+
+      html += '<li>Multi-pet discounts available with most insurers (5-10% savings)</li>';
+      html += '<li>Annual payment discounts can save 5-15% vs monthly payments</li>';
+      html += '<li>Some employers offer pet insurance as a voluntary benefit</li>';
+
+      tips.innerHTML = html;
+    }
+  });
+</script>

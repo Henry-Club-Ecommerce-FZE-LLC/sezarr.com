@@ -1,0 +1,290 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`space-y-4 ${className}`}>
+  <!-- Article Rating -->
+  <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
+      Rate this article
+    </h3>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          class="rating-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-300 transition-colors"
+          data-rating="positive"
+          onclick="submitRating(this)"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L9 7v13m7-10H9m-4-4v16"/>
+          </svg>
+          <span>Helpful</span>
+          <span class="rating-count bg-green-200 dark:bg-green-800 px-2 py-0.5 rounded text-sm font-medium">0</span>
+        </button>
+
+        <button
+          type="button"
+          class="rating-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:hover:bg-red-800 text-red-700 dark:text-red-300 transition-colors"
+          data-rating="negative"
+          onclick="submitRating(this)"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transform: rotate(180deg)">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L9 7v13m7-10H9m-4-4v16"/>
+          </svg>
+          <span>Not helpful</span>
+          <span class="rating-count bg-red-200 dark:bg-red-800 px-2 py-0.5 rounded text-sm font-medium">0</span>
+        </button>
+      </div>
+      
+      <div class="rating-thanks hidden text-sm text-gray-600 dark:text-gray-400">
+        Thank you for your feedback!
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Form -->
+  <div class="feedback-form bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700" style="display: none;">
+    <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-3">
+      Help us improve this article
+    </h4>
+    <form onsubmit="submitFeedback(event)">
+      <textarea
+        placeholder="What could we improve? (optional)"
+        class="w-full p-3 border border-blue-200 dark:border-blue-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 resize-none"
+        rows="3"
+        maxlength="500"
+      ></textarea>
+      <div class="flex items-center justify-between mt-3">
+        <span class="text-xs text-gray-500 dark:text-gray-400">
+          Your feedback helps us create better content
+        </span>
+        <div class="flex gap-2">
+          <button
+            type="button"
+            onclick="hideFeedbackForm()"
+            class="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+          >
+            Skip
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+          >
+            Send Feedback
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Bookmark Button -->
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        id="bookmark-btn"
+        onclick="toggleBookmark()"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors"
+      >
+        <svg class="w-5 h-5 bookmark-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+        </svg>
+        <span class="bookmark-text">Bookmark</span>
+      </button>
+
+      <button
+        type="button"
+        onclick="copyArticleLink()"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 transition-colors"
+        id="copy-link-btn"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+        </svg>
+        <span>Copy Link</span>
+      </button>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+      <span class="reading-time-remaining hidden">
+        <span class="time-left"></span> left
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Rating functionality
+  function submitRating(button) {
+    const rating = button.dataset.rating;
+    const countElement = button.querySelector('.rating-count');
+    const currentCount = parseInt(countElement.textContent);
+    const thanksMessage = button.closest('.space-y-4').querySelector('.rating-thanks');
+    const feedbackForm = button.closest('.space-y-4').querySelector('.feedback-form');
+    
+    // Increment count
+    countElement.textContent = currentCount + 1;
+    
+    // Show thanks message
+    thanksMessage.classList.remove('hidden');
+    
+    // Disable rating buttons
+    const ratingBtns = button.closest('.space-y-4').querySelectorAll('.rating-btn');
+    ratingBtns.forEach(btn => {
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+    
+    // Show feedback form for negative ratings
+    if (rating === 'negative') {
+      setTimeout(() => {
+        feedbackForm.style.display = 'block';
+      }, 1000);
+    }
+    
+    // Store rating in localStorage
+    const articleUrl = window.location.pathname;
+    const ratings = JSON.parse(localStorage.getItem('articleRatings') || '{}');
+    ratings[articleUrl] = { rating, timestamp: Date.now() };
+    localStorage.setItem('articleRatings', JSON.stringify(ratings));
+  }
+
+  // Feedback form functionality
+  function submitFeedback(event) {
+    event.preventDefault();
+    const form = event.target;
+    const textarea = form.querySelector('textarea');
+    const feedback = textarea.value.trim();
+    
+    // Here you could send feedback to your analytics or feedback service
+    console.log('Feedback submitted:', feedback);
+    
+    // Hide form and show thank you
+    form.closest('.feedback-form').innerHTML = `
+      <div class="text-center py-4">
+        <div class="text-green-600 dark:text-green-400 text-2xl mb-2">✓</div>
+        <p class="text-green-800 dark:text-green-200 font-medium">Thank you for your feedback!</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">We'll use it to improve our content.</p>
+      </div>
+    `;
+  }
+
+  function hideFeedbackForm() {
+    document.querySelector('.feedback-form').style.display = 'none';
+  }
+
+  // Bookmark functionality
+  function toggleBookmark() {
+    const btn = document.getElementById('bookmark-btn');
+    const icon = btn.querySelector('.bookmark-icon');
+    const text = btn.querySelector('.bookmark-text');
+    const articleUrl = window.location.pathname;
+    const articleTitle = document.title;
+    
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    const isBookmarked = bookmarks.some(b => b.url === articleUrl);
+    
+    if (isBookmarked) {
+      // Remove bookmark
+      bookmarks = bookmarks.filter(b => b.url !== articleUrl);
+      icon.setAttribute('fill', 'none');
+      text.textContent = 'Bookmark';
+      btn.classList.remove('bg-yellow-100', 'text-yellow-700');
+      btn.classList.add('bg-gray-100', 'text-gray-700');
+    } else {
+      // Add bookmark
+      bookmarks.push({
+        url: articleUrl,
+        title: articleTitle,
+        timestamp: Date.now()
+      });
+      icon.setAttribute('fill', 'currentColor');
+      text.textContent = 'Bookmarked';
+      btn.classList.remove('bg-gray-100', 'text-gray-700');
+      btn.classList.add('bg-yellow-100', 'text-yellow-700');
+    }
+    
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }
+
+  // Copy link functionality
+  function copyArticleLink() {
+    const btn = document.getElementById('copy-link-btn');
+    const originalText = btn.innerHTML;
+    
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      btn.innerHTML = `
+        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+        <span>Copied!</span>
+      `;
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 2000);
+    });
+  }
+
+  // Initialize on page load
+  function initInteractiveElements() {
+    // Check if article is bookmarked
+    const articleUrl = window.location.pathname;
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    const isBookmarked = bookmarks.some(b => b.url === articleUrl);
+    
+    if (isBookmarked) {
+      const btn = document.getElementById('bookmark-btn');
+      const icon = btn.querySelector('.bookmark-icon');
+      const text = btn.querySelector('.bookmark-text');
+      
+      icon.setAttribute('fill', 'currentColor');
+      text.textContent = 'Bookmarked';
+      btn.classList.remove('bg-gray-100', 'text-gray-700');
+      btn.classList.add('bg-yellow-100', 'text-yellow-700');
+    }
+    
+    // Check if user already rated this article
+    const ratings = JSON.parse(localStorage.getItem('articleRatings') || '{}');
+    if (ratings[articleUrl]) {
+      const ratingBtns = document.querySelectorAll('.rating-btn');
+      const thanksMessage = document.querySelector('.rating-thanks');
+      
+      ratingBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      });
+      
+      thanksMessage.classList.remove('hidden');
+    }
+    
+    // Load rating counts from localStorage or initialize
+    const ratingData = JSON.parse(localStorage.getItem('allRatings') || '{}');
+    if (ratingData[articleUrl]) {
+      document.querySelector('[data-rating="positive"] .rating-count').textContent = ratingData[articleUrl].positive || 0;
+      document.querySelector('[data-rating="negative"] .rating-count').textContent = ratingData[articleUrl].negative || 0;
+    }
+  }
+
+  // Initialize when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initInteractiveElements);
+  } else {
+    initInteractiveElements();
+  }
+  
+  // Export functions to global scope for onclick handlers
+  window.submitRating = submitRating;
+  window.submitFeedback = submitFeedback;
+  window.hideFeedbackForm = hideFeedbackForm;
+  window.toggleBookmark = toggleBookmark;
+  window.copyArticleLink = copyArticleLink;
+  
+  console.log('InteractiveElements: Functions exported to global scope');
+</script>

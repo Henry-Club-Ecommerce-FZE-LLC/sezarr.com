@@ -1,0 +1,1 @@
+function n(){const n=navigator.onLine?"online":"offline";document.body.setAttribute("data-connection",n)}import"./hoisted-Z_A9AY-b.js";window.addEventListener("online",()=>{window.location.reload()}),window.addEventListener("online",n),window.addEventListener("offline",n),n();

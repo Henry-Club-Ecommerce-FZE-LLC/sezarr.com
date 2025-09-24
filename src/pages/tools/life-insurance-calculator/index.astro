@@ -1,0 +1,169 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { SITE } from "../../../config/site";
+import LifeInsuranceCalculator from "../../../components/calculators/LifeInsuranceCalculator.astro";
+
+const siteUrl = SITE.URL;
+const url = `${siteUrl}/tools/life-insurance-calculator/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Life Insurance Needs Calculator",
+    "description": "Free calculator to determine how much life insurance coverage you need based on income, debts, family size, and future expenses.",
+    "url": url,
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "permissions": "none",
+    "author": {
+      "@type": "Organization",
+      "name": "Insurance Insights USA"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Life Insurance Coverage Needs",
+    "description": "Step-by-step process using the DIME method to determine optimal life insurance coverage",
+    "totalTime": "PT10M",
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Annual income and family financial information"
+      },
+      {
+        "@type": "HowToSupply", 
+        "name": "Outstanding debts and future expenses"
+      }
+    ],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Calculate Income Replacement",
+        "text": "Determine how many years of income your family would need if you passed away."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Add Debt Coverage",
+        "text": "Include mortgage, credit cards, and other debts that should be paid off."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Plan for Education Costs",
+        "text": "Calculate college funding needs for your children based on your goals."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Include Final Expenses",
+        "text": "Add funeral costs and final expenses, typically $10,000-$20,000."
+      }
+    ]
+  }
+];
+---
+
+<BaseLayout 
+  title="Life Insurance Needs Calculator - How Much Coverage Do You Need?" 
+  description="Calculate your life insurance needs with our free DIME method calculator. Determine optimal coverage based on income, debts, children's education, and final expenses."
+  url={url} 
+  type="website"
+  {schema}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Life Insurance Needs Calculator
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        Calculate how much life insurance coverage your family needs using the proven DIME method. 
+        Get personalized recommendations based on your income, debts, and family goals.
+      </p>
+    </div>
+
+    <LifeInsuranceCalculator />
+
+    <!-- Educational Content -->
+    <div class="mt-16 prose prose-lg dark:prose-invert mx-auto">
+      <h2>Understanding Life Insurance Needs</h2>
+      
+      <h3>The DIME Method</h3>
+      <p>Our calculator uses the DIME method, a comprehensive approach to determining life insurance needs:</p>
+      <ul>
+        <li><strong>D</strong>ebts and final expenses</li>
+        <li><strong>I</strong>ncome replacement</li>
+        <li><strong>M</strong>ortgage and major expenses</li>
+        <li><strong>E</strong>ducation funding for children</li>
+      </ul>
+
+      <h3>Types of Life Insurance</h3>
+      <div class="grid md:grid-cols-2 gap-6 not-prose">
+        <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">Term Life Insurance</h4>
+          <ul class="text-sm space-y-2">
+            <li>✓ Most affordable option</li>
+            <li>✓ Coverage for specific period (10, 20, 30 years)</li>
+            <li>✓ Ideal for family protection during working years</li>
+            <li>✓ No cash value component</li>
+          </ul>
+        </div>
+        <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+          <h4 class="text-lg font-semibold mb-3">Permanent Life Insurance</h4>
+          <ul class="text-sm space-y-2">
+            <li>✓ Lifetime coverage</li>
+            <li>✓ Builds cash value</li>
+            <li>✓ Higher premiums than term</li>
+            <li>✓ Tax-advantaged savings component</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Factors That Affect Your Needs</h3>
+      <ul>
+        <li><strong>Age and Health:</strong> Younger, healthier individuals pay lower premiums</li>
+        <li><strong>Dependents:</strong> More dependents typically mean more coverage needed</li>
+        <li><strong>Debt Level:</strong> High debt requires more coverage to protect family</li>
+        <li><strong>Spouse's Income:</strong> Higher spouse income may reduce coverage needs</li>
+        <li><strong>Existing Savings:</strong> More savings reduces required coverage</li>
+      </ul>
+
+      <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg">
+        <h4 class="text-lg font-semibold mb-3">💡 Expert Tips</h4>
+        <ul class="space-y-2">
+          <li>Review your coverage every 3-5 years or after major life events</li>
+          <li>Consider inflation when calculating future expenses</li>
+          <li>Don't forget to account for taxes on investment returns</li>
+          <li>Term life insurance is usually the best choice for young families</li>
+          <li>Consider a mix of term and permanent insurance for comprehensive planning</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Related Tools -->
+    <div class="mt-16 bg-gray-50 dark:bg-gray-800 rounded-xl p-8">
+      <h2 class="text-2xl font-bold text-center mb-8">Related Insurance Tools</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-700 rounded-lg p-6 text-center">
+          <h3 class="font-semibold mb-2">Auto Insurance Calculator</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Calculate optimal auto coverage needs</p>
+          <a href="/tools/auto-insurance-calculator/" class="text-blue-600 hover:text-blue-700 text-sm font-medium">Use Calculator →</a>
+        </div>
+        <div class="bg-white dark:bg-gray-700 rounded-lg p-6 text-center">
+          <h3 class="font-semibold mb-2">Home Insurance Calculator</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Calculate replacement cost and coverage needs</p>
+          <span class="text-sm text-gray-500">Coming Soon</span>
+        </div>
+        <div class="bg-white dark:bg-gray-700 rounded-lg p-6 text-center">
+          <h3 class="font-semibold mb-2">Retirement Planning</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Calculate retirement savings needs</p>
+          <span class="text-sm text-gray-500">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,9 @@
+---
+import type { CollectionEntry } from 'astro:content';
+const { author } = Astro.props as { author: CollectionEntry<'authors'> };
+const a = author.data;
+---
+<span class="inline-flex items-center gap-2 text-sm">
+  {a.avatar && <img src={a.avatar} alt={a.name} width="20" height="20" class="rounded-full" loading="lazy" />}
+  <a href={`/authors/${author.slug}/`} class="underline hover:no-underline">{a.name}</a>
+</span>

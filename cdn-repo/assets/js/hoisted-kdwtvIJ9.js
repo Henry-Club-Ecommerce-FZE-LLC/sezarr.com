@@ -1,0 +1,1 @@
+import"./hoisted-DKOxBC1d.js";function n(){const n=navigator.onLine?"online":"offline";document.body.setAttribute("data-connection",n)}window.addEventListener("online",()=>{window.location.reload()}),window.addEventListener("online",n),window.addEventListener("offline",n),n();

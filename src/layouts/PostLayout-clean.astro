@@ -1,0 +1,97 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AdSenseBlock from '../components/AdSenseBlock.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import AuthorBadge from '../components/AuthorBadge.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from "../config/site";
+import ResponsivePicture from "../components/ResponsivePicture.astro";
+import NewsletterCallout from "../components/NewsletterCallout.astro";
+
+interface Props {
+  frontmatter: any;
+  breadcrumbs?: { label: string; href: string; }[];
+  url?: string;
+}
+
+const { frontmatter, breadcrumbs, url: propUrl } = Astro.props;
+const authors = await getCollection('authors');
+const authorEntry = authors.find((a) => a.slug === frontmatter.author?.slug || a.slug === frontmatter.author);
+const reviewerEntry = frontmatter.reviewedBy ? authors.find((a) => a.slug === frontmatter.reviewedBy?.slug || a.slug === frontmatter.reviewedBy) : undefined;
+const siteUrl = SITE.URL;
+const url = propUrl || `${siteUrl}/${frontmatter.category}/${Astro.url.pathname.split('/').pop()?.replace('.html', '') || ''}`;
+
+// Generate breadcrumbs if not provided
+const defaultBreadcrumbs = [
+  { label: 'Home', href: '/' },
+  { 
+    label: frontmatter.category.charAt(0).toUpperCase() + frontmatter.category.slice(1) + ' Insurance', 
+    href: `/${frontmatter.category}-insurance` 
+  },
+  { 
+    label: frontmatter.title, 
+    href: `/${frontmatter.category}/${frontmatter.slug || Astro.params.slug}`
+  }
+];
+
+const finalBreadcrumbs = breadcrumbs || defaultBreadcrumbs;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: frontmatter.title,
+    description: frontmatter.description,
+    datePublished: frontmatter.pubDate,
+    dateModified: frontmatter.updatedDate || frontmatter.pubDate,
+    author: authorEntry ? [{"@type":"Person","name": authorEntry.data.name, url: `${siteUrl}/authors/${authorEntry.slug}/`, sameAs: authorEntry.data.sameAs}] : undefined,
+    reviewedBy: reviewerEntry ? {"@type":"Person","name": reviewerEntry.data.name, url: `${siteUrl}/authors/${reviewerEntry.slug}/`, sameAs: reviewerEntry.data.sameAs } : undefined,
+    mainEntityOfPage: url,
+    image: frontmatter.heroImage ? `${siteUrl}${frontmatter.heroImage}` : `${siteUrl}/og-default.jpg`,
+    publisher: {"@type":"Organization","name":"Sezarr","logo":{"@type":"ImageObject","url":`${siteUrl}/logo-512.png`}}
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: finalBreadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": crumb.label,
+      "item": siteUrl + crumb.href
+    }))
+  }
+];
+---
+<BaseLayout title={frontmatter.title} description={frontmatter.description} url={url} image={frontmatter.heroImage || '/og-default.jpg'} type="article" {schema}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 grid lg:grid-cols-[1fr_280px] gap-8">
+    <article class="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 prose-a:font-medium">
+      <Breadcrumbs items={finalBreadcrumbs.map(crumb => ({
+        name: crumb.label,
+        url: crumb.href
+      }))} />
+      <h1>{frontmatter.title}</h1>
+      {frontmatter.heroImage && (
+        <div class="mt-4">
+          <ResponsivePicture src={frontmatter.heroImage} alt={frontmatter.title} width={1200} height={630} class="w-full h-auto rounded" priority={true} />
+        </div>
+      )}
+      {authorEntry && (
+        <div class="mt-2 text-sm text-gray-600">By <AuthorBadge author={authorEntry} /> {frontmatter.pubDate && <span class="ml-2">• {new Date(frontmatter.pubDate).toLocaleDateString()}</span>}</div>
+      )}
+      {reviewerEntry && (
+        <div class="text-xs text-gray-500">Reviewed by <a class="underline" href={`/authors/${reviewerEntry.slug}/`}>{reviewerEntry.data.name}</a>{frontmatter.reviewedDate ? ` on ${new Date(frontmatter.reviewedDate).toLocaleDateString()}` : ''}</div>
+      )}
+      {frontmatter.affiliate && <AffiliateDisclosure compact={true} />}
+      
+      <slot />
+      
+      {authorEntry && <AuthorCard author={authorEntry} />}
+      <NewsletterCallout />
+      <AdSenseBlock />
+    </article>
+    <TableOfContents />
+  </section>
+</BaseLayout>

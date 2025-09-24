@@ -1,0 +1,88 @@
+---
+import { SITE } from '../../config/site';
+
+interface Props {
+  serviceType: string;
+  serviceName: string;
+  description: string;
+  url: string;
+  averageCost?: string;
+  coverageAreas?: string[];
+  provider?: string;
+}
+
+const {
+  serviceType,
+  serviceName,
+  description,
+  url,
+  averageCost,
+  coverageAreas = ['United States'],
+  provider = SITE.NAME
+} = Astro.props;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": serviceName,
+  "description": description,
+  "url": url,
+  "provider": {
+    "@type": "Organization",
+    "@id": `${SITE.URL}/#organization`,
+    "name": provider
+  },
+  "serviceType": serviceType,
+  "areaServed": coverageAreas.map(area => ({
+    "@type": "Place",
+    "name": area
+  })),
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": `${serviceName} Information`,
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": `${serviceName} Guidance`,
+          "description": `Expert ${serviceName.toLowerCase()} advice and comparison tools`
+        },
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "validFrom": new Date().toISOString(),
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "0",
+          "priceCurrency": "USD",
+          "valueAddedTaxIncluded": false
+        }
+      }
+    ]
+  },
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Insurance Consumers",
+    "geographicArea": {
+      "@type": "Country",
+      "name": "United States"
+    }
+  },
+  "category": "Financial Services",
+  "additionalType": "https://schema.org/InsuranceAgency"
+};
+
+// Add pricing information if provided
+if (averageCost) {
+  serviceSchema.offers = {
+    "@type": "AggregateOffer",
+    "lowPrice": averageCost.includes('-') ? averageCost.split('-')[0].replace(/[^0-9.]/g, '') : averageCost.replace(/[^0-9.]/g, ''),
+    "highPrice": averageCost.includes('-') ? averageCost.split('-')[1]?.replace(/[^0-9.]/g, '') : averageCost.replace(/[^0-9.]/g, ''),
+    "priceCurrency": "USD",
+    "offerCount": "100+",
+    "availability": "https://schema.org/InStock"
+  };
+}
+---
+<script type="application/ld+json" set:html={JSON.stringify(serviceSchema)}></script>

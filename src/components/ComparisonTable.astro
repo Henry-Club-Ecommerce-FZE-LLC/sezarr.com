@@ -1,0 +1,52 @@
+---
+const { columns = [], rows = [] } = Astro.props as { columns: Array<{ key: string; label: string }>, rows: Array<Record<string, string | number>> };
+---
+<div class="overflow-x-auto border rounded">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 dark:bg-gray-700">
+      <tr>
+        {columns.map((c, idx) => (
+          <th class="text-left p-3 whitespace-nowrap">
+            <button class="font-semibold hover:underline" data-sort={c.key}>{c.label}</button>
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody id="tbl-body">
+      {rows.map(r => (
+        <tr class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800">
+          {columns.map(c => (
+            <td class="p-3 whitespace-nowrap">{String(r[c.key] ?? '')}</td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<script>
+  {`
+    (function(){
+      const body = document.getElementById('tbl-body');
+      const btns = Array.from(document.querySelectorAll('th button[data-sort]'));
+      btns.forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          const key = btn.getAttribute('data-sort');
+          const rows = Array.from(body.querySelectorAll('tr'));
+          const idx = btns.indexOf(btn);
+          const asc = btn.getAttribute('data-asc') !== 'true';
+          btns.forEach(b=>b.removeAttribute('data-asc'));
+          btn.setAttribute('data-asc', String(asc));
+          rows.sort((a,b)=>{
+            const av = a.children[idx].textContent || '';
+            const bv = b.children[idx].textContent || '';
+            const na = parseFloat(av.replace(/[^0-9.]/g,''));
+            const nb = parseFloat(bv.replace(/[^0-9.]/g,''));
+            if(!isNaN(na) && !isNaN(nb)) return asc? na-nb : nb-na;
+            return asc? av.localeCompare(bv) : bv.localeCompare(av);
+          });
+          rows.forEach(r=>body.appendChild(r));
+        });
+      });
+    })();
+  `}
+  </script>

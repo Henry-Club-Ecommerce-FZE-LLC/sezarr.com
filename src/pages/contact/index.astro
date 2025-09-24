@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE } from "../../config/site";
+const url = `${SITE.URL}/contact/`;
+---
+<BaseLayout title="Contact" description="Contact Insurance Insights USA for partnerships, guest posts, or feedback." {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 prose">
+    <h1>Contact</h1>
+    <p>Email us at: <a href="mailto:hello@example.com">hello@example.com</a></p>
+    <p>For guest posts or partnerships, include examples and metrics.</p>
+  </section>
+</BaseLayout>

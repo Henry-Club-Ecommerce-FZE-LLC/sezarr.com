@@ -1,0 +1,19 @@
+---
+interface Props {
+  src: string; // e.g., /images/hero.jpg
+  alt?: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  priority?: boolean; // if true, eager + fetchpriority=high
+}
+const { src, alt = '', width, height, class: klass = '', priority = false } = Astro.props as Props;
+const base = src.replace(/\.[^.]+$/, '');
+const avif = base + '.avif';
+const webp = base + '.webp';
+---
+<picture>
+  <source srcset={avif} type="image/avif" />
+  <source srcset={webp} type="image/webp" />
+  <img src={src} alt={alt} width={width} height={height} loading={priority ? 'eager' : 'lazy'} decoding="async" fetchpriority={priority ? 'high' : 'auto'} class={klass} />
+</picture>

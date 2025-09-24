@@ -1,0 +1,34 @@
+{
+  "name": "sezarr-insurance-cdn-assets",
+  "version": "1.0.0",
+  "description": "CDN-optimized static assets for Sezarr Insurance website via jsDelivr",
+  "main": "assets/index.js",
+  "keywords": [
+    "cdn",
+    "assets",
+    "jsdelivr",
+    "insurance",
+    "sezarr",
+    "static",
+    "performance"
+  ],
+  "author": "Sezarr Insurance",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Henry-Club-Ecommerce-FZE-LLC/sezarr.com.git"
+  },
+  "jsdelivr": "assets/",
+  "files": [
+    "assets/**/*",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "validate": "echo 'Validating CDN assets...'",
+    "size-report": "echo 'Generating size report...'"
+  }
+}

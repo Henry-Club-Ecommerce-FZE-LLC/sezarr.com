@@ -1,0 +1,346 @@
+---
+import { SITE } from '../config/site';
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface HowToStep {
+  name: string;
+  text: string;
+  image?: string;
+  url?: string;
+}
+
+interface Review {
+  name: string;
+  reviewBody: string;
+  reviewRating: number;
+  author: string;
+  datePublished: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  url: string;
+  publishedDate: string;
+  modifiedDate?: string;
+  author?: {
+    name: string;
+    url: string;
+    image?: string;
+  };
+  category?: string;
+  tags?: string[];
+  wordCount?: number;
+  readingTime?: string;
+  image?: string;
+  
+  // Enhanced schema types
+  faqs?: FAQ[];
+  howToSteps?: HowToStep[];
+  reviews?: Review[];
+  aggregateRating?: {
+    ratingValue: number;
+    reviewCount: number;
+  };
+  breadcrumbs?: Array<{
+    name: string;
+    url: string;
+  }>;
+}
+
+const {
+  title,
+  description,
+  url,
+  publishedDate,
+  modifiedDate,
+  author = {
+    name: 'Sezarr Editorial Team',
+    url: `${SITE.URL}/authors/editorial-team/`,
+    image: `${SITE.URL}/images/editorial-team.jpg`
+  },
+  category = 'Insurance',
+  tags = [],
+  wordCount = 2500,
+  readingTime = '8-12 minutes',
+  image = `${SITE.URL}/og-default.jpg`,
+  faqs = [],
+  howToSteps = [],
+  reviews = [],
+  aggregateRating,
+  breadcrumbs = []
+} = Astro.props;
+
+// Helper function to safely format dates
+function formatDate(dateString) {
+  if (!dateString) return new Date().toISOString();
+  const date = new Date(dateString);
+  return isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+}
+
+// Base Article Schema
+const baseArticleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": title,
+  "description": description,
+  "url": url,
+  "image": {
+    "@type": "ImageObject",
+    "url": image,
+    "width": 1200,
+    "height": 630
+  },
+  "author": {
+    "@type": "Person",
+    "name": author.name,
+    "url": author.url,
+    ...(author.image && {
+      "image": {
+        "@type": "ImageObject",
+        "url": author.image
+      }
+    })
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": `${SITE.URL}/#organization`,
+    "name": SITE.NAME,
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${SITE.URL}/logo-512.png`,
+      "width": 512,
+      "height": 512
+    }
+  },
+  "datePublished": formatDate(publishedDate),
+  "dateModified": formatDate(modifiedDate),
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": url
+  },
+  "articleSection": category,
+  "keywords": tags.join(', '),
+  "wordCount": wordCount,
+  "timeRequired": readingTime,
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "creativeWorkStatus": "Published"
+};
+
+// FAQ Schema
+const faqSchema = faqs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+} : null;
+
+// HowTo Schema
+const howToSchema = howToSteps.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": title,
+  "description": description,
+  "image": image,
+  "totalTime": readingTime,
+  "estimatedCost": {
+    "@type": "MonetaryAmount",
+    "currency": "USD",
+    "value": "0"
+  },
+  "step": howToSteps.map((step, index) => ({
+    "@type": "HowToStep",
+    "name": step.name,
+    "text": step.text,
+    "position": index + 1,
+    ...(step.image && {
+      "image": {
+        "@type": "ImageObject",
+        "url": step.image
+      }
+    }),
+    ...(step.url && {
+      "url": step.url
+    })
+  }))
+} : null;
+
+// Review Schema
+const reviewSchema = reviews.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": title,
+  "description": description,
+  "category": category,
+  "review": reviews.map(review => ({
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": review.reviewRating,
+      "bestRating": 5
+    },
+    "author": {
+      "@type": "Person",
+      "name": review.author
+    },
+    "reviewBody": review.reviewBody,
+    "datePublished": review.datePublished
+  })),
+  ...(aggregateRating && {
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": aggregateRating.ratingValue,
+      "reviewCount": aggregateRating.reviewCount,
+      "bestRating": 5,
+      "worstRating": 1
+    }
+  })
+} : null;
+
+// BreadcrumbList Schema
+const breadcrumbSchema = breadcrumbs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((crumb, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": crumb.name,
+    "item": crumb.url
+  }))
+} : null;
+
+// WebPage Schema
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": url,
+  "url": url,
+  "name": title,
+  "description": description,
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": `${SITE.URL}/#website`,
+    "url": SITE.URL,
+    "name": SITE.NAME,
+    "description": "Independent, practical insurance guides for Americans. Compare rates, understand coverage, and make confident decisions.",
+    "publisher": {
+      "@id": `${SITE.URL}/#organization`
+    },
+    "inLanguage": "en-US"
+  },
+  "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "@id": `${image}#primaryimage`,
+    "url": image,
+    "width": 1200,
+    "height": 630
+  },
+  "datePublished": formatDate(publishedDate),
+  "dateModified": formatDate(modifiedDate)
+};
+
+// Specialized Insurance Article Schema
+const insuranceArticleSchema = {
+  ...baseArticleSchema,
+  "@type": ["Article", "FinancialProduct"],
+  "about": {
+    "@type": "Thing",
+    "name": category + " Insurance",
+    "description": `Information and guidance about ${category} insurance coverage, policies, and claims.`
+  },
+  "mentions": tags.map(tag => ({
+    "@type": "Thing",
+    "name": tag
+  })),
+  "educationalAlignment": {
+    "@type": "AlignmentObject",
+    "alignmentType": "educationalLevel",
+    "targetName": "General Public"
+  },
+  "audience": {
+    "@type": "Audience",
+    "audienceType": "Insurance Consumers"
+  }
+};
+
+// Combine all schemas
+const allSchemas = [
+  insuranceArticleSchema,
+  webPageSchema,
+  ...(faqSchema ? [faqSchema] : []),
+  ...(howToSchema ? [howToSchema] : []),
+  ...(reviewSchema ? [reviewSchema] : []),
+  ...(breadcrumbSchema ? [breadcrumbSchema] : [])
+];
+---
+
+<!-- Enhanced Article Schema Markup -->
+<script type="application/ld+json" set:html={JSON.stringify(allSchemas)} />
+
+<!-- Additional meta tags for rich snippets -->
+<meta name="article:published_time" content={formatDate(publishedDate)} />
+{modifiedDate && (
+  <meta name="article:modified_time" content={formatDate(modifiedDate)} />
+)}
+<meta name="article:author" content={author.name} />
+<meta name="article:section" content={category} />
+{tags.map(tag => (
+  <meta name="article:tag" content={tag} />
+))}
+
+<!-- Twitter Card Enhanced -->
+<meta name="twitter:label1" content="Reading time" />
+<meta name="twitter:data1" content={readingTime} />
+<meta name="twitter:label2" content="Category" />
+<meta name="twitter:data2" content={category} />
+
+<!-- Open Graph Enhanced -->
+<meta property="og:article:published_time" content={formatDate(publishedDate)} />
+{modifiedDate && (
+  <meta property="og:article:modified_time" content={formatDate(modifiedDate)} />
+)}
+<meta property="og:article:author" content={author.name} />
+<meta property="og:article:section" content={category} />
+{tags.map(tag => (
+  <meta property="og:article:tag" content={tag} />
+))}
+
+<!-- Additional structured data hints -->
+<meta name="news_keywords" content={tags.join(', ')} />
+<meta name="article:word_count" content={wordCount.toString()} />
+
+{/* FAQ Schema specific meta (if FAQs present) */}
+{faqs.length > 0 && (
+  <>
+    <meta name="faq:count" content={faqs.length.toString()} />
+    <meta name="content:faq" content="true" />
+  </>
+)}
+
+{/* HowTo Schema specific meta (if steps present) */}
+{howToSteps.length > 0 && (
+  <>
+    <meta name="howto:steps" content={howToSteps.length.toString()} />
+    <meta name="content:howto" content="true" />
+  </>
+)}
+
+{/* Review Schema specific meta (if reviews present) */}
+{reviews.length > 0 && aggregateRating && (
+  <>
+    <meta name="review:count" content={reviews.length.toString()} />
+    <meta name="review:average" content={aggregateRating.ratingValue.toString()} />
+    <meta name="content:reviews" content="true" />
+  </>
+)}

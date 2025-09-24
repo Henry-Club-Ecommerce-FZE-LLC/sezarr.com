@@ -1,0 +1,431 @@
+---
+// Import icons for each insurance category
+import IconShield from './icons/IconShield.astro';
+import IconHeart from './icons/IconHeart.astro';
+import IconHome from './icons/IconHome.astro';
+import IconCar from './icons/IconCar.astro';
+
+// Define all insurance categories with their details
+const insuranceCategories = [
+  {
+    title: 'Auto Insurance',
+    href: '/auto-insurance/',
+    description: 'Compare car insurance rates, understand coverage options, and find the best auto insurance for your vehicle.',
+    icon: 'car',
+    color: 'blue',
+    stats: 'From $25/month',
+    popularity: 95,
+    avgSavings: '$426/year'
+  },
+  {
+    title: 'Health Insurance',
+    href: '/health-insurance/',
+    description: 'Navigate ACA marketplace plans, Medicare options, and find the right health coverage for you.',
+    icon: 'heart', 
+    color: 'green',
+    stats: 'ACA & Medicare',
+    popularity: 88,
+    avgSavings: '$1,200/year'
+  },
+  {
+    title: 'Homeowners Insurance', 
+    href: '/homeowners-insurance/',
+    description: 'Protect your home with comprehensive dwelling coverage, liability protection, and property insurance.',
+    icon: 'home',
+    color: 'orange',
+    stats: 'Coverage A-F',
+    popularity: 82,
+    avgSavings: '$315/year'
+  },
+  {
+    title: 'Life Insurance',
+    href: '/life-insurance/',
+    description: 'Secure your family\'s future with term life, whole life, and universal life insurance policies.',
+    icon: 'shield',
+    color: 'purple',
+    stats: 'Term & Whole Life',
+    popularity: 76,
+    avgSavings: '$580/year'
+  },
+  {
+    title: 'Business Insurance',
+    href: '/business-insurance/',
+    description: 'Comprehensive business protection including general liability, commercial property, and workers comp.',
+    icon: 'briefcase',
+    color: 'indigo',
+    stats: 'LLC & Corp Coverage',
+    popularity: 68,
+    avgSavings: '$850/year'
+  },
+  {
+    title: 'Disability Insurance',
+    href: '/disability-insurance/',
+    description: 'Income protection through short-term and long-term disability insurance coverage.',
+    icon: 'users',
+    color: 'teal',
+    stats: 'Short & Long Term',
+    popularity: 62,
+    avgSavings: '$290/year'
+  },
+  {
+    title: 'Travel Insurance',
+    href: '/travel-insurance/',
+    description: 'Trip protection, medical coverage, and cancellation insurance for domestic and international travel.',
+    icon: 'airplane',
+    color: 'cyan',
+    stats: 'Trip Protection',
+    popularity: 54,
+    avgSavings: '$180/year'
+  },
+  {
+    title: 'Pet Insurance',
+    href: '/pet-insurance/',
+    description: 'Veterinary coverage for dogs, cats, and exotic pets including accident, illness, and wellness plans.',
+    icon: 'heart-paw',
+    color: 'pink',
+    stats: 'Dogs & Cats',
+    popularity: 48,
+    avgSavings: '$245/year'
+  }
+];
+
+const getColorClasses = (color) => {
+  const colorMap = {
+    blue: 'from-blue-500/20 to-blue-600/30 border-blue-300/50 hover:border-blue-400/70 text-blue-600 dark:text-blue-400 bg-blue-500/10',
+    green: 'from-green-500/20 to-green-600/30 border-green-300/50 hover:border-green-400/70 text-green-600 dark:text-green-400 bg-green-500/10', 
+    orange: 'from-orange-500/20 to-orange-600/30 border-orange-300/50 hover:border-orange-400/70 text-orange-600 dark:text-orange-400 bg-orange-500/10',
+    purple: 'from-purple-500/20 to-purple-600/30 border-purple-300/50 hover:border-purple-400/70 text-purple-600 dark:text-purple-400 bg-purple-500/10',
+    indigo: 'from-indigo-500/20 to-indigo-600/30 border-indigo-300/50 hover:border-indigo-400/70 text-indigo-600 dark:text-indigo-400 bg-indigo-500/10',
+    teal: 'from-teal-500/20 to-teal-600/30 border-teal-300/50 hover:border-teal-400/70 text-teal-600 dark:text-teal-400 bg-teal-500/10',
+    cyan: 'from-cyan-500/20 to-cyan-600/30 border-cyan-300/50 hover:border-cyan-400/70 text-cyan-600 dark:text-cyan-400 bg-cyan-500/10',
+    pink: 'from-pink-500/20 to-pink-600/30 border-pink-300/50 hover:border-pink-400/70 text-pink-600 dark:text-pink-400 bg-pink-500/10'
+  };
+  return colorMap[color] || colorMap.blue;
+};
+
+const getIconComponent = (iconName) => {
+  const iconMap = {
+    car: IconCar,
+    heart: IconHeart,
+    home: IconHome,
+    shield: IconShield,
+    briefcase: 'briefcase',
+    users: 'users',
+    airplane: 'airplane',
+    'heart-paw': 'heart-paw'
+  };
+  return iconMap[iconName];
+};
+---
+
+<section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30 dark:from-gray-900 dark:to-blue-950/30 relative overflow-hidden">
+  <!-- Background Effects -->
+  <div class="absolute inset-0 opacity-30">
+    <div class="absolute top-20 left-20 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl animate-float-gentle"></div>
+    <div class="absolute bottom-40 right-32 w-24 h-24 bg-purple-400/20 rounded-full blur-2xl animate-float-reverse"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-indigo-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <!-- Header Section -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-full border border-blue-200/50 dark:border-blue-700/50 text-sm font-medium text-blue-700 dark:text-blue-300 mb-6">
+        <svg class="w-4 h-4 mr-2 animate-spin-slow" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+        </svg>
+        Complete Insurance Solution
+      </div>
+      
+      <h2 class="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-900 dark:from-white dark:to-blue-200 bg-clip-text text-transparent mb-6">
+        Insurance Coverage Made
+        <span class="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          Simple & Smart
+        </span>
+      </h2>
+      
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Explore comprehensive guides, compare rates, and find the perfect insurance coverage with our advanced tools and expert insights
+      </p>
+    </div>
+    
+    <!-- Interactive Cards Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto mb-20">
+      {insuranceCategories.map((category, index) => {
+        const IconComponent = getIconComponent(category.icon);
+        return (
+          <div class="category-card group relative">
+            <a 
+              href={category.href}
+              class={`block relative overflow-hidden rounded-2xl border-2 backdrop-blur-sm bg-gradient-to-br ${getColorClasses(category.color)} transition-all duration-500 hover:scale-[1.05] hover:-translate-y-2 hover:shadow-2xl hover:shadow-current/20`}
+              style={`animation-delay: ${index * 100}ms`}
+            >
+              <!-- Card Background Pattern -->
+              <div class="absolute inset-0 opacity-30">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-white/20 rounded-full blur-2xl transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-700"></div>
+                <div class="absolute bottom-0 left-0 w-16 h-16 bg-white/10 rounded-full blur-xl transform -translate-x-4 translate-y-4 group-hover:scale-125 transition-transform duration-500"></div>
+              </div>
+
+              <div class="relative p-8 flex flex-col min-h-[320px]">
+                <!-- Icon and Popularity -->
+                <div class="flex items-center justify-between mb-6">
+                  {typeof IconComponent === 'string' ? (
+                    <div class="w-14 h-14 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                      {category.icon === 'briefcase' && (
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2zm4-3a1 1 0 00-1 1v1h2V4a1 1 0 00-1-1zM4 9a1 1 0 000 2v5a1 1 0 001 1h10a1 1 0 001-1v-5a1 1 0 000-2H4z" clip-rule="evenodd"/>
+                        </svg>
+                      )}
+                      {category.icon === 'users' && (
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                        </svg>
+                      )}
+                      {category.icon === 'airplane' && (
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/>
+                        </svg>
+                      )}
+                      {category.icon === 'heart-paw' && (
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                        </svg>
+                      )}
+                    </div>
+                  ) : (
+                    <div class="w-14 h-14 rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm flex items-center justify-center shadow-lg border border-white/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                      <IconComponent class="w-7 h-7" />
+                    </div>
+                  )}
+                  
+                  <!-- Popularity Indicator -->
+                  <div class="flex flex-col items-end">
+                    <div class="w-12 h-2 bg-white/30 rounded-full overflow-hidden">
+                      <div 
+                        class="h-full bg-gradient-to-r from-white/70 to-white/90 rounded-full transition-all duration-1000 group-hover:from-white group-hover:to-white"
+                        style={`width: ${category.popularity}%`}
+                      ></div>
+                    </div>
+                    <span class="text-xs text-white/80 font-medium mt-1">{category.popularity}%</span>
+                  </div>
+                </div>
+                
+                <!-- Title -->
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-current transition-colors duration-300">
+                  {category.title}
+                </h3>
+                
+                <!-- Description -->
+                <div class="flex-grow">
+                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 line-clamp-3">
+                    {category.description}
+                  </p>
+                </div>
+                
+                <!-- Stats and CTA -->
+                <div class="flex items-center justify-between mt-auto pt-4">
+                  <div class="flex flex-col">
+                    <span class="text-xs font-medium text-gray-600 dark:text-gray-400 group-hover:text-current transition-colors duration-300">
+                      {category.stats}
+                    </span>
+                    <span class="text-sm font-bold text-green-600 dark:text-green-400 mt-1">
+                      Save {category.avgSavings}
+                    </span>
+                  </div>
+                  
+                  <div class="flex items-center text-sm font-medium group-hover:text-current transition-all duration-300">
+                    <span class="mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Explore</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 group-hover:scale-110 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hover Glow Effect -->
+              <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-white/10 via-transparent to-white/5"></div>
+            </a>
+          </div>
+        );
+      })}
+    </div>
+    
+    <!-- Enhanced Quick Stats with Animations -->
+    <div class="text-center">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">
+        Trusted by Thousands
+      </h3>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+        <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 hover:scale-105 transition-all duration-300">
+          <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent counter" data-target="8">0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Insurance Types</div>
+          <div class="w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mt-2 group-hover:w-16 transition-all duration-300"></div>
+        </div>
+        
+        <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 hover:scale-105 transition-all duration-300">
+          <div class="text-4xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent counter" data-target="50">0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Expert Guides</div>
+          <div class="w-12 h-1 bg-gradient-to-r from-green-500 to-teal-500 rounded-full mx-auto mt-2 group-hover:w-16 transition-all duration-300"></div>
+        </div>
+        
+        <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 hover:scale-105 transition-all duration-300">
+          <div class="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent counter" data-target="100">0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Users Helped (K+)</div>
+          <div class="w-12 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full mx-auto mt-2 group-hover:w-16 transition-all duration-300"></div>
+        </div>
+        
+        <div class="group text-center p-6 rounded-2xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-white/30 hover:scale-105 transition-all duration-300">
+          <div class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">24/7</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Available</div>
+          <div class="w-12 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto mt-2 group-hover:w-16 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Advanced Animations */
+  @keyframes float-gentle {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+  }
+
+  @keyframes float-reverse {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(15px) rotate(-5deg); }
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.05); }
+  }
+
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animation Classes */
+  .animate-float-gentle {
+    animation: float-gentle 8s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float-reverse 10s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 6s ease-in-out infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+
+  /* Category Cards with Staggered Animation */
+  .category-card {
+    opacity: 0;
+    animation: slide-up 0.8s ease-out forwards;
+  }
+
+  /* Counter Animation */
+  .counter {
+    transition: all 0.3s ease;
+  }
+
+  /* Glassmorphism Enhancement */
+  section {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Performance Optimizations */
+  .category-card,
+  .group {
+    contain: layout style;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Accessibility - Respect motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float-gentle,
+    .animate-float-reverse,
+    .animate-pulse-slow,
+    .animate-spin-slow,
+    .category-card {
+      animation: none;
+    }
+    
+    .category-card {
+      opacity: 1;
+    }
+  }
+
+  /* Enhanced Hover States */
+  .category-card a:hover {
+    filter: brightness(1.05) saturate(1.1);
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 768px) {
+    .category-card a {
+      transform: none;
+    }
+    
+    .category-card a:hover {
+      transform: scale(1.02);
+    }
+  }
+</style>
+
+<script>
+  // Counter Animation
+  function animateCounter() {
+    const counters = document.querySelectorAll('.counter');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
+          const target = parseInt(entry.target.getAttribute('data-target'));
+          const counter = entry.target;
+          const increment = target / 100;
+          let count = 0;
+          
+          const updateCount = () => {
+            if (count < target) {
+              count += increment;
+              counter.textContent = Math.ceil(count);
+              requestAnimationFrame(updateCount);
+            } else {
+              counter.textContent = target;
+            }
+          };
+          
+          updateCount();
+          counter.classList.add('counted');
+        }
+      });
+    });
+    
+    counters.forEach(counter => observer.observe(counter));
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', animateCounter);
+  
+  // Re-initialize on view transitions (if using Astro view transitions)
+  document.addEventListener('astro:page-load', animateCounter);
+</script>

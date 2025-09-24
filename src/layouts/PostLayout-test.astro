@@ -1,0 +1,18 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  frontmatter: any;
+  breadcrumbs?: { label: string; href: string; }[];
+  url?: string;
+}
+
+const { frontmatter, breadcrumbs, url: propUrl } = Astro.props;
+---
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <main>
+    <h1>TEST: {frontmatter.title}</h1>
+    <div>This is a test layout to see if content renders</div>
+    <slot />
+  </main>
+</BaseLayout>

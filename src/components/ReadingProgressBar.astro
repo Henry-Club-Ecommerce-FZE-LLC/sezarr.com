@@ -1,0 +1,73 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<!-- Reading Progress Bar -->
+<div 
+  id="reading-progress-bar" 
+  class={`fixed top-0 left-0 h-1 bg-gradient-to-r from-blue-500 to-blue-600 transition-all duration-150 ease-out z-50 ${className}`}
+  style="width: 0%"
+  aria-hidden="true"
+></div>
+
+<script>
+  function initReadingProgressBar() {
+    const progressBar = document.getElementById('reading-progress-bar');
+    if (!progressBar) return;
+
+    const article = document.querySelector('article');
+    if (!article) return;
+
+    function updateProgressBar() {
+      const articleRect = article.getBoundingClientRect();
+      const articleHeight = article.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const articleTop = article.offsetTop;
+      
+      // Calculate how much of the article has been scrolled through
+      const scrolled = Math.max(0, scrollTop - articleTop);
+      const maxScroll = Math.max(0, articleHeight - viewportHeight);
+      const progress = Math.min(100, Math.max(0, (scrolled / maxScroll) * 100));
+      
+      // Update progress bar width
+      progressBar.style.width = `${progress}%`;
+      
+      // Add/remove opacity based on scroll position
+      if (scrollTop > 100) {
+        progressBar.style.opacity = '1';
+      } else {
+        progressBar.style.opacity = '0';
+      }
+    }
+
+    // Throttled scroll handler for performance
+    let ticking = false;
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateProgressBar();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', requestTick);
+    window.addEventListener('resize', requestTick);
+    
+    // Initial check
+    updateProgressBar();
+  }
+
+  // Initialize when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReadingProgressBar);
+  } else {
+    initReadingProgressBar();
+  }
+</script>

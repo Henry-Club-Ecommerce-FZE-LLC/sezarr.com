@@ -1,0 +1,57 @@
+/* Critical CSS - Above the fold content styles */
+
+/* Reset & Base Styles - Critical */
+*,*::before,*::after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}
+*::before,*::after{--tw-content:''}
+html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal}
+body{margin:0;line-height:inherit}
+
+/* Header & Navigation - Critical */
+header{display:block}
+nav{display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.focus\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
+
+/* Theme Toggle - Critical */
+.theme-toggle{background:transparent;border:1px solid #d1d5db;border-radius:0.375rem;padding:0.5rem;transition:all 0.15s ease-in-out}
+.dark .theme-toggle{border-color:#4b5563;color:#f3f4f6}
+
+/* Layout Critical Styles */
+.container{width:100%;margin-left:auto;margin-right:auto;padding-left:1rem;padding-right:1rem}
+@media (min-width:640px){.container{max-width:640px}}
+@media (min-width:768px){.container{max-width:768px;padding-left:2rem;padding-right:2rem}}
+@media (min-width:1024px){.container{max-width:1024px}}
+@media (min-width:1280px){.container{max-width:1280px}}
+
+/* Header Styles */
+.header{background-color:#fff;border-bottom:1px solid #e5e7eb;position:sticky;top:0;z-index:50}
+.dark .header{background-color:#111827;border-bottom-color:#374151}
+
+/* Navigation Styles */
+.nav-link{display:flex;align-items:center;padding:0.75rem;min-height:44px;transition:color 0.15s ease-in-out;color:#374151;text-decoration:none}
+.nav-link:hover{color:#2563eb}
+.dark .nav-link{color:#d1d5db}
+.dark .nav-link:hover{color:#60a5fa}
+
+/* Mobile Menu Button */
+.mobile-menu-btn{display:inline-flex;align-items:center;justify-content:center;padding:0.5rem;border-radius:0.375rem;color:#9ca3af;background-color:transparent;border:none}
+.mobile-menu-btn:hover{background-color:#f3f4f6;color:#374151}
+.dark .mobile-menu-btn:hover{background-color:#374151;color:#d1d5db}
+
+/* Dropdown Styles */
+.dropdown{position:relative;display:inline-block}
+.dropdown-menu{position:absolute;top:100%;left:0;z-index:50;min-width:12rem;background-color:#fff;border:1px solid #e5e7eb;border-radius:0.375rem;box-shadow:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);opacity:0;visibility:hidden;transform:translateY(-0.5rem);transition:all 0.15s ease-out}
+.dropdown:hover .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.dark .dropdown-menu{background-color:#1f2937;border-color:#374151}
+
+/* Critical Font Loading */
+@font-display:swap;
+
+/* Dark Mode Critical */
+.dark{color-scheme:dark}
+:root{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity))}
+.dark:root{--tw-bg-opacity:1;background-color:rgb(17 24 39/var(--tw-bg-opacity))}
+
+/* Hide non-critical content initially */
+.below-fold{opacity:0}
+.loaded .below-fold{opacity:1;transition:opacity 0.3s ease-in-out}

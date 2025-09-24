@@ -1,0 +1,293 @@
+---
+// Real-Time Insurance Rate Widget Component
+interface Props {
+  insuranceType?: 'auto' | 'home' | 'life';
+  location?: string;
+  className?: string;
+}
+
+const { insuranceType = 'auto', location = '', className = '' } = Astro.props;
+
+// Sample rate data (in a real app, this would come from APIs)
+const sampleRates = {
+  auto: {
+    'CA': { min: 1200, max: 2800, avg: 1850 },
+    'TX': { min: 1100, max: 2400, avg: 1650 },
+    'FL': { min: 1300, max: 3200, avg: 2100 },
+    'NY': { min: 1400, max: 3500, avg: 2200 },
+    'default': { min: 1200, max: 2600, avg: 1750 }
+  },
+  home: {
+    'CA': { min: 800, max: 2200, avg: 1350 },
+    'TX': { min: 1200, max: 3500, avg: 2100 },
+    'FL': { min: 1500, max: 4200, avg: 2650 },
+    'NY': { min: 900, max: 2800, avg: 1650 },
+    'default': { min: 1000, max: 2800, avg: 1750 }
+  },
+  life: {
+    'CA': { min: 25, max: 85, avg: 42 },
+    'TX': { min: 22, max: 78, avg: 38 },
+    'FL': { min: 28, max: 95, avg: 48 },
+    'NY': { min: 30, max: 100, avg: 52 },
+    'default': { min: 25, max: 85, avg: 42 }
+  }
+};
+
+const typeLabels = {
+  auto: 'Auto Insurance',
+  home: 'Home Insurance',
+  life: 'Life Insurance'
+};
+
+const units = {
+  auto: '/year',
+  home: '/year',
+  life: '/month'
+};
+---
+
+<div class={`bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-lg ${className}`}>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xl font-bold">Current {typeLabels[insuranceType]} Rates</h3>
+    <div class="bg-white/20 rounded-full px-3 py-1">
+      <span class="text-sm font-medium">Live Rates</span>
+      <span class="inline-block w-2 h-2 bg-green-400 rounded-full ml-2 animate-pulse"></span>
+    </div>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4 mb-6">
+    <div class="text-center">
+      <div class="text-2xl font-bold" id="min-rate">-</div>
+      <div class="text-sm opacity-80">Starting from</div>
+    </div>
+    <div class="text-center">
+      <div class="text-3xl font-bold text-yellow-300" id="avg-rate">-</div>
+      <div class="text-sm opacity-80">Average rate</div>
+    </div>
+    <div class="text-center">
+      <div class="text-2xl font-bold" id="max-rate">-</div>
+      <div class="text-sm opacity-80">Up to</div>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <!-- Location Input -->
+    <div>
+      <label for="rate-location" class="block text-sm font-medium mb-2">Your Location</label>
+      <div class="relative">
+        <select id="rate-location" class="w-full px-4 py-2 text-gray-900 bg-white rounded-lg focus:ring-2 focus:ring-yellow-300 focus:outline-none">
+          <option value="">Select your state...</option>
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CA">California</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NM">New Mexico</option>
+          <option value="NY">New York</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="TX">Texas</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WA">Washington</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
+        </select>
+        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insurance Type Selector -->
+    <div>
+      <label class="block text-sm font-medium mb-2">Insurance Type</label>
+      <div class="grid grid-cols-3 gap-2">
+        <button class="rate-type-btn px-3 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300" data-type="auto">
+          Auto
+        </button>
+        <button class="rate-type-btn px-3 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300" data-type="home">
+          Home
+        </button>
+        <button class="rate-type-btn px-3 py-2 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300" data-type="life">
+          Life
+        </button>
+      </div>
+    </div>
+
+    <!-- Get Quotes Button -->
+    <button id="get-quotes-btn" class="w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:ring-offset-blue-600">
+      Get Free Quotes
+    </button>
+  </div>
+
+  <!-- Rate Trend -->
+  <div class="mt-6 pt-4 border-t border-white/20">
+    <div class="flex items-center justify-between text-sm">
+      <span class="opacity-80">Rate trend this month:</span>
+      <span id="rate-trend" class="font-medium">
+        <span class="text-green-300">↓ 2.1% lower</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Last Updated -->
+  <div class="mt-2 text-xs opacity-60 text-center">
+    Last updated: <span id="last-updated">{new Date().toLocaleTimeString()}</span>
+  </div>
+</div>
+
+<script define:vars={{ sampleRates, insuranceType, units }}>
+document.addEventListener('DOMContentLoaded', function() {
+  const locationSelect = document.getElementById('rate-location');
+  const typeButtons = document.querySelectorAll('.rate-type-btn');
+  const getQuotesBtn = document.getElementById('get-quotes-btn');
+  const minRateEl = document.getElementById('min-rate');
+  const avgRateEl = document.getElementById('avg-rate');
+  const maxRateEl = document.getElementById('max-rate');
+  const lastUpdatedEl = document.getElementById('last-updated');
+  const rateTrendEl = document.getElementById('rate-trend');
+
+  let currentType = insuranceType;
+  let currentLocation = '';
+
+  // Set initial active type button
+  typeButtons.forEach(btn => {
+    if (btn.dataset.type === currentType) {
+      btn.classList.add('bg-white', 'text-blue-600');
+    } else {
+      btn.classList.add('bg-white/20', 'text-white');
+    }
+  });
+
+  function updateRates() {
+    const rates = sampleRates[currentType];
+    const locationRates = rates[currentLocation] || rates.default;
+    const unit = units[currentType];
+    
+    // Add some randomization to simulate live rates
+    const variance = 0.1; // 10% variance
+    const minRate = Math.round(locationRates.min * (1 + (Math.random() - 0.5) * variance));
+    const avgRate = Math.round(locationRates.avg * (1 + (Math.random() - 0.5) * variance));
+    const maxRate = Math.round(locationRates.max * (1 + (Math.random() - 0.5) * variance));
+
+    minRateEl.textContent = `$${minRate.toLocaleString()}${unit}`;
+    avgRateEl.textContent = `$${avgRate.toLocaleString()}${unit}`;
+    maxRateEl.textContent = `$${maxRate.toLocaleString()}${unit}`;
+    
+    // Update last updated time
+    lastUpdatedEl.textContent = new Date().toLocaleTimeString();
+    
+    // Simulate rate trends
+    const trends = [
+      { text: '↓ 2.1% lower', class: 'text-green-300' },
+      { text: '↓ 1.8% lower', class: 'text-green-300' },
+      { text: '↑ 1.2% higher', class: 'text-red-300' },
+      { text: '→ No change', class: 'text-yellow-300' }
+    ];
+    const randomTrend = trends[Math.floor(Math.random() * trends.length)];
+    rateTrendEl.innerHTML = `<span class="${randomTrend.class}">${randomTrend.text}</span>`;
+  }
+
+  // Location change handler
+  locationSelect.addEventListener('change', function() {
+    currentLocation = this.value;
+    updateRates();
+  });
+
+  // Type button handlers
+  typeButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      // Update active state
+      typeButtons.forEach(b => {
+        b.classList.remove('bg-white', 'text-blue-600');
+        b.classList.add('bg-white/20', 'text-white');
+      });
+      this.classList.remove('bg-white/20', 'text-white');
+      this.classList.add('bg-white', 'text-blue-600');
+      
+      currentType = this.dataset.type;
+      updateRates();
+    });
+  });
+
+  // Get quotes button handler
+  getQuotesBtn.addEventListener('click', function() {
+    // In a real app, this would redirect to a quote form or open a modal
+    const params = new URLSearchParams({
+      type: currentType,
+      location: currentLocation
+    });
+    
+    // Simulate opening quote form
+    alert(`Getting ${currentType} insurance quotes for ${currentLocation || 'your area'}...\\n\\nThis would normally redirect to a quote form with pre-filled information.`);
+  });
+
+  // Initial rate update
+  updateRates();
+  
+  // Auto-update rates every 30 seconds to simulate live data
+  setInterval(updateRates, 30000);
+});
+</script>
+
+<style>
+  .rate-type-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .rate-type-btn.bg-white:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>

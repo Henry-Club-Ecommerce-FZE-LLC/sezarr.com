@@ -1,0 +1,41 @@
+---
+interface Props {
+  title: string;
+  links: {
+    href: string;
+    label: string;
+    description?: string;
+    icon?: string;
+    featured?: boolean;
+  }[];
+}
+
+const { title, links } = Astro.props;
+---
+
+<nav class="py-4" aria-labelledby={`nav-${title.toLowerCase().replace(/\s+/g, '-')}`}>
+  <h2 id={`nav-${title.toLowerCase().replace(/\s+/g, '-')}`} class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">{title}</h2>
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
+    {links.map((link) => (
+      <li>
+        <a 
+          href={link.href}
+          class={`block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-500 transition-colors ${link.featured ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}`}
+          aria-current={Astro.url.pathname === link.href ? 'page' : undefined}
+        >
+          <div class="flex items-start gap-3">
+            {link.icon && (
+              <span class="text-xl" aria-hidden="true">{link.icon}</span>
+            )}
+            <div>
+              <div class={`font-medium ${link.featured ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-gray-100'}`}>{link.label}</div>
+              {link.description && (
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
+              )}
+            </div>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

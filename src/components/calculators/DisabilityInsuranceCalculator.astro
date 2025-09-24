@@ -1,0 +1,260 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class={`bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 ${className}`}>
+  <div class="mb-6">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+      Disability Insurance Calculator
+    </h3>
+    <p class="text-gray-600 dark:text-gray-300">
+      Calculate how much disability insurance coverage you need to protect your income.
+    </p>
+  </div>
+
+  <form id="disability-calculator" class="space-y-6">
+    <!-- Current Income -->
+    <div>
+      <label for="annual-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Annual Income ($)
+      </label>
+      <input type="number" id="annual-income" name="annual-income" 
+             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white"
+             placeholder="75000" min="20000" max="500000" step="1000" required>
+    </div>
+
+    <!-- Age -->
+    <div>
+      <label for="age" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Current Age
+      </label>
+      <input type="number" id="age" name="age" 
+             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white"
+             placeholder="35" min="18" max="65" required>
+    </div>
+
+    <!-- Gender -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Gender
+      </label>
+      <div class="flex gap-4">
+        <label class="flex items-center">
+          <input type="radio" name="gender" value="male" class="mr-2 text-emerald-600 focus:ring-emerald-500" required>
+          <span class="text-gray-700 dark:text-gray-300">Male</span>
+        </label>
+        <label class="flex items-center">
+          <input type="radio" name="gender" value="female" class="mr-2 text-emerald-600 focus:ring-emerald-500">
+          <span class="text-gray-700 dark:text-gray-300">Female</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Occupation -->
+    <div>
+      <label for="occupation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Occupation Class
+      </label>
+      <select id="occupation" name="occupation" 
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white" required>
+        <option value="">Select your occupation class</option>
+        <option value="professional">Professional/Office Worker (Class 1-2)</option>
+        <option value="skilled">Skilled Trades (Class 3-4)</option>
+        <option value="physical">Physical Labor (Class 5-6)</option>
+      </select>
+    </div>
+
+    <!-- Current Coverage -->
+    <div>
+      <label for="current-coverage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Existing Disability Coverage ($ per month)
+      </label>
+      <input type="number" id="current-coverage" name="current-coverage" 
+             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white"
+             placeholder="0" min="0" max="20000" step="100">
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Include group coverage and Social Security disability estimates</p>
+    </div>
+
+    <!-- Monthly Expenses -->
+    <div>
+      <label for="monthly-expenses" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Essential Monthly Expenses ($)
+      </label>
+      <input type="number" id="monthly-expenses" name="monthly-expenses" 
+             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:bg-gray-700 dark:text-white"
+             placeholder="4500" min="1000" max="20000" step="100" required>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Mortgage, utilities, food, transportation, insurance, etc.</p>
+    </div>
+
+    <!-- Calculate Button -->
+    <button type="submit" 
+            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-md transition-colors">
+      Calculate My Disability Insurance Needs
+    </button>
+  </form>
+
+  <!-- Results Section -->
+  <div id="results" class="hidden mt-8 p-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+    <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Your Disability Insurance Analysis</h4>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="space-y-4">
+        <div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Recommended Coverage</div>
+          <div id="recommended-coverage" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400"></div>
+        </div>
+        
+        <div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Coverage Gap</div>
+          <div id="coverage-gap" class="text-xl font-semibold text-red-600 dark:text-red-400"></div>
+        </div>
+        
+        <div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Annual Premium</div>
+          <div id="estimated-premium" class="text-xl font-semibold text-gray-900 dark:text-white"></div>
+        </div>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Income Replacement Ratio</div>
+          <div id="replacement-ratio" class="text-xl font-semibold text-gray-900 dark:text-white"></div>
+        </div>
+        
+        <div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Premium as % of Income</div>
+          <div id="premium-percentage" class="text-xl font-semibold text-gray-900 dark:text-white"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="recommendations" class="mt-6 space-y-3">
+      <h5 class="font-semibold text-gray-900 dark:text-white">Recommendations:</h5>
+      <ul id="recommendation-list" class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+        <!-- Recommendations will be populated by JavaScript -->
+      </ul>
+    </div>
+
+    <div class="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
+      <p class="text-sm text-yellow-800 dark:text-yellow-200">
+        <strong>Disclaimer:</strong> This calculator provides estimates for educational purposes only. 
+        Actual coverage needs and premiums may vary. Consult with a licensed insurance professional for personalized advice.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('disability-calculator');
+    const results = document.getElementById('results');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      calculateDisabilityInsurance();
+    });
+    
+    function calculateDisabilityInsurance() {
+      // Get form values
+      const annualIncome = parseFloat(document.getElementById('annual-income').value);
+      const age = parseInt(document.getElementById('age').value);
+      const gender = document.querySelector('input[name="gender"]:checked').value;
+      const occupation = document.getElementById('occupation').value;
+      const currentCoverage = parseFloat(document.getElementById('current-coverage').value) || 0;
+      const monthlyExpenses = parseFloat(document.getElementById('monthly-expenses').value);
+      
+      // Calculate monthly income
+      const monthlyIncome = annualIncome / 12;
+      
+      // Calculate recommended coverage (60-70% of income, but not more than expenses + 20%)
+      const incomeBasedCoverage = monthlyIncome * 0.65;
+      const expenseBasedCoverage = monthlyExpenses * 1.2;
+      const recommendedCoverage = Math.min(incomeBasedCoverage, expenseBasedCoverage);
+      
+      // Calculate coverage gap
+      const coverageGap = Math.max(0, recommendedCoverage - currentCoverage);
+      
+      // Calculate estimated premium (rough estimates based on industry averages)
+      let premiumRate = 0.02; // Base rate 2% of income
+      
+      // Adjust for age
+      if (age > 50) premiumRate += 0.005;
+      else if (age > 40) premiumRate += 0.003;
+      
+      // Adjust for gender (women typically pay more)
+      if (gender === 'female') premiumRate += 0.002;
+      
+      // Adjust for occupation
+      switch(occupation) {
+        case 'professional':
+          // No adjustment (best rates)
+          break;
+        case 'skilled':
+          premiumRate += 0.003;
+          break;
+        case 'physical':
+          premiumRate += 0.006;
+          break;
+      }
+      
+      const estimatedAnnualPremium = annualIncome * premiumRate;
+      
+      // Calculate ratios
+      const replacementRatio = (recommendedCoverage / monthlyIncome) * 100;
+      const premiumPercentage = (estimatedAnnualPremium / annualIncome) * 100;
+      
+      // Display results
+      document.getElementById('recommended-coverage').textContent = `$${recommendedCoverage.toLocaleString()}/month`;
+      document.getElementById('coverage-gap').textContent = coverageGap > 0 ? `$${coverageGap.toLocaleString()}/month` : 'Fully Covered';
+      document.getElementById('estimated-premium').textContent = `$${estimatedAnnualPremium.toLocaleString()}/year`;
+      document.getElementById('replacement-ratio').textContent = `${replacementRatio.toFixed(1)}%`;
+      document.getElementById('premium-percentage').textContent = `${premiumPercentage.toFixed(2)}%`;
+      
+      // Generate recommendations
+      const recommendations = [];
+      
+      if (coverageGap > 0) {
+        recommendations.push(`Consider purchasing an additional $${coverageGap.toLocaleString()}/month in disability coverage.`);
+      }
+      
+      if (replacementRatio < 50) {
+        recommendations.push('Your current coverage may not be sufficient to maintain your lifestyle during a disability.');
+      }
+      
+      if (premiumPercentage > 3) {
+        recommendations.push('Consider a longer waiting period to reduce premium costs.');
+      }
+      
+      if (occupation === 'professional') {
+        recommendations.push('Look for "own-occupation" coverage given your professional status.');
+      }
+      
+      if (age < 40) {
+        recommendations.push('Consider a future increase option to grow your coverage as your income increases.');
+      }
+      
+      recommendations.push('Add a cost-of-living adjustment (COLA) rider to protect against inflation.');
+      
+      if (currentCoverage === 0) {
+        recommendations.push('Start with basic coverage and enhance it over time as your budget allows.');
+      }
+      
+      // Display recommendations
+      const recommendationList = document.getElementById('recommendation-list');
+      recommendationList.innerHTML = '';
+      recommendations.forEach(rec => {
+        const li = document.createElement('li');
+        li.textContent = '• ' + rec;
+        recommendationList.appendChild(li);
+      });
+      
+      // Show results
+      results.classList.remove('hidden');
+      results.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>

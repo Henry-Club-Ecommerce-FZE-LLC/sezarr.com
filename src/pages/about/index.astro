@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE } from "../../config/site";
+const url = `${SITE.URL}/about/`;
+---
+<BaseLayout title="About Us" description="About Insurance Insights USA: editorial standards, review process, and contact info." {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 prose">
+    <h1>About Insurance Insights USA</h1>
+    <p>We publish independent, practical insurance guides for U.S. consumers. Our writers follow strict editorial and fact-checking standards.</p>
+    <h2>Editorial Principles</h2>
+    <ul>
+      <li>E-E-A-T focused: experience, expertise, authoritativeness, trust.</li>
+      <li>Fact-checked with sources and updated regularly.</li>
+      <li>Clear disclosures for ads and affiliates.</li>
+    </ul>
+  </section>
+</BaseLayout>

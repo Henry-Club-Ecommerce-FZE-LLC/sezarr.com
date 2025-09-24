@@ -1,0 +1,293 @@
+---
+// Auto Insurance Needs Calculator - Interactive Tool
+---
+<div class="bg-white dark:bg-gray-900 rounded-xl border shadow-lg p-6 max-w-4xl mx-auto">
+  <div class="text-center mb-8">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Auto Insurance Needs Calculator</h2>
+    <p class="text-gray-600 dark:text-gray-300 mt-2">Get personalized coverage recommendations based on your situation</p>
+  </div>
+
+  <form id="auto-calc-form" class="space-y-6">
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Vehicle Information -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Vehicle Information</h3>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vehicle Value</label>
+          <input type="number" id="vehicle-value" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="25000" min="1000" max="200000">
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vehicle Age</label>
+          <select id="vehicle-age" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="new">0-2 years (New)</option>
+            <option value="recent">3-5 years</option>
+            <option value="older">6-10 years</option>
+            <option value="old">10+ years</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Loan Status</label>
+          <select id="loan-status" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="owned">Paid off</option>
+            <option value="financed">Financed/Leased</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Your Situation</h3>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Net Worth (Assets - Debts)</label>
+          <select id="net-worth" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="low">Under $50,000</option>
+            <option value="medium">$50,000 - $250,000</option>
+            <option value="high">$250,000 - $500,000</option>
+            <option value="very-high">Over $500,000</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Annual Income</label>
+          <select id="income" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="low">Under $40,000</option>
+            <option value="medium">$40,000 - $80,000</option>
+            <option value="high">$80,000 - $150,000</option>
+            <option value="very-high">Over $150,000</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">State</label>
+          <select id="state" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="CA">California</option>
+            <option value="TX">Texas</option>
+            <option value="FL">Florida</option>
+            <option value="NY">New York</option>
+            <option value="other">Other State</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <button type="button" id="calculate-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors">
+        Calculate My Coverage Needs
+      </button>
+    </div>
+  </form>
+
+  <!-- Results Section -->
+  <div id="results" class="hidden mt-8 space-y-6">
+    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
+      <h3 class="text-xl font-bold text-blue-900 dark:text-blue-100 mb-4">Your Recommended Coverage</h3>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-3">
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Liability (Per Person)</span>
+            <span id="liability-person" class="font-bold text-blue-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Liability (Per Accident)</span>
+            <span id="liability-accident" class="font-bold text-blue-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Property Damage</span>
+            <span id="property-damage" class="font-bold text-blue-700"></span>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Comprehensive Deductible</span>
+            <span id="comp-deductible" class="font-bold text-blue-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Collision Deductible</span>
+            <span id="collision-deductible" class="font-bold text-blue-700"></span>
+          </div>
+          <div class="flex justify-between py-2 border-b border-blue-200">
+            <span class="font-medium">Full Coverage Needed?</span>
+            <span id="full-coverage" class="font-bold text-blue-700"></span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+        <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">💡 Why These Recommendations?</h4>
+        <div id="explanation" class="text-sm text-yellow-700 dark:text-yellow-300"></div>
+      </div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg p-6 text-center">
+      <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Ready to Get Quotes?</h4>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">Compare rates from top insurers with your recommended coverage levels.</p>
+      <a href="/posts/compare-auto-insurance-rates/" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors mr-4">
+        Compare Quotes Guide
+      </a>
+      <button id="share-results" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+        Share Results
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('auto-calc-form');
+  const calculateBtn = document.getElementById('calculate-btn');
+  const results = document.getElementById('results');
+
+  calculateBtn.addEventListener('click', function() {
+    const vehicleValue = parseInt(document.getElementById('vehicle-value').value) || 25000;
+    const vehicleAge = document.getElementById('vehicle-age').value;
+    const loanStatus = document.getElementById('loan-status').value;
+    const netWorth = document.getElementById('net-worth').value;
+    const income = document.getElementById('income').value;
+    const state = document.getElementById('state').value;
+
+    // Calculate recommendations based on inputs
+    const recommendations = calculateCoverage(vehicleValue, vehicleAge, loanStatus, netWorth, income, state);
+    
+    // Display results
+    displayResults(recommendations);
+    
+    // Track analytics
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'calculator_use', {
+        event_category: 'engagement',
+        event_label: 'auto_insurance_calculator',
+        custom_parameters: {
+          vehicle_value: vehicleValue,
+          net_worth: netWorth,
+          income: income
+        }
+      });
+    }
+  });
+
+  function calculateCoverage(vehicleValue, vehicleAge, loanStatus, netWorth, income, state) {
+    let liabilityPerson, liabilityAccident, propertyDamage, compDeductible, collisionDeductible;
+    let needsFullCoverage = false;
+    let explanation = [];
+
+    // Base liability recommendations on net worth and income
+    if (netWorth === 'very-high' || income === 'very-high') {
+      liabilityPerson = '$500,000';
+      liabilityAccident = '$1,000,000';
+      propertyDamage = '$100,000';
+      explanation.push('High liability limits protect your significant assets from lawsuits.');
+    } else if (netWorth === 'high' || income === 'high') {
+      liabilityPerson = '$250,000';
+      liabilityAccident = '$500,000';
+      propertyDamage = '$50,000';
+      explanation.push('Higher liability limits recommended to protect your assets.');
+    } else if (netWorth === 'medium' || income === 'medium') {
+      liabilityPerson = '$100,000';
+      liabilityAccident = '$300,000';
+      propertyDamage = '$25,000';
+      explanation.push('Moderate liability limits provide good protection for your income level.');
+    } else {
+      liabilityPerson = '$50,000';
+      liabilityAccident = '$100,000';
+      propertyDamage = '$25,000';
+      explanation.push('State minimum may be sufficient given your current assets.');
+    }
+
+    // State-specific adjustments
+    if (state === 'CA' || state === 'NY') {
+      explanation.push('Your state has higher average claim costs, consider higher limits.');
+    }
+
+    // Full coverage recommendations
+    if (loanStatus === 'financed') {
+      needsFullCoverage = true;
+      explanation.push('Lender requires comprehensive and collision coverage.');
+    } else if (vehicleValue > 10000) {
+      needsFullCoverage = true;
+      explanation.push('Vehicle value justifies full coverage protection.');
+    } else if (vehicleAge === 'old' && vehicleValue < 5000) {
+      needsFullCoverage = false;
+      explanation.push('Older vehicle may not need full coverage - compare premiums vs. value.');
+    } else {
+      needsFullCoverage = true;
+    }
+
+    // Deductible recommendations based on income and risk tolerance
+    if (income === 'very-high' || netWorth === 'very-high') {
+      compDeductible = '$1,000';
+      collisionDeductible = '$1,000';
+      explanation.push('Higher deductibles reduce premiums and you can afford out-of-pocket costs.');
+    } else if (income === 'high' || netWorth === 'high') {
+      compDeductible = '$500';
+      collisionDeductible = '$500';
+    } else {
+      compDeductible = '$250';
+      collisionDeductible = '$250';
+      explanation.push('Lower deductibles reduce financial shock if you need to file a claim.');
+    }
+
+    return {
+      liabilityPerson,
+      liabilityAccident,
+      propertyDamage,
+      compDeductible,
+      collisionDeductible,
+      needsFullCoverage: needsFullCoverage ? 'Yes' : 'No',
+      explanation: explanation.join(' ')
+    };
+  }
+
+  function displayResults(recommendations) {
+    document.getElementById('liability-person').textContent = recommendations.liabilityPerson;
+    document.getElementById('liability-accident').textContent = recommendations.liabilityAccident;
+    document.getElementById('property-damage').textContent = recommendations.propertyDamage;
+    document.getElementById('comp-deductible').textContent = recommendations.compDeductible;
+    document.getElementById('collision-deductible').textContent = recommendations.collisionDeductible;
+    document.getElementById('full-coverage').textContent = recommendations.needsFullCoverage;
+    document.getElementById('explanation').textContent = recommendations.explanation;
+    
+    results.classList.remove('hidden');
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Share functionality
+  document.getElementById('share-results').addEventListener('click', function() {
+    const url = window.location.href;
+    const text = 'I just calculated my auto insurance needs! Check out this helpful calculator.';
+    
+    if (navigator.share) {
+      navigator.share({ title: 'Auto Insurance Calculator Results', text, url });
+    } else {
+      // Fallback - copy to clipboard
+      navigator.clipboard.writeText(text + ' ' + url).then(() => {
+        alert('Results copied to clipboard!');
+      });
+    }
+  });
+});
+</script>
+
+<style>
+  /* Enhanced styling for the calculator */
+  #auto-calc-form input:focus,
+  #auto-calc-form select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    #auto-calc-form input,
+    #auto-calc-form select {
+      background-color: rgb(31 41 55);
+      border-color: rgb(75 85 99);
+      color: rgb(243 244 246);
+    }
+  }
+</style>

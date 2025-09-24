@@ -1,0 +1,51 @@
+---
+import IconShieldCheck from './icons/IconShieldCheck.astro';
+import IconBookOpen from './icons/IconBookOpen.astro';
+import IconScale from './icons/IconScale.astro';
+
+const features = [
+  {
+    name: 'Unbiased & Independent',
+    description: 'Our content is based on objective, data-driven analysis. We are not owned by an insurance company, and our recommendations are our own.',
+    icon: IconScale,
+  },
+  {
+    name: 'Expert Reviewed',
+    description: 'Every guide is written and reviewed by licensed insurance professionals and financial experts to ensure accuracy and practical value.',
+    icon: IconShieldCheck,
+  },
+  {
+    name: 'Transparent & Thorough',
+    description: 'We believe in showing our work. We cite our data sources and explain our methodology so you can make decisions with confidence.',
+    icon: IconBookOpen,
+  },
+]
+---
+<div class="bg-white dark:bg-gray-900 py-16 sm:py-24">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-2xl lg:text-center">
+      <h2 class="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">Your Financial Safeguard</h2>
+      <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+        Why Trust Insurance Insights USA?
+      </p>
+      <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+        Navigating the world of insurance is complex. We're committed to providing clear, unbiased, and expert-driven information to help you make the best choices for your financial security.
+      </p>
+    </div>
+    <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
+      <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-10 lg:max-w-none lg:grid-cols-3 lg:gap-y-16">
+        {features.map((feature) => (
+          <div class="relative pl-16">
+            <dt class="text-base font-semibold leading-7 text-gray-900 dark:text-white">
+              <div class="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600">
+                <feature.icon class="h-6 w-6 text-white" aria-hidden="true" />
+              </div>
+              {feature.name}
+            </dt>
+            <dd class="mt-2 text-base leading-7 text-gray-600 dark:text-gray-300">{feature.description}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</div>

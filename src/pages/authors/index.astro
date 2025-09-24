@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from "../../config/site";
+
+const authors = await getCollection('authors');
+const siteUrl = SITE.URL;
+const url = `${siteUrl}${Astro.url.pathname}`;
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: 'Authors',
+  mainEntityOfPage: url
+};
+---
+<BaseLayout title="Authors" description="Meet our authors and reviewers." url={url} image="/og-default.jpg" type="website" {schema}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">
+    <h1 class="text-3xl font-semibold mb-6">Authors</h1>
+    <ul class="grid md:grid-cols-2 gap-6">
+      {authors.map((a) => (
+        <li class="rounded border p-4 bg-white/60 dark:bg-gray-800/60">
+          <a href={`/authors/${a.slug}/`} class="no-underline">
+            <div class="font-semibold">{a.data.name}</div>
+            {a.data.title && <div class="text-xs text-gray-500">{a.data.title}</div>}
+            <p class="mt-2 text-sm">{a.data.bio}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>

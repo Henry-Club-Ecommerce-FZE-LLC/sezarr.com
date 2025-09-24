@@ -1,0 +1,1 @@
+Delete the file named [...slug].astro. This marker exists because the editor failed to delete the bracketed filename automatically.

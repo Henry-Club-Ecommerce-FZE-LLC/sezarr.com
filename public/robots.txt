@@ -1,0 +1,72 @@
+User-agent: *
+Allow: /
+
+# Allow bots to index these content types
+Allow: /posts/
+Allow: /auto-insurance/
+Allow: /health-insurance/
+Allow: /homeowners-insurance/
+Allow: /life-insurance/
+Allow: /tools/
+Allow: /authors/
+
+# Disallow private/admin areas
+Disallow: /_astro/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /.well-known/
+Disallow: /*.json$
+Disallow: /*?*utm_*
+Disallow: /*?*ref=*
+Disallow: /*?*source=*
+
+# Block AI crawlers except for search engines
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OpenAI
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Bard
+Disallow: /
+
+# Allow search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# Social media crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Sitemaps
+Sitemap: https://sezarr.com/sitemap.xml
+Sitemap: https://sezarr.com/sitemap-index.xml
+
+# Host directive
+Host: https://sezarr.com

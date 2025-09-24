@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { 
+      category: post.data.category, 
+      slug: post.slug 
+    },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Map category IDs to their proper URLs and display names
+const categoryMapping = {
+  'auto': { 
+    url: '/auto-insurance/', 
+    name: 'Auto Insurance' 
+  },
+  'business': { 
+    url: '/business-insurance/', 
+    name: 'Business Insurance' 
+  },
+  'health': { 
+    url: '/health-insurance/', 
+    name: 'Health Insurance' 
+  },
+  'home': { 
+    url: '/homeowners-insurance/', 
+    name: 'Home Insurance' 
+  },
+  'life': { 
+    url: '/life-insurance/', 
+    name: 'Life Insurance' 
+  },
+  'travel': { 
+    url: '/travel-insurance/', 
+    name: 'Travel Insurance' 
+  },
+  'pet': { 
+    url: '/pet-insurance/', 
+    name: 'Pet Insurance' 
+  },
+  'disability': { 
+    url: '/disability-insurance/', 
+    name: 'Disability Insurance' 
+  }
+};
+
+const categoryInfo = categoryMapping[post.data.category] || { 
+  url: `/${post.data.category}/`, 
+  name: post.data.category.charAt(0).toUpperCase() + post.data.category.slice(1) 
+};
+
+// Generate breadcrumbs for the article
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: categoryInfo.name, href: categoryInfo.url },
+  { label: post.data.title, href: `/${post.data.category}/${post.slug}/` }
+];
+---
+
+<PostLayout frontmatter={post.data} breadcrumbs={breadcrumbs}>
+  <Content />
+</PostLayout>

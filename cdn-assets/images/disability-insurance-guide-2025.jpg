@@ -1,0 +1,89 @@
+<svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="overlay" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#overlay)"/>
+  
+  <!-- Shield icon -->
+  <g transform="translate(100, 150)">
+    <path d="M60 0 L120 20 L120 80 C120 120 90 150 60 160 C30 150 0 120 0 80 L0 20 Z" 
+          fill="white" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+    <path d="M30 60 L50 80 L90 40" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Person silhouette -->
+  <g transform="translate(300, 200)">
+    <circle cx="40" cy="30" r="25" fill="white" fill-opacity="0.8"/>
+    <rect x="20" y="55" width="40" height="80" rx="20" fill="white" fill-opacity="0.8"/>
+    <rect x="10" y="75" width="20" height="60" rx="10" fill="white" fill-opacity="0.8"/>
+    <rect x="70" y="75" width="20" height="60" rx="10" fill="white" fill-opacity="0.8"/>
+    <rect x="25" y="135" width="15" height="40" rx="7" fill="white" fill-opacity="0.8"/>
+    <rect x="60" y="135" width="15" height="40" rx="7" fill="white" fill-opacity="0.8"/>
+  </g>
+  
+  <!-- Income protection visualization -->
+  <g transform="translate(500, 200)">
+    <!-- Dollar signs -->
+    <text x="0" y="40" font-family="Arial, sans-serif" font-size="48" fill="white" font-weight="bold">$</text>
+    <text x="40" y="40" font-family="Arial, sans-serif" font-size="48" fill="white" font-weight="bold">$</text>
+    <text x="80" y="40" font-family="Arial, sans-serif" font-size="48" fill="white" font-weight="bold">$</text>
+    
+    <!-- Arrow pointing to protected money -->
+    <path d="M50 80 L50 120 M35 105 L50 120 L65 105" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+    
+    <!-- Protected money stack -->
+    <rect x="20" y="140" width="60" height="40" rx="5" fill="white" fill-opacity="0.9"/>
+    <text x="50" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#10b981" font-weight="bold">PROTECTED</text>
+  </g>
+  
+  <!-- Title text -->
+  <text x="700" y="180" font-family="Arial, sans-serif" font-size="42" fill="white" font-weight="bold">
+    Disability Insurance Guide
+  </text>
+  <text x="700" y="220" font-family="Arial, sans-serif" font-size="32" fill="white">
+    Protect Your Income
+  </text>
+  <text x="700" y="260" font-family="Arial, sans-serif" font-size="24" fill="white" fill-opacity="0.9">
+    Complete 2025 Guide to Income Protection
+  </text>
+  
+  <!-- Statistics boxes -->
+  <g transform="translate(700, 320)">
+    <rect x="0" y="0" width="120" height="80" rx="8" fill="white" fill-opacity="0.9"/>
+    <text x="60" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#10b981" font-weight="bold">25%</text>
+    <text x="60" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">DISABILITY</text>
+    <text x="60" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151">RISK</text>
+    <text x="60" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Before retirement</text>
+  </g>
+  
+  <g transform="translate(830, 320)">
+    <rect x="0" y="0" width="120" height="80" rx="8" fill="white" fill-opacity="0.9"/>
+    <text x="60" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#dc2626" font-weight="bold">60%</text>
+    <text x="60" y="45" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151" font-weight="bold">INCOME</text>
+    <text x="60" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#374151">REPLACED</text>
+    <text x="60" y="72" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">Typical coverage</text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="950" cy="150" r="3" fill="white" fill-opacity="0.6"/>
+  <circle cx="980" cy="180" r="2" fill="white" fill-opacity="0.4"/>
+  <circle cx="1020" cy="120" r="4" fill="white" fill-opacity="0.5"/>
+  <circle cx="1100" cy="200" r="2" fill="white" fill-opacity="0.7"/>
+  
+  <!-- Bottom accent -->
+  <rect x="0" y="580" width="1200" height="50" fill="url(#overlay)"/>
+  <text x="600" y="610" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="white" fill-opacity="0.8">
+    Learn about short-term and long-term coverage options
+  </text>
+</svg>

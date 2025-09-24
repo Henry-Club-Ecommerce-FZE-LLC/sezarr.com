@@ -1,0 +1,24 @@
+---
+const { items = [] } = Astro.props as { items: Array<{ q: string; a: string }> };
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map(it => ({
+    "@type": "Question",
+    name: it.q,
+    acceptedAnswer: { "@type": "Answer", text: it.a }
+  }))
+};
+---
+<section class="my-8">
+  <h2 class="text-xl font-semibold mb-3">Frequently asked questions</h2>
+  <div class="divide-y">
+    {items.map((it, i) => (
+      <details class="py-3 group">
+        <summary class="cursor-pointer font-medium">{it.q}</summary>
+        <div class="mt-2 text-gray-700 dark:text-gray-200">{it.a}</div>
+      </details>
+    ))}
+  </div>
+  <script type="application/ld+json">{JSON.stringify(schema)}</script>
+</section>

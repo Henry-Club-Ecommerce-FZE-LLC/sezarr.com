@@ -1,0 +1,78 @@
+---
+interface Props {
+  category: string;
+  className?: string;
+}
+
+const { category, className = '' } = Astro.props;
+
+// Category color and icon mapping
+const categoryMapping: Record<string, { name: string; color: string; bgColor: string; icon: string }> = {
+  'auto': { 
+    name: 'Auto Insurance', 
+    color: 'text-blue-700 dark:text-blue-300', 
+    bgColor: 'bg-blue-100 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700',
+    icon: '🚗' 
+  },
+  'business': { 
+    name: 'Business Insurance', 
+    color: 'text-purple-700 dark:text-purple-300', 
+    bgColor: 'bg-purple-100 dark:bg-purple-900/30 border-purple-200 dark:border-purple-700',
+    icon: '🏢' 
+  },
+  'health': { 
+    name: 'Health Insurance', 
+    color: 'text-red-700 dark:text-red-300', 
+    bgColor: 'bg-red-100 dark:bg-red-900/30 border-red-200 dark:border-red-700',
+    icon: '🏥' 
+  },
+  'homeowners': { 
+    name: 'Home Insurance', 
+    color: 'text-green-700 dark:text-green-300', 
+    bgColor: 'bg-green-100 dark:bg-green-900/30 border-green-200 dark:border-green-700',
+    icon: '🏠' 
+  },
+  'life': { 
+    name: 'Life Insurance', 
+    color: 'text-yellow-700 dark:text-yellow-300', 
+    bgColor: 'bg-yellow-100 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-700',
+    icon: '💰' 
+  },
+  'travel': { 
+    name: 'Travel Insurance', 
+    color: 'text-indigo-700 dark:text-indigo-300', 
+    bgColor: 'bg-indigo-100 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-700',
+    icon: '✈️' 
+  },
+  'pets': { 
+    name: 'Pet Insurance', 
+    color: 'text-orange-700 dark:text-orange-300', 
+    bgColor: 'bg-orange-100 dark:bg-orange-900/30 border-orange-200 dark:border-orange-700',
+    icon: '🐕' 
+  },
+  'disability': { 
+    name: 'Disability Insurance', 
+    color: 'text-teal-700 dark:text-teal-300', 
+    bgColor: 'bg-teal-100 dark:bg-teal-900/30 border-teal-200 dark:border-teal-700',
+    icon: '🦽' 
+  }
+};
+
+const categoryInfo = categoryMapping[category] || {
+  name: category.charAt(0).toUpperCase() + category.slice(1),
+  color: 'text-gray-700 dark:text-gray-300',
+  bgColor: 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700',
+  icon: '📄'
+};
+
+const categoryUrl = `/${category === 'homeowners' ? 'homeowners' : category}-insurance/`;
+---
+
+<a 
+  href={categoryUrl}
+  class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium border transition-colors hover:shadow-sm ${categoryInfo.bgColor} ${categoryInfo.color} ${className}`}
+  title={`View all ${categoryInfo.name} articles`}
+>
+  <span class="text-base" role="img" aria-label={categoryInfo.name}>{categoryInfo.icon}</span>
+  <span>{categoryInfo.name}</span>
+</a>

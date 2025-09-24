@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from 'astro:content';
+const url = 'https://www.example.com/search/';
+const posts = await getCollection('posts');
+const index = posts.map(p => ({ slug: p.slug, title: p.data.title, description: p.data.description }));
+---
+<BaseLayout title="Search" description="Search insurance guides" {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">
+    <h1 class="text-3xl font-bold">Search</h1>
+    <input id="q" class="mt-4 w-full max-w-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Search guides..." />
+    <ul id="results" class="mt-6 space-y-3"></ul>
+  </section>
+  <script>
+    {`(function(){
+      const data = ${JSON.stringify(index)};
+      const q=document.getElementById('q');
+      const out=document.getElementById('results');
+      function render(items){
+        out.innerHTML = items.map(i=>
+          '<li><a href="/posts/'+i.slug+'/" class="font-semibold">'+i.title+'</a><div class="text-sm text-gray-600">'+i.description+'</div></li>'
+        ).join('');
+      }
+      q.addEventListener('input',()=>{
+        const s=q.value.toLowerCase();
+        const items = !s?[]:data.filter(d=> d.title.toLowerCase().includes(s) || d.description.toLowerCase().includes(s));
+        render(items);
+      });
+    })();`}
+  </script>
+</BaseLayout>

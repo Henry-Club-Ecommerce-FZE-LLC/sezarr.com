@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import AdSenseBlock from '../../components/AdSenseBlock.astro';
+import NewsletterCallout from '../../components/NewsletterCallout.astro';
+import FAQ from '../../components/FAQ.astro';
+import FeaturedPosts from '../../components/FeaturedPosts.astro';
+
+const title = 'Life Insurance Guide 2025 - Term vs Whole Life & Best Policies';
+const description = 'Complete life insurance guide for 2025. Compare term vs whole life insurance, understand coverage amounts, riders, beneficiaries & find the best life insurance policies.';
+
+const lifeInsuranceStats = [
+  { label: 'Average Annual Premium', value: '$500', description: 'For $500K term life policy' },
+  { label: 'Coverage Gap', value: '40M', description: 'Americans lack life insurance' },
+  { label: 'Income Replacement', value: '10-12x', description: 'Annual income recommended' },
+  { label: 'Policy Types', value: '2 Main', description: 'Term and permanent options' }
+];
+
+const coverageTypes = [
+  {
+    title: 'Term Life Insurance',
+    description: 'Temporary coverage for a specific period with affordable premiums',
+    features: ['10, 20, or 30-year terms', 'Level premium periods', 'Renewable options', 'Convertible to permanent', 'Pure death benefit protection'],
+    priceRange: '$20-100/month'
+  },
+  {
+    title: 'Whole Life Insurance', 
+    description: 'Permanent coverage with cash value accumulation component',
+    features: ['Lifetime protection', 'Cash value growth', 'Fixed premiums', 'Dividend potential', 'Tax-deferred savings'],
+    priceRange: '$200-800/month'
+  },
+  {
+    title: 'Universal Life Insurance',
+    description: 'Flexible permanent coverage with investment components',
+    features: ['Adjustable premiums', 'Flexible death benefits', 'Investment options', 'Cash value accumulation', 'Potential for growth'],
+    priceRange: '$100-500/month'
+  },
+  {
+    title: 'Variable Life Insurance',
+    description: 'Investment-linked permanent coverage with market participation',
+    features: ['Investment control', 'Variable returns', 'Tax advantages', 'Death benefit flexibility', 'Professional management options'],
+    priceRange: '$150-600/month'
+  }
+];
+
+const faqs = [
+  {
+    question: "What's the difference between term and whole life insurance?",
+    answer: "Term life insurance provides temporary coverage for a specific period (10-30 years) with lower premiums, while whole life insurance offers permanent coverage with a cash value component and higher premiums. Term is ideal for temporary needs, while whole life provides lifelong protection and savings."
+  },
+  {
+    question: "How much life insurance coverage do I need?",
+    answer: "A common rule is 10-12 times your annual income, but your needs depend on debts, dependents, income replacement needs, and final expenses. Consider mortgage balance, children's education costs, and your spouse's financial security when calculating coverage amounts."
+  },
+  {
+    question: "Do I need a medical exam for life insurance?",
+    answer: "Many life insurance policies require a medical exam, but some insurers offer no-exam options for smaller coverage amounts or simplified issue policies. The exam typically includes basic measurements, blood and urine tests, and health questionnaires."
+  },
+  {
+    question: "Can I change my life insurance beneficiaries?",
+    answer: "Yes, you can typically change beneficiaries at any time by completing a beneficiary change form with your insurance company. It's important to keep beneficiary information current, especially after major life events like marriage, divorce, or births."
+  },
+  {
+    question: "What riders should I consider for life insurance?",
+    answer: "Common valuable riders include accidental death, waiver of premium (pays premiums if disabled), term conversion, accelerated death benefit (for terminal illness), and child term rider. Choose riders based on your specific needs and budget."
+  },
+  {
+    question: "How does the life insurance underwriting process work?",
+    answer: "Underwriting evaluates your risk through application review, medical exams, prescription checks, driving records, and sometimes financial verification. The process typically takes 4-8 weeks and determines your premium rates and coverage approval."
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-purple-950 dark:via-indigo-950 dark:to-blue-950 py-16 lg:py-24">
+    <div class="container mx-auto px-4">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium mb-6">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Life Insurance Guide 2025
+          </div>
+          <h1 class="text-4xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            Secure Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Family's Future</span> Today
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+            Comprehensive life insurance guide for 2025. Compare term vs whole life insurance, understand coverage amounts, explore rider options, and find the best life insurance policies to protect your loved ones.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/tools/life-insurance-calculator/" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+              </svg>
+              Calculate Coverage Needs
+            </a>
+            <a href="/tools/insurance-quote-comparison/" class="inline-flex items-center px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-200 dark:border-gray-700">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 00-2 2z"/>
+              </svg>
+              Compare Quotes
+            </a>
+          </div>
+        </div>
+        <div class="relative">
+          <ResponsiveImage 
+            src="/images/life-insurance-hero"
+            alt="Life Insurance Protection - Family secured by comprehensive life insurance coverage"
+            width={600}
+            height={400}
+            class="rounded-2xl shadow-2xl"
+            priority={true}
+          />
+          <div class="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-bold text-gray-900 dark:text-white">Family Protection</div>
+                <div class="text-sm text-gray-600 dark:text-gray-300">Financial security</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Statistics -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Life Insurance Market Insights
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Understanding the importance and accessibility of life insurance protection
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {lifeInsuranceStats.map((stat) => (
+          <div class="text-center p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
+            <div class="text-3xl lg:text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+              {stat.value}
+            </div>
+            <div class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              {stat.label}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-300">
+              {stat.description}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Coverage Types Grid -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Types of Life Insurance Coverage
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          Choose between term and permanent life insurance options based on your needs and budget
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        {coverageTypes.map((coverage) => (
+          <div class="bg-white dark:bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-start justify-between mb-6">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+                {coverage.title}
+              </h3>
+              <span class="bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full text-sm font-medium">
+                {coverage.priceRange}
+              </span>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">
+              {coverage.description}
+            </p>
+            <ul class="space-y-2">
+              {coverage.features.map((feature) => (
+                <li class="flex items-center text-gray-700 dark:text-gray-300">
+                  <svg class="w-4 h-4 text-green-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts -->
+  <section class="py-16 bg-white dark:bg-gray-900">
+    <FeaturedPosts category="life" />
+  </section>
+
+  <!-- AdSense Block -->
+  <section class="py-8">
+    <AdSenseBlock slot="8421032275" format="horizontal" />
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-16 bg-gray-50 dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Life Insurance FAQ
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            Common questions about life insurance coverage and policies
+          </p>
+        </div>
+        <FAQ faqs={faqs} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <NewsletterCallout />
+</BaseLayout>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Life Insurance Guide 2025 - Term vs Whole Life & Best Policies",
+  "description": "Complete life insurance guide for 2025. Compare term vs whole life insurance, understand coverage amounts, riders, beneficiaries & find the best life insurance policies.",
+  "url": "https://sezarr.com/life-insurance/",
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What's the difference between term and whole life insurance?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Term life insurance provides temporary coverage for a specific period (10-30 years) with lower premiums, while whole life insurance offers permanent coverage with a cash value component and higher premiums. Term is ideal for temporary needs, while whole life provides lifelong protection and savings."
+        }
+      },
+      {
+        "@type": "Question", 
+        "name": "How much life insurance coverage do I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A common rule is 10-12 times your annual income, but your needs depend on debts, dependents, income replacement needs, and final expenses. Consider mortgage balance, children's education costs, and your spouse's financial security when calculating coverage amounts."
+        }
+      }
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://sezarr.com/"
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Life Insurance",
+        "item": "https://sezarr.com/life-insurance/"
+      }
+    ]
+  }
+}
+</script>

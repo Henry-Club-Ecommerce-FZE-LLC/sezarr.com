@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ClaimsProbabilityCalculator from '../../../components/calculators/ClaimsProbabilityCalculator.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import FAQ from '../../../components/FAQ.astro';
+import AffiliateDisclosure from '../../../components/AffiliateDisclosure.astro';
+import NewsletterCallout from '../../../components/NewsletterCallout.astro';
+
+const title = "Claims Probability Calculator - Estimate Your Insurance Risk";
+const description = "Calculate your likelihood of filing an insurance claim based on your risk factors. Get personalized recommendations to reduce your risk and save on premiums.";
+const keywords = "claims probability calculator, insurance risk assessment, claim likelihood, insurance risk factors, premium calculator";
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Claims Probability Calculator', href: '/tools/claims-probability-calculator/' }
+];
+
+const faqs = [
+  {
+    question: "How accurate is the claims probability calculator?",
+    answer: "Our calculator uses statistical data from insurance industry studies and actuarial tables. While it provides a good estimate based on major risk factors, individual circumstances vary greatly. The actual probability depends on many additional factors not captured in this simplified model."
+  },
+  {
+    question: "What factors affect my claim probability the most?",
+    answer: "For auto insurance, age, driving experience, and violation history are major factors. For home insurance, the age of your home, location, and safety features have the biggest impact. Higher-risk factors can significantly increase your probability of filing a claim."
+  },
+  {
+    question: "How can I reduce my claim probability?",
+    answer: "Focus on controllable factors: maintain a clean driving record, improve home safety features, choose safer vehicles, reduce annual mileage when possible, and take preventive maintenance seriously. Many of these actions also qualify you for insurance discounts."
+  },
+  {
+    question: "Does a higher claim probability mean higher premiums?",
+    answer: "Generally yes. Insurance companies use similar risk factors to calculate premiums. If you have a higher claim probability, you'll typically pay higher premiums. However, each insurer weights factors differently, so shopping around is important."
+  },
+  {
+    question: "How often should I recalculate my claim probability?",
+    answer: "Recalculate annually or when major changes occur: moving to a new location, buying a new home or car, significant changes in driving patterns, or after violations drop off your record. This helps you understand how your risk profile evolves."
+  },
+  {
+    question: "What's the difference between claim probability and claim frequency?",
+    answer: "Claim probability is your likelihood of filing any claim in a given period. Claim frequency refers to how often claims occur across all policyholders. Your individual probability may be higher or lower than the average frequency based on your specific risk factors."
+  }
+];
+
+const jsonLD = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Claims Probability Calculator",
+  "description": description,
+  "url": "https://example.com/tools/claims-probability-calculator/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Auto insurance claim probability calculation",
+    "Home insurance claim probability calculation", 
+    "Risk factor analysis",
+    "Personalized recommendations",
+    "Risk level assessment"
+  ]
+};
+---
+
+<BaseLayout 
+  title={title}
+  description={description}
+  keywords={keywords}
+  jsonLD={jsonLD}
+>
+  <main class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumbs items={breadcrumbItems} />
+      
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          Claims Probability Calculator
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          Understand your risk profile and estimate your likelihood of filing an insurance claim. 
+          Get personalized recommendations to reduce risk and potentially lower your premiums.
+        </p>
+      </div>
+
+      <!-- Calculator -->
+      <div class="mb-12">
+        <ClaimsProbabilityCalculator />
+      </div>
+
+      <!-- Educational Content -->
+      <div class="grid lg:grid-cols-2 gap-8 mb-12">
+        <div class="bg-white dark:bg-gray-900 rounded-lg border shadow-sm p-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Understanding Claim Probability
+          </h2>
+          <div class="prose prose-gray dark:prose-invert">
+            <p>
+              Claim probability represents your statistical likelihood of filing an insurance claim within a specific time period, 
+              typically one year. Insurance companies use similar calculations to assess risk and set premiums.
+            </p>
+            
+            <h3 class="text-lg font-semibold mt-6 mb-3">Key Risk Factors</h3>
+            <ul class="space-y-2">
+              <li><strong>Age:</strong> Both your age and your property's age affect risk</li>
+              <li><strong>Experience:</strong> More experienced drivers have fewer accidents</li>
+              <li><strong>Location:</strong> Geographic area influences exposure to various risks</li>
+              <li><strong>Usage:</strong> How much you drive or how you use your property</li>
+              <li><strong>History:</strong> Past violations or claims indicate future risk</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-900 rounded-lg border shadow-sm p-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            How to Use This Information
+          </h2>
+          <div class="prose prose-gray dark:prose-invert">
+            <h3 class="text-lg font-semibold mb-3">Insurance Shopping</h3>
+            <p>
+              Understanding your risk profile helps you shop more effectively. High-risk individuals should focus on companies 
+              that specialize in their demographic or offer accident forgiveness programs.
+            </p>
+            
+            <h3 class="text-lg font-semibold mt-6 mb-3">Risk Management</h3>
+            <p>
+              Use the calculator's recommendations to identify areas where you can reduce risk. Even small improvements 
+              can lead to significant premium savings over time.
+            </p>
+            
+            <h3 class="text-lg font-semibold mt-6 mb-3">Coverage Decisions</h3>
+            <p>
+              Higher claim probability might justify lower deductibles or additional coverage options like rental car 
+              reimbursement or gap coverage.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Industry Statistics -->
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-8 mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+          Insurance Industry Statistics
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-blue-600 mb-2">12%</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Average annual auto claim probability</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-green-600 mb-2">5%</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Average annual home claim probability</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-orange-600 mb-2">$4,711</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Average auto claim cost (2023)</div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
+          Statistics from Insurance Information Institute and National Association of Insurance Commissioners
+        </p>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="mb-8">
+        <NewsletterCallout />
+      </div>
+
+      <!-- FAQ -->
+      <div class="mb-8">
+        <FAQ questions={faqs} />
+      </div>
+
+      <!-- Affiliate Disclosure -->
+      <AffiliateDisclosure />
+    </div>
+  </main>
+</BaseLayout>

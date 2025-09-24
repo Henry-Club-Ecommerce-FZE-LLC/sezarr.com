@@ -1,0 +1,652 @@
+---
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<div class={`mobile-enhancements ${className}`}>
+  <!-- Mobile Reading Progress (circular) -->
+  <div 
+    id="mobile-progress-circle" 
+    class="fixed bottom-4 right-4 w-14 h-14 md:hidden z-50 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700"
+    style="display: none;"
+  >
+    <div class="relative w-full h-full">
+      <!-- Progress Circle -->
+      <svg class="w-full h-full transform -rotate-90" viewBox="0 0 48 48">
+        <circle
+          cx="24"
+          cy="24"
+          r="20"
+          fill="none"
+          stroke="#e5e7eb"
+          stroke-width="2"
+          class="dark:stroke-gray-600"
+        />
+        <circle
+          id="mobile-progress-path"
+          cx="24"
+          cy="24"
+          r="20"
+          fill="none"
+          stroke="#3b82f6"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-dasharray="125.66"
+          stroke-dashoffset="125.66"
+          class="transition-all duration-300 ease-out"
+        />
+      </svg>
+      
+      <!-- Percentage Text -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span id="mobile-progress-text" class="text-xs font-medium text-gray-600 dark:text-gray-400">
+          0%
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile TOC Toggle -->
+  <button
+    type="button"
+    id="mobile-toc-toggle"
+    class="fixed bottom-20 right-4 w-12 h-12 md:hidden z-50 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center"
+    style="display: none;"
+    onclick="toggleMobileTOC()"
+    aria-label="Table of Contents"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+
+  <!-- Mobile TOC Overlay -->
+  <div
+    id="mobile-toc-overlay"
+    class="fixed inset-0 bg-black bg-opacity-50 z-60 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+    onclick="toggleMobileTOC()"
+  ></div>
+
+  <!-- Mobile TOC Drawer -->
+  <div
+    id="mobile-toc-drawer"
+    class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-xl shadow-2xl z-70 transform translate-y-full transition-transform duration-300 md:hidden max-h-96 overflow-hidden"
+  >
+    <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          Table of Contents
+        </h3>
+        <button
+          type="button"
+          onclick="toggleMobileTOC()"
+          class="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+          aria-label="Close"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Drag Handle -->
+      <div class="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mt-2"></div>
+    </div>
+    
+    <div id="mobile-toc-content" class="p-4 overflow-y-auto max-h-80">
+      <!-- TOC content will be inserted here by JavaScript -->
+    </div>
+  </div>
+
+  <!-- Swipe Navigation Hints -->
+  <div class="swipe-hints md:hidden">
+    <!-- Previous Article Hint -->
+    <div
+      id="swipe-prev-hint"
+      class="fixed left-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-2 rounded-r-lg shadow-lg transform -translate-x-full transition-transform duration-300 z-40"
+      style="display: none;"
+    >
+      <div class="flex items-center gap-2 text-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span>Previous</span>
+      </div>
+    </div>
+
+    <!-- Next Article Hint -->
+    <div
+      id="swipe-next-hint"
+      class="fixed right-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-2 rounded-l-lg shadow-lg transform translate-x-full transition-transform duration-300 z-40"
+      style="display: none;"
+    >
+      <div class="flex items-center gap-2 text-sm">
+        <span>Next</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Touch-friendly FAB Menu -->
+  <div class="fab-menu fixed bottom-4 left-4 md:hidden z-50">
+    <button
+      type="button"
+      id="fab-toggle"
+      class="w-14 h-14 bg-gray-800 dark:bg-gray-700 text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center"
+      onclick="toggleFABMenu()"
+      aria-label="Article actions"
+    >
+      <svg class="w-6 h-6 fab-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+      </svg>
+    </button>
+
+    <!-- FAB Menu Items -->
+    <div id="fab-menu-items" class="absolute bottom-16 left-0 space-y-3 opacity-0 pointer-events-none transition-all duration-300">
+      <!-- Share -->
+      <button
+        type="button"
+        onclick="triggerMobileShare()"
+        class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg transition-all duration-200 flex items-center justify-center transform scale-0"
+        style="transition-delay: 0.1s;"
+        title="Share"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+        </svg>
+      </button>
+
+      <!-- Bookmark -->
+      <button
+        type="button"
+        onclick="triggerBookmark()"
+        class="w-12 h-12 bg-yellow-600 hover:bg-yellow-700 text-white rounded-full shadow-lg transition-all duration-200 flex items-center justify-center transform scale-0"
+        style="transition-delay: 0.2s;"
+        title="Bookmark"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
+        </svg>
+      </button>
+
+      <!-- Font Size -->
+      <button
+        type="button"
+        onclick="toggleFontSizeMenu()"
+        class="w-12 h-12 bg-green-600 hover:bg-green-700 text-white rounded-full shadow-lg transition-all duration-200 flex items-center justify-center transform scale-0"
+        style="transition-delay: 0.3s;"
+        title="Font Size"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Font Size Controls -->
+  <div
+    id="font-size-controls"
+    class="fixed bottom-4 left-20 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3 opacity-0 pointer-events-none transition-all duration-300 md:hidden z-50"
+  >
+    <div class="flex items-center gap-3">
+      <span class="text-sm text-gray-600 dark:text-gray-400">A</span>
+      <div class="flex items-center gap-1">
+        <button
+          type="button"
+          onclick="adjustFontSize('decrease')"
+          class="w-8 h-8 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors"
+          aria-label="Decrease font size"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          onclick="resetFontSize()"
+          class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded transition-colors"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          onclick="adjustFontSize('increase')"
+          class="w-8 h-8 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors"
+          aria-label="Increase font size"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+        </button>
+      </div>
+      <span class="text-lg text-gray-600 dark:text-gray-400">A</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let currentFontSize = 100; // percentage
+
+  // Initialize mobile enhancements
+  function initMobileEnhancements() {
+    setupMobileProgressCircle();
+    setupTouchGestures();
+    setupMobileTOC();
+    initializeFontSizeFromStorage();
+    
+    // Show mobile controls when scrolling
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      showMobileControls();
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        hideMobileControls();
+      }, 3000);
+    });
+  }
+
+  // Mobile progress circle
+  function setupMobileProgressCircle() {
+    const circle = document.getElementById('mobile-progress-circle');
+    const path = document.getElementById('mobile-progress-path');
+    const text = document.getElementById('mobile-progress-text');
+    
+    if (!circle || !path || !text) return;
+
+    function updateMobileProgress() {
+      const article = document.querySelector('article');
+      if (!article) return;
+
+      const rect = article.getBoundingClientRect();
+      const articleHeight = article.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrolled = Math.max(0, -rect.top);
+      const maxScroll = Math.max(0, articleHeight - viewportHeight);
+      const progress = Math.min(100, Math.max(0, (scrolled / maxScroll) * 100));
+      
+      // Update circle progress
+      const circumference = 125.66;
+      const offset = circumference - (progress / 100) * circumference;
+      path.style.strokeDashoffset = offset.toString();
+      text.textContent = Math.round(progress) + '%';
+      
+      // Show/hide based on scroll position
+      if (window.scrollY > 100) {
+        circle.style.display = 'block';
+      } else {
+        circle.style.display = 'none';
+      }
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateMobileProgress();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+
+  // Touch gestures for swipe navigation
+  function setupTouchGestures() {
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+  }
+
+  function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }
+
+  function handleTouchMove(e) {
+    if (!touchStartX || !touchStartY) return;
+
+    const touchCurrentX = e.touches[0].clientX;
+    const touchCurrentY = e.touches[0].clientY;
+    const diffX = touchStartX - touchCurrentX;
+    const diffY = touchStartY - touchCurrentY;
+
+    // Only handle horizontal swipes (ignore vertical scrolling)
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      const swipeThreshold = 50;
+      
+      if (Math.abs(diffX) > swipeThreshold) {
+        // Show swipe hints
+        if (diffX > 0) {
+          // Swiping left (next)
+          showSwipeHint('next');
+        } else {
+          // Swiping right (previous)
+          showSwipeHint('prev');
+        }
+      }
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!touchStartX || !touchStartY) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    // Reset touch coordinates
+    touchStartX = 0;
+    touchStartY = 0;
+
+    // Hide swipe hints
+    hideSwipeHints();
+
+    // Handle swipe if it was significant enough
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 100) {
+      if (diffX > 0) {
+        // Swiped left (next article)
+        navigateToNextArticle();
+      } else {
+        // Swiped right (previous article)
+        navigateToPrevArticle();
+      }
+    }
+  }
+
+  function showSwipeHint(direction) {
+    const hint = document.getElementById(`swipe-${direction}-hint`);
+    if (hint) {
+      hint.style.display = 'block';
+      setTimeout(() => {
+        hint.style.transform = direction === 'prev' ? 'translateX(0)' : 'translateX(0)';
+      }, 10);
+    }
+  }
+
+  function hideSwipeHints() {
+    ['prev', 'next'].forEach(direction => {
+      const hint = document.getElementById(`swipe-${direction}-hint`);
+      if (hint) {
+        hint.style.transform = direction === 'prev' ? 'translateX(-100%)' : 'translateX(100%)';
+        setTimeout(() => {
+          hint.style.display = 'none';
+        }, 300);
+      }
+    });
+  }
+
+  // Mobile TOC functionality
+  function setupMobileTOC() {
+    const mobileTOCContent = document.getElementById('mobile-toc-content');
+    const mobileTOCToggle = document.getElementById('mobile-toc-toggle');
+    
+    console.log('MobileTOC: Setting up mobile TOC');
+    console.log('MobileTOC: Content element found:', !!mobileTOCContent);
+    console.log('MobileTOC: Toggle button found:', !!mobileTOCToggle);
+    
+    if (!mobileTOCContent || !mobileTOCToggle) {
+      console.log('MobileTOC: Missing required elements');
+      return;
+    }
+    
+    // Find article headings (H2, H3, H4)
+    let headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id], main h2[id], main h3[id], main h4[id]');
+    console.log('MobileTOC: Found headings with article/main:', headings.length);
+    
+    if (headings.length === 0) {
+      // Try alternative selector for headings without article/main wrapper
+      const altHeadings = document.querySelectorAll('h2[id], h3[id], h4[id]');
+      console.log('MobileTOC: Alternative headings found:', altHeadings.length);
+      if (altHeadings.length === 0) {
+        console.log('MobileTOC: No headings found at all');
+        return;
+      }
+      headings = altHeadings;
+    }
+    
+    // Generate TOC HTML
+    let tocHTML = '<ul class="space-y-2">';
+    Array.from(headings).forEach(heading => {
+      const level = parseInt(heading.tagName.charAt(1));
+      const indent = level > 2 ? 'ml-4' : '';
+      const id = heading.id;
+      const text = heading.textContent.trim();
+      
+      tocHTML += `
+        <li class="${indent}">
+          <a href="#${id}" class="block py-1 px-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors">
+            ${text}
+          </a>
+        </li>
+      `;
+    });
+    tocHTML += '</ul>';
+    
+    mobileTOCContent.innerHTML = tocHTML;
+    mobileTOCToggle.style.display = 'flex';
+    console.log('MobileTOC: TOC generated successfully, button should now be visible');
+    
+    // Make links close the mobile TOC
+    const links = mobileTOCContent.querySelectorAll('a');
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        toggleMobileTOC();
+      });
+    });
+  }
+
+  function toggleMobileTOC() {
+    const overlay = document.getElementById('mobile-toc-overlay');
+    const drawer = document.getElementById('mobile-toc-drawer');
+    
+    const isOpen = !drawer.classList.contains('translate-y-full');
+    
+    if (isOpen) {
+      drawer.classList.add('translate-y-full');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+    } else {
+      drawer.classList.remove('translate-y-full');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+    }
+  }
+
+  // FAB Menu functionality
+  function toggleFABMenu() {
+    const items = document.getElementById('fab-menu-items');
+    const toggle = document.getElementById('fab-toggle');
+    const icon = toggle.querySelector('.fab-icon');
+    
+    const isOpen = !items.classList.contains('opacity-0');
+    
+    if (isOpen) {
+      // Close menu
+      items.classList.add('opacity-0', 'pointer-events-none');
+      items.querySelectorAll('button').forEach((btn, index) => {
+        setTimeout(() => {
+          btn.classList.add('scale-0');
+        }, index * 50);
+      });
+      icon.style.transform = 'rotate(0deg)';
+    } else {
+      // Open menu
+      items.classList.remove('opacity-0', 'pointer-events-none');
+      items.querySelectorAll('button').forEach((btn, index) => {
+        setTimeout(() => {
+          btn.classList.remove('scale-0');
+        }, index * 50);
+      });
+      icon.style.transform = 'rotate(45deg)';
+    }
+  }
+
+  // Mobile-specific actions
+  function triggerMobileShare() {
+    const title = document.title;
+    const url = window.location.href;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: title,
+        url: url
+      });
+    } else {
+      // Fallback to copy to clipboard
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Link copied for sharing!');
+      });
+    }
+    toggleFABMenu();
+  }
+
+  function triggerBookmark() {
+    // Call the existing bookmark function
+    if (window.toggleBookmark) {
+      window.toggleBookmark();
+    }
+    toggleFABMenu();
+  }
+
+  // Font size controls
+  function toggleFontSizeMenu() {
+    const controls = document.getElementById('font-size-controls');
+    const isOpen = !controls.classList.contains('opacity-0');
+    
+    if (isOpen) {
+      controls.classList.add('opacity-0', 'pointer-events-none');
+    } else {
+      controls.classList.remove('opacity-0', 'pointer-events-none');
+    }
+    
+    toggleFABMenu();
+  }
+
+  function adjustFontSize(action) {
+    const article = document.querySelector('article');
+    if (!article) return;
+
+    if (action === 'increase') {
+      currentFontSize = Math.min(150, currentFontSize + 10);
+    } else if (action === 'decrease') {
+      currentFontSize = Math.max(80, currentFontSize - 10);
+    }
+
+    article.style.fontSize = `${currentFontSize}%`;
+    localStorage.setItem('articleFontSize', currentFontSize.toString());
+    showToast(`Font size: ${currentFontSize}%`);
+  }
+
+  function resetFontSize() {
+    currentFontSize = 100;
+    const article = document.querySelector('article');
+    if (article) {
+      article.style.fontSize = '100%';
+    }
+    localStorage.removeItem('articleFontSize');
+    showToast('Font size reset');
+  }
+
+  function initializeFontSizeFromStorage() {
+    const savedSize = localStorage.getItem('articleFontSize');
+    if (savedSize) {
+      currentFontSize = parseInt(savedSize);
+      const article = document.querySelector('article');
+      if (article) {
+        article.style.fontSize = `${currentFontSize}%`;
+      }
+    }
+  }
+
+  // Show/hide mobile controls
+  function showMobileControls() {
+    const progressCircle = document.getElementById('mobile-progress-circle');
+    const tocToggle = document.getElementById('mobile-toc-toggle');
+    
+    if (window.scrollY > 100) {
+      if (progressCircle) progressCircle.style.display = 'block';
+      if (tocToggle) tocToggle.style.display = 'flex';
+    }
+  }
+
+  function hideMobileControls() {
+    // Don't hide controls, keep them visible for better UX
+    // This function is kept for potential future use
+  }
+
+  // Navigation functions (to be implemented based on your site structure)
+  function navigateToNextArticle() {
+    // Implementation depends on how you store next/prev article info
+    console.log('Navigate to next article');
+    showToast('Swipe navigation: Next article');
+  }
+
+  function navigateToPrevArticle() {
+    // Implementation depends on how you store next/prev article info
+    console.log('Navigate to previous article');
+    showToast('Swipe navigation: Previous article');
+  }
+
+  // Utility functions
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300';
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(-10px)';
+      setTimeout(() => document.body.removeChild(toast), 300);
+    }, 2000);
+  }
+
+  // Make functions globally available
+  window.toggleMobileTOC = toggleMobileTOC;
+  window.toggleFABMenu = toggleFABMenu;
+  window.triggerMobileShare = triggerMobileShare;
+  window.triggerBookmark = triggerBookmark;
+  window.toggleFontSizeMenu = toggleFontSizeMenu;
+  window.adjustFontSize = adjustFontSize;
+  window.resetFontSize = resetFontSize;
+
+  // Initialize when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileEnhancements);
+  } else {
+    initMobileEnhancements();
+  }
+</script>
+
+<style>
+  /* Mobile-specific styles */
+  @media (max-width: 768px) {
+    /* Hide desktop TOC on mobile */
+    .table-of-contents {
+      display: none;
+    }
+    
+    /* Improve touch targets */
+    .mobile-enhancements button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+    
+    /* Smooth animations for mobile */
+    .mobile-enhancements * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+  
+  /* Z-index layers */
+  .z-60 { z-index: 60; }
+  .z-70 { z-index: 70; }
+</style>

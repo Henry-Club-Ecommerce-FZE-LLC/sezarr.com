@@ -1,0 +1,155 @@
+---
+// State-specific insurance information component
+const { state = 'US' } = Astro.props;
+
+const stateData = {
+  'CA': {
+    name: 'California',
+    minimumLiability: '15/30/5',
+    avgPremium: '$1,868',
+    requirements: ['Liability insurance required', 'Uninsured motorist coverage required'],
+    specialNotes: [
+      'No-fault state for property damage under $1,000',
+      'High medical and repair costs drive up premiums',
+      'Prop 103 requires insurance companies to justify rate increases'
+    ],
+    topInsurers: ['State Farm', 'Geico', 'Progressive', 'Farmers'],
+    averageClaim: '$4,200'
+  },
+  'TX': {
+    name: 'Texas',
+    minimumLiability: '30/60/25',
+    avgPremium: '$1,445',
+    requirements: ['Liability insurance required', 'Personal injury protection available'],
+    specialNotes: [
+      'Higher minimum requirements than many states',
+      'Hail storms and severe weather affect rates',
+      'Large urban areas see higher collision rates'
+    ],
+    topInsurers: ['State Farm', 'Allstate', 'Progressive', 'Geico'],
+    averageClaim: '$3,800'
+  },
+  'FL': {
+    name: 'Florida',
+    minimumLiability: '10/20/10',
+    avgPremium: '$2,059',
+    requirements: ['PIP (Personal Injury Protection) required', 'Property damage liability required'],
+    specialNotes: [
+      'No-fault state - PIP covers medical expenses regardless of fault',
+      'Hurricane and weather risks affect comprehensive rates',
+      'High uninsured motorist rates'
+    ],
+    topInsurers: ['State Farm', 'Geico', 'Progressive', 'USAA'],
+    averageClaim: '$4,500'
+  },
+  'NY': {
+    name: 'New York',
+    minimumLiability: '25/50/10',
+    avgPremium: '$1,966',
+    requirements: ['Liability insurance required', 'PIP required', 'Uninsured motorist coverage required'],
+    specialNotes: [
+      'No-fault state with required PIP coverage',
+      'Urban areas have significantly higher rates',
+      'Strict enforcement and penalties for driving uninsured'
+    ],
+    topInsurers: ['Geico', 'State Farm', 'Progressive', 'Allstate'],
+    averageClaim: '$5,100'
+  },
+  'US': {
+    name: 'United States',
+    minimumLiability: 'Varies by state',
+    avgPremium: '$1,483',
+    requirements: ['Requirements vary significantly by state'],
+    specialNotes: [
+      'Each state sets its own insurance requirements',
+      'Some states require PIP or medical payments coverage',
+      'Penalties for driving uninsured vary widely'
+    ],
+    topInsurers: ['State Farm', 'Geico', 'Progressive', 'Allstate'],
+    averageClaim: '$4,000'
+  }
+};
+
+const data = stateData[state] || stateData['US'];
+---
+
+<div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+  <div class="flex items-center mb-4">
+    <div class="text-2xl mr-3">📍</div>
+    <h3 class="text-xl font-bold text-gray-900 dark:text-white">
+      {data.name} Insurance Guide
+    </h3>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <div class="space-y-4">
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Minimum Requirements</h4>
+        <div class="text-sm text-gray-600 dark:text-gray-300">
+          <p><strong>Liability Limits:</strong> {data.minimumLiability}</p>
+          <ul class="mt-2 space-y-1">
+            {data.requirements.map(req => (
+              <li class="flex items-start">
+                <span class="text-green-500 mr-2">✓</span>
+                {req}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Average Costs</h4>
+        <div class="text-sm text-gray-600 dark:text-gray-300">
+          <p><strong>Average Premium:</strong> {data.avgPremium}/year</p>
+          <p><strong>Average Claim:</strong> {data.averageClaim}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Key Insights</h4>
+        <ul class="text-sm text-gray-600 dark:text-gray-300 space-y-1">
+          {data.specialNotes.map(note => (
+            <li class="flex items-start">
+              <span class="text-blue-500 mr-2">•</span>
+              {note}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-gray-800 dark:text-gray-200 mb-2">Top Insurers</h4>
+        <div class="flex flex-wrap gap-2">
+          {data.topInsurers.map(insurer => (
+            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">
+              {insurer}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {state !== 'US' && (
+    <div class="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Data represents state averages. Individual rates vary based on driving record, vehicle, credit score, and other factors.
+        <strong>Last updated:</strong> {new Date().toLocaleDateString()}
+      </p>
+    </div>
+  )}
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .state-guide {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>

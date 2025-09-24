@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const url = 'https://www.example.com/404';
+---
+<BaseLayout title="Page not found" description="The page you were looking for wasn’t found." {url} noindex={true}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-24 text-center">
+    <h1 class="text-4xl font-bold">404</h1>
+    <p class="mt-2 text-gray-700">Sorry, we couldn’t find that page.</p>
+    <p class="mt-6"><a href="/">Return home</a></p>
+  </section>
+</BaseLayout>

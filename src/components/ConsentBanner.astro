@@ -1,0 +1,76 @@
+---
+---
+<div id="consent-banner" class="fixed bottom-4 inset-x-0 z-50 transform translate-y-full opacity-0 transition-all duration-300 ease-out" style="height: 0; overflow: hidden; containment: strict;">
+  <div class="mx-auto max-w-[var(--max-w)] px-4">
+    <div class="rounded-lg bg-white border shadow p-4 md:flex md:items-center md:justify-between dark:bg-gray-800 dark:border-gray-700">
+      <p class="text-sm text-gray-700 dark:text-gray-300">
+        We use cookies to improve your experience and measure performance. You can accept or manage preferences.
+      </p>
+      <div class="mt-3 md:mt-0 flex gap-2">
+        <button id="consent-accept" class="px-4 py-3 rounded bg-blue-600 text-white text-base min-h-[44px] hover:bg-blue-700 transition-colors">Accept all</button>
+        <button id="consent-deny" class="px-4 py-3 rounded border border-gray-300 text-base min-h-[44px] hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">Deny non-essential</button>
+      </div>
+    </div>
+  </div>
+  <script is:inline>
+    // Optimized consent banner for FID performance
+    (function(){
+      'use strict';
+      
+      // Early exit if consent already given to minimize execution
+      if (localStorage.getItem('consentChoice')) return;
+      
+      function initConsentBanner() {
+        const banner = document.getElementById('consent-banner');
+        const acceptBtn = document.getElementById('consent-accept');
+        const denyBtn = document.getElementById('consent-deny');
+        
+        if (!banner || !acceptBtn || !denyBtn) return;
+        
+        // Pre-calculate layout to prevent CLS
+        banner.style.cssText = 'height:auto;opacity:0;visibility:hidden;transform:translateY(0)';
+        
+        // Deferred banner display to not block main thread
+        requestIdleCallback(() => {
+          const bannerHeight = banner.offsetHeight;
+          banner.style.cssText = `height:0;visibility:visible;opacity:0;transform:translateY(100%)`;
+          
+          // Animate in with optimal timing
+          requestAnimationFrame(() => {
+            banner.style.cssText = `height:${bannerHeight}px;opacity:1;visibility:visible;transform:translateY(0);transition:all 0.3s ease-out`;
+          });
+        }, { timeout: 1000 });
+        
+        // Optimized consent handler with minimal operations
+        function handleConsent(grant) {
+          // Immediate UI feedback
+          banner.style.cssText = 'height:0;opacity:0;transform:translateY(100%);transition:all 0.3s ease-out';
+          localStorage.setItem('consentChoice', grant ? 'accepted' : 'denied');
+          
+          // Deferred analytics update to not block interaction
+          requestIdleCallback(() => {
+            const dl = window.dataLayer = window.dataLayer || [];
+            const consentValue = grant ? 'granted' : 'denied';
+            dl.push(['consent', 'update', {
+              ad_storage: consentValue,
+              ad_user_data: consentValue,
+              ad_personalization: consentValue,
+              analytics_storage: consentValue
+            }]);
+          });
+        }
+        
+        // Efficient event delegation
+        banner.addEventListener('click', e => {
+          if (e.target.id === 'consent-accept') handleConsent(true);
+          else if (e.target.id === 'consent-deny') handleConsent(false);
+        }, { passive: false });
+      }
+      
+      // Optimized initialization
+      document.readyState === 'loading' ? 
+        document.addEventListener('DOMContentLoaded', initConsentBanner, { once: true }) : 
+        initConsentBanner();
+    })();
+  </script>
+</div>

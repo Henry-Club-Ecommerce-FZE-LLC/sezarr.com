@@ -1,0 +1,477 @@
+---
+import type { TravelInsuranceInputs, TravelInsuranceResults } from '../types/insurance';
+---
+
+<div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+  <div class="text-center mb-6">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+      Travel Insurance Calculator
+    </h2>
+    <p class="text-gray-600 dark:text-gray-300">
+      Calculate your travel insurance needs and estimated costs based on your trip details
+    </p>
+  </div>
+
+  <form id="travel-insurance-calculator" class="space-y-6">
+    <!-- Trip Information -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Trip Information</h3>
+      
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label for="destination-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Destination Type
+          </label>
+          <select id="destination-type" name="destinationType" required
+                  class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <option value="">Select Destination</option>
+            <option value="domestic">Domestic (US)</option>
+            <option value="canada">Canada</option>
+            <option value="europe">Europe</option>
+            <option value="asia-pacific">Asia/Pacific</option>
+            <option value="caribbean">Caribbean</option>
+            <option value="south-america">South America</option>
+            <option value="africa">Africa</option>
+            <option value="middle-east">Middle East</option>
+            <option value="worldwide">Worldwide</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="trip-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Trip Type
+          </label>
+          <select id="trip-type" name="tripType" required
+                  class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <option value="">Select Trip Type</option>
+            <option value="leisure">Leisure/Vacation</option>
+            <option value="business">Business Travel</option>
+            <option value="cruise">Cruise</option>
+            <option value="adventure">Adventure/Sports</option>
+            <option value="family">Family Vacation</option>
+            <option value="honeymoon">Honeymoon/Special Event</option>
+            <option value="group">Group Travel</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label for="trip-cost" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Total Trip Cost
+          </label>
+          <input type="number" id="trip-cost" name="tripCost" min="0" step="100" required
+                 placeholder="3000"
+                 class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+        </div>
+
+        <div>
+          <label for="trip-length" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Trip Length (Days)
+          </label>
+          <input type="number" id="trip-length" name="tripLength" min="1" max="365" required
+                 placeholder="7"
+                 class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label for="travelers" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Number of Travelers
+          </label>
+          <input type="number" id="travelers" name="travelers" min="1" max="20" required
+                 placeholder="2"
+                 class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+        </div>
+
+        <div>
+          <label for="oldest-traveler" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Age of Oldest Traveler
+          </label>
+          <input type="number" id="oldest-traveler" name="oldestTraveler" min="0" max="120" required
+                 placeholder="35"
+                 class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+        </div>
+      </div>
+    </div>
+
+    <!-- Coverage Preferences -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Coverage Preferences</h3>
+      
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label for="coverage-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Coverage Type
+          </label>
+          <select id="coverage-type" name="coverageType" required
+                  class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <option value="basic">Basic Coverage</option>
+            <option value="comprehensive" selected>Comprehensive Coverage</option>
+            <option value="premium">Premium Coverage</option>
+            <option value="medical-only">Medical Only</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="medical-limit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Medical Coverage Limit
+          </label>
+          <select id="medical-limit" name="medicalLimit" required
+                  class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <option value="50000">$50,000</option>
+            <option value="100000" selected>$100,000</option>
+            <option value="250000">$250,000</option>
+            <option value="500000">$500,000</option>
+            <option value="1000000">$1,000,000</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="deductible" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          Deductible Amount
+        </label>
+        <select id="deductible" name="deductible" required
+                class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          <option value="0">$0 (Higher Premium)</option>
+          <option value="100" selected>$100 (Balanced)</option>
+          <option value="250">$250 (Lower Premium)</option>
+          <option value="500">$500 (Lowest Premium)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Risk Factors -->
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Risk Factors & Add-ons</h3>
+      
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="flex items-center">
+          <input type="checkbox" id="pre-existing" name="preExisting"
+                 class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+          <label for="pre-existing" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+            Pre-existing medical conditions
+          </label>
+        </div>
+
+        <div class="flex items-center">
+          <input type="checkbox" id="adventure-sports" name="adventureSports"
+                 class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+          <label for="adventure-sports" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+            Adventure sports/high-risk activities
+          </label>
+        </div>
+
+        <div class="flex items-center">
+          <input type="checkbox" id="cancel-any-reason" name="cancelAnyReason"
+                 class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+          <label for="cancel-any-reason" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+            Cancel for Any Reason (CFAR)
+          </label>
+        </div>
+
+        <div class="flex items-center">
+          <input type="checkbox" id="rental-car" name="rentalCar"
+                 class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600">
+          <label for="rental-car" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+            Rental car coverage
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" 
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-md transition-colors">
+      Calculate Travel Insurance Cost
+    </button>
+  </form>
+
+  <!-- Results Section -->
+  <div id="travel-insurance-results" class="mt-8 hidden">
+    <div class="border-t border-gray-200 dark:border-gray-600 pt-6">
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Your Travel Insurance Quote</h3>
+      
+      <!-- Total Cost -->
+      <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg mb-6">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-purple-600 dark:text-purple-400" id="total-premium">$0</div>
+          <div class="text-sm text-gray-600 dark:text-gray-300">Estimated Premium</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="cost-percentage">0% of trip cost</div>
+        </div>
+      </div>
+
+      <!-- Coverage Summary -->
+      <div class="space-y-4">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Coverage Summary:</h4>
+        <div id="coverage-summary" class="space-y-2">
+          <!-- Coverage items will be populated here -->
+        </div>
+      </div>
+
+      <!-- Policy Recommendations -->
+      <div class="mt-6 space-y-4">
+        <h4 class="font-semibold text-gray-900 dark:text-white">Policy Recommendations:</h4>
+        <div id="policy-recommendations" class="space-y-2">
+          <!-- Policy recommendations will be populated here -->
+        </div>
+      </div>
+
+      <!-- Destination-Specific Advice -->
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Destination-Specific Advice:</h4>
+        <div id="destination-advice" class="text-sm text-blue-700 dark:text-blue-300">
+          <!-- Destination advice will be populated here -->
+        </div>
+      </div>
+
+      <!-- Important Reminders -->
+      <div class="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+        <h4 class="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Important Reminders:</h4>
+        <ul class="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
+          <li>• Purchase travel insurance within 10-21 days of initial trip deposit for maximum benefits</li>
+          <li>• Read policy exclusions carefully, especially for adventure activities</li>
+          <li>• Keep all receipts and document any incidents immediately</li>
+          <li>• Contact the insurance company's 24/7 hotline for emergencies</li>
+          <li>• Consider annual policies if taking multiple trips per year</li>
+        </ul>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="mt-6 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+          <strong>Disclaimer:</strong> This calculator provides estimates only and should not be considered professional advice. 
+          Actual premiums and coverage may vary significantly between insurance providers. Always compare multiple quotes 
+          and read policy documents carefully before purchasing.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('travel-insurance-calculator') as HTMLFormElement;
+  const resultsDiv = document.getElementById('travel-insurance-results') as HTMLElement;
+
+  form?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const inputs = {
+      destinationType: formData.get('destinationType') as string,
+      tripType: formData.get('tripType') as string,
+      tripCost: parseInt(formData.get('tripCost') as string) || 0,
+      tripLength: parseInt(formData.get('tripLength') as string) || 0,
+      travelers: parseInt(formData.get('travelers') as string) || 0,
+      oldestTraveler: parseInt(formData.get('oldestTraveler') as string) || 0,
+      coverageType: formData.get('coverageType') as string,
+      medicalLimit: parseInt(formData.get('medicalLimit') as string) || 0,
+      deductible: parseInt(formData.get('deductible') as string) || 0,
+      preExisting: formData.has('preExisting'),
+      adventureSports: formData.has('adventureSports'),
+      cancelAnyReason: formData.has('cancelAnyReason'),
+      rentalCar: formData.has('rentalCar')
+    };
+
+    const results = calculateTravelInsurance(inputs);
+    displayResults(results);
+    
+    resultsDiv.classList.remove('hidden');
+    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  function calculateTravelInsurance(inputs: any) {
+    let basePremium = 0;
+    const coverageSummary = [];
+    const recommendations = [];
+    let destinationAdvice = '';
+
+    // Base rate calculation (% of trip cost)
+    const destinationRates = {
+      'domestic': 0.04,
+      'canada': 0.05,
+      'europe': 0.06,
+      'asia-pacific': 0.08,
+      'caribbean': 0.07,
+      'south-america': 0.09,
+      'africa': 0.12,
+      'middle-east': 0.11,
+      'worldwide': 0.10
+    };
+
+    const tripTypeMultipliers = {
+      'leisure': 1.0,
+      'business': 0.9,
+      'cruise': 1.2,
+      'adventure': 1.8,
+      'family': 1.1,
+      'honeymoon': 1.3,
+      'group': 0.85
+    };
+
+    const coverageMultipliers = {
+      'basic': 0.7,
+      'comprehensive': 1.0,
+      'premium': 1.4,
+      'medical-only': 0.4
+    };
+
+    const baseRate = destinationRates[inputs.destinationType] || 0.08;
+    const tripMultiplier = tripTypeMultipliers[inputs.tripType] || 1.0;
+    const coverageMultiplier = coverageMultipliers[inputs.coverageType] || 1.0;
+
+    // Base premium calculation
+    basePremium = inputs.tripCost * baseRate * tripMultiplier * coverageMultiplier;
+
+    // Age adjustments
+    if (inputs.oldestTraveler >= 65) {
+      basePremium *= 2.0;
+    } else if (inputs.oldestTraveler >= 50) {
+      basePremium *= 1.5;
+    } else if (inputs.oldestTraveler >= 30) {
+      basePremium *= 1.2;
+    }
+
+    // Trip length adjustments
+    if (inputs.tripLength > 30) {
+      basePremium *= 1.3;
+    } else if (inputs.tripLength > 14) {
+      basePremium *= 1.1;
+    }
+
+    // Multiple travelers discount
+    if (inputs.travelers > 1) {
+      basePremium *= (1 + (inputs.travelers - 1) * 0.8); // 20% discount per additional traveler
+    }
+
+    // Add-ons and risk factors
+    if (inputs.preExisting) {
+      basePremium *= 1.25;
+      recommendations.push('Pre-existing condition waiver included - purchase within 10-21 days of initial deposit');
+    }
+
+    if (inputs.adventureSports) {
+      basePremium *= 1.5;
+      recommendations.push('Adventure sports coverage included - verify specific activities are covered');
+    }
+
+    if (inputs.cancelAnyReason) {
+      basePremium *= 1.6;
+      recommendations.push('Cancel for Any Reason provides 75% reimbursement for any reason');
+    }
+
+    if (inputs.rentalCar) {
+      basePremium += 50;
+      recommendations.push('Rental car coverage includes collision damage and theft protection');
+    }
+
+    // Deductible adjustments
+    const deductibleAdjustments = {
+      0: 1.0,
+      100: 0.9,
+      250: 0.85,
+      500: 0.8
+    };
+    basePremium *= deductibleAdjustments[inputs.deductible] || 1.0;
+
+    // Build coverage summary
+    if (inputs.coverageType !== 'medical-only') {
+      coverageSummary.push({
+        type: 'Trip Cancellation/Interruption',
+        limit: `$${inputs.tripCost.toLocaleString()} (100% of trip cost)`
+      });
+    }
+
+    coverageSummary.push({
+      type: 'Emergency Medical',
+      limit: `$${inputs.medicalLimit.toLocaleString()}`
+    });
+
+    coverageSummary.push({
+      type: 'Emergency Evacuation',
+      limit: '$1,000,000'
+    });
+
+    if (inputs.coverageType !== 'medical-only') {
+      coverageSummary.push({
+        type: 'Baggage Coverage',
+        limit: '$2,500 per person'
+      });
+
+      coverageSummary.push({
+        type: 'Travel Delay',
+        limit: '$1,500 per incident'
+      });
+    }
+
+    // Destination-specific advice
+    const destinationAdviceMap = {
+      'domestic': 'For US travel, focus on trip cancellation and medical coverage gaps from your regular insurance.',
+      'canada': 'Canada has excellent healthcare, but ensure coverage for prescription medications and emergency evacuation.',
+      'europe': 'Consider Schengen visa requirements (€30,000 minimum medical). Winter sports may need additional coverage.',
+      'asia-pacific': 'Higher medical evacuation costs due to remote areas. Consider monsoon season and political stability.',
+      'caribbean': 'Hurricane season coverage essential. Water sports and diving coverage may need special attention.',
+      'south-america': 'Political unrest and adventure activity coverage important. Higher medical evacuation costs.',
+      'africa': 'Comprehensive medical coverage essential. Consider evacuation insurance and political unrest coverage.',
+      'middle-east': 'Political situation coverage and higher medical limits recommended. Check travel advisories.',
+      'worldwide': 'Maximum coverage recommended for diverse risks. Consider annual policy if traveling frequently.'
+    };
+
+    destinationAdvice = destinationAdviceMap[inputs.destinationType] || 'Consult with travel insurance specialist for destination-specific advice.';
+
+    const totalPremium = Math.round(basePremium);
+    const costPercentage = ((totalPremium / inputs.tripCost) * 100).toFixed(1);
+
+    return {
+      totalPremium,
+      costPercentage,
+      coverageSummary,
+      recommendations,
+      destinationAdvice
+    };
+  }
+
+  function displayResults(results: any) {
+    // Display total premium
+    const totalPremiumElement = document.getElementById('total-premium');
+    if (totalPremiumElement) {
+      totalPremiumElement.textContent = `$${results.totalPremium.toLocaleString()}`;
+    }
+
+    const costPercentageElement = document.getElementById('cost-percentage');
+    if (costPercentageElement) {
+      costPercentageElement.textContent = `${results.costPercentage}% of trip cost`;
+    }
+
+    // Display coverage summary
+    const coverageSummaryElement = document.getElementById('coverage-summary');
+    if (coverageSummaryElement) {
+      coverageSummaryElement.innerHTML = results.coverageSummary.map((item: any) => `
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600 dark:text-gray-300">${item.type}:</span>
+          <span class="font-medium text-gray-900 dark:text-white">${item.limit}</span>
+        </div>
+      `).join('');
+    }
+
+    // Display recommendations
+    const recommendationsElement = document.getElementById('policy-recommendations');
+    if (recommendationsElement) {
+      recommendationsElement.innerHTML = results.recommendations.map((rec: string) => `
+        <div class="flex items-start">
+          <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 mt-2 flex-shrink-0"></span>
+          <span class="text-sm text-gray-700 dark:text-gray-300">${rec}</span>
+        </div>
+      `).join('');
+    }
+
+    // Display destination advice
+    const destinationAdviceElement = document.getElementById('destination-advice');
+    if (destinationAdviceElement) {
+      destinationAdviceElement.textContent = results.destinationAdvice;
+    }
+  }
+});
+</script>

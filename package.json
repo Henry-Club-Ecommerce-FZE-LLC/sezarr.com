@@ -1,0 +1,42 @@
+{
+  "name": "sezarr-insurance",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "lint": "echo Linting... (add ESLint to enable)",
+    "format": "echo Formatting... (add Prettier to enable)",
+    "test:links": "node scripts/check-links.mjs",
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "cdn:optimize": "node scripts/cdn-optimizer.mjs",
+    "cdn:update": "node scripts/update-cdn.mjs",
+    "cdn:deploy": "cd cdn-repo && git add . && git commit -m \"Auto-update CDN assets\" && git push",
+    "test:cdn": "node scripts/test-cdn.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^3.1.0",
+    "@astrojs/rss": "^4.0.6",
+    "@astrojs/sitemap": "^3.1.4",
+    "@astrojs/tailwind": "^5.1.1",
+    "astro": "^4.12.0",
+    "classnames": "^2.5.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.18",
+    "autoprefixer": "^10.4.19",
+    "cssnano": "^7.1.1",
+    "lightningcss": "^1.30.1",
+    "postcss": "^8.4.38",
+    "remark-heading-id": "^1.0.1",
+    "sharp": "^0.33.4",
+    "tailwindcss": "^3.4.10",
+    "terser": "^5.44.0",
+    "typescript": "^5.9.2"
+  }
+}

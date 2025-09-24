@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { SITE } from "../../config/site";
+
+const title = "Offline - " + SITE.NAME;
+const description = "You're currently offline. Some content may not be available.";
+---
+
+<BaseLayout {title} {description} noindex={true}>
+  <div class="max-w-2xl mx-auto px-4 py-16 text-center">
+    <div class="mb-8">
+      <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728m0-12.728l12.728 12.728M12 2L2 12l10 10 10-10L12 2z" />
+      </svg>
+    </div>
+    
+    <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">You're Offline</h1>
+    
+    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+      It looks like you've lost your internet connection. Don't worry - you can still browse some of our content that's been saved to your device.
+    </p>
+
+    <div class="space-y-4">
+      <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <h2 class="font-semibold text-blue-900 dark:text-blue-100 mb-2">Available Offline</h2>
+        <ul class="text-left space-y-2 text-blue-800 dark:text-blue-200">
+          <li>• Previously visited insurance guides</li>
+          <li>• Cached calculator tools</li>
+          <li>• Saved comparison data</li>
+        </ul>
+      </div>
+
+      <div class="flex gap-4 justify-center">
+        <button 
+          onclick="window.location.reload()" 
+          class="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors"
+          aria-label="Try to reconnect"
+        >
+          Try Again
+        </button>
+        
+        <a 
+          href="/" 
+          class="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-blue-600 hover:text-white transition-colors"
+          aria-label="Go to homepage"
+        >
+          Go Home
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-12 text-gray-500 dark:text-gray-400">
+      <p class="text-sm">
+        Once your connection is restored, you'll have access to all our latest insurance guides and tools.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Check for connectivity and reload when back online
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+
+    // Show connection status
+    function updateConnectionStatus() {
+      const status = navigator.onLine ? 'online' : 'offline';
+      document.body.setAttribute('data-connection', status);
+    }
+
+    window.addEventListener('online', updateConnectionStatus);
+    window.addEventListener('offline', updateConnectionStatus);
+    updateConnectionStatus();
+  </script>
+</BaseLayout>

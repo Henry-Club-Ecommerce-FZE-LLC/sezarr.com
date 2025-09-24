@@ -1,0 +1,100 @@
+---
+// Mobile TOC component - displays above content on mobile only
+---
+
+<!-- Mobile TOC (shows above content on mobile) -->
+<div class="lg:hidden mb-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+  <h3 class="font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center">
+    <span class="mr-2">📋</span> Table of Contents
+  </h3>
+  <nav id="mobile-toc" class="space-y-2 text-sm">
+    <!-- TOC will be populated by JavaScript -->
+  </nav>
+</div>
+
+<script is:inline>
+(function() {
+  console.log('MobileTOC: Script starting');
+  
+  function initMobileTOC() {
+    console.log('MobileTOC: Initializing mobile TOC');
+    const mobileToc = document.getElementById('mobile-toc');
+    
+    console.log('MobileTOC: Found mobile TOC:', !!mobileToc);
+    
+    if (!mobileToc) return;
+    
+    // Find only main section headings (H2) in the content - try multiple selectors
+    let headings = document.querySelectorAll('article h2[id]');
+    console.log('MobileTOC: Found headings with article h2[id]:', headings.length);
+    
+    // If no headings found, try alternative selectors
+    if (headings.length === 0) {
+      headings = document.querySelectorAll('main article h2[id]');
+      console.log('MobileTOC: Trying main article selector, found:', headings.length);
+    }
+    if (headings.length === 0) {
+      headings = document.querySelectorAll('h2[id]');
+      console.log('MobileTOC: Trying generic selector, found:', headings.length);
+    }
+    
+    console.log('MobileTOC: Found main section headings:', headings.length);
+    
+    if (headings.length === 0) {
+      mobileToc.innerHTML = '<p class="text-gray-500 italic">No headings found</p>';
+      return;
+    }
+    
+    // Generate TOC HTML
+    let tocHTML = '';
+    headings.forEach((heading, index) => {
+      // Create ID if missing
+      if (!heading.id) {
+        const text = heading.textContent?.trim().toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        heading.id = text || `heading-${index}`;
+      }
+      
+      tocHTML += `
+        <div>
+          <a href="#${heading.id}" 
+             class="toc-link block py-2 px-3 text-sm text-blue-800 dark:text-blue-200 hover:text-blue-900 dark:hover:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-800/40 rounded transition-all duration-200"
+             onclick="smoothScrollTo('${heading.id}')">
+            ${heading.textContent?.trim() || 'Untitled'}
+          </a>
+        </div>
+      `;
+    });
+    
+    mobileToc.innerHTML = tocHTML;
+  }
+  
+  // Smooth scroll function (if not already defined)
+  if (!window.smoothScrollTo) {
+    window.smoothScrollTo = function(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+        // Update URL after scroll
+        setTimeout(() => {
+          history.pushState(null, null, '#' + id);
+        }, 300);
+      }
+    };
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileTOC);
+  } else {
+    initMobileTOC();
+  }
+})();
+</script>

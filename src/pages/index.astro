@@ -1,0 +1,130 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AdSenseBlock from "../components/AdSenseBlock.astro";
+import { SITE } from "../config/site";
+import NewsletterCallout from "../components/NewsletterCallout.astro";
+import Hero from "../components/Hero.astro";
+import CategoryGrid from "../components/CategoryGrid.astro";
+import FeaturedPosts from "../components/FeaturedPosts.astro";
+import WhyTrustUs from "../components/WhyTrustUs.astro";
+import RealTimeRateWidget from "../components/RealTimeRateWidget.astro";
+import InsuranceCompanyRatings from "../components/InsuranceCompanyRatings.astro";
+import TestimonialsCarousel from "../components/TestimonialsCarousel.astro";
+
+const siteUrl = SITE.URL;
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    "name": SITE.NAME,
+    "alternateName": "Sezarr Insurance",
+    "description": "Smart insurance decisions made simple with expert guides and tools.",
+    "url": siteUrl,
+    "inLanguage": "en-US",
+    "isPartOf": {
+      "@id": `${siteUrl}/#organization`
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Insurance"
+    },
+    "author": {
+      "@id": `${siteUrl}/#organization`
+    },
+    "creator": {
+      "@id": `${siteUrl}/#organization`
+    },
+    "publisher": {
+      "@id": `${siteUrl}/#organization`
+    },
+    "potentialAction": [
+      {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": `${siteUrl}/search?q={search_term_string}`
+        },
+        "query-input": "required name=search_term_string"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${siteUrl}/#webpage`,
+    "url": siteUrl,
+    "name": `${SITE.NAME} - ${SITE.TAGLINE}`,
+    "description": "Smart insurance decisions made simple. Compare rates, understand coverage, and get expert insights tailored for you.",
+    "inLanguage": "en-US",
+    "isPartOf": {
+      "@id": `${siteUrl}/#website`
+    },
+    "about": {
+      "@type": "Thing",
+      "name": "Insurance Services"
+    },
+    "mainEntity": {
+      "@type": "ItemList",
+      "name": "Insurance Services",
+      "description": "Comprehensive insurance guides and tools",
+      "itemListElement": [
+        {
+          "@type": "Service",
+          "name": "Auto Insurance Guidance",
+          "description": "Expert auto insurance advice and rate comparisons"
+        },
+        {
+          "@type": "Service", 
+          "name": "Health Insurance Information",
+          "description": "Health insurance plans and coverage explanations"
+        },
+        {
+          "@type": "Service",
+          "name": "Life Insurance Tools",
+          "description": "Life insurance calculators and coverage guidance"
+        },
+        {
+          "@type": "Service",
+          "name": "Homeowners Insurance",
+          "description": "Home insurance coverage and rate information"
+        }
+      ]
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": siteUrl
+        }
+      ]
+    }
+  }
+];
+---
+<BaseLayout title={`${SITE.NAME} - ${SITE.TAGLINE}`} description="Your trusted insurance guide. Compare rates, understand coverage, and make smart insurance decisions with Sezarr's expert insights and tools." url={siteUrl} type="website" {schema}>
+  <Hero />
+  <CategoryGrid />
+  <TestimonialsCarousel />
+  <WhyTrustUs />
+  
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">
+    <!-- Real-Time Rate Widget -->
+    <div class="mb-12">
+      <RealTimeRateWidget />
+    </div>
+    
+    <AdSenseBlock />
+    <FeaturedPosts />
+    
+    <!-- Company Ratings -->
+    <div class="my-12">
+      <InsuranceCompanyRatings />
+    </div>
+    
+    <NewsletterCallout variant="block" />
+  </section>
+</BaseLayout>

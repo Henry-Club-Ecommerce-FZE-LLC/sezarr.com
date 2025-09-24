@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TravelInsuranceCalculator from '../../../components/calculators/TravelInsuranceCalculator.astro';
+import AdSenseBlock from '../../../components/AdSenseBlock.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { SITE } from "../../../config/site";
+
+const title = "Travel Insurance Calculator - Get Instant Quotes & Compare Coverage | Sezarr";
+const description = "Calculate travel insurance costs and coverage needs. Compare policies for international and domestic travel. Get personalized recommendations based on destination and trip details.";
+const keywords = "travel insurance calculator, trip insurance cost, travel coverage calculator, international travel insurance, trip protection quotes";
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Travel Insurance Calculator', href: '/tools/travel-insurance-calculator/' }
+];
+
+const siteUrl = SITE.URL;
+const currentUrl = `${siteUrl}/tools/travel-insurance-calculator/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${currentUrl}#webpage`,
+    "url": currentUrl,
+    "name": title,
+    "description": description,
+    "inLanguage": "en-US",
+    "isPartOf": {
+      "@id": `${siteUrl}/#website`
+    },
+    "breadcrumb": {
+      "@id": `${currentUrl}#breadcrumb`
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${currentUrl}#breadcrumb`,
+    "itemListElement": breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.label,
+      "item": index === breadcrumbItems.length - 1 ? undefined : `${siteUrl}${item.href}`
+    }))
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Travel Insurance Calculator",
+    "description": "Interactive calculator to estimate travel insurance costs and coverage needs for any destination",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+];
+---
+
+<BaseLayout 
+  title={title} 
+  description={description} 
+  keywords={keywords}
+  ogImage="/images/travel-insurance-calculator.jpg"
+  schema={schema}
+>
+  <main class="flex-1">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center space-y-4">
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+            Travel Insurance Calculator
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Get personalized travel insurance quotes and coverage recommendations. Calculate costs based on 
+            your destination, trip type, and coverage needs.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section class="py-12">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <TravelInsuranceCalculator />
+      </div>
+    </section>
+
+    <!-- AdSense Block -->
+    <AdSenseBlock slot="middle-content" />
+
+    <!-- Information Section -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="prose prose-lg dark:prose-invert mx-auto">
+          <h2>Understanding Your Travel Insurance Quote</h2>
+          
+          <p>
+            This calculator provides personalized estimates based on your specific travel plans and destination. 
+            The recommendations are designed to help you understand the types of coverage most important for 
+            your trip and approximate costs from leading travel insurance providers.
+          </p>
+
+          <h3>Key Coverage Components Evaluated</h3>
+          
+          <ul>
+            <li><strong>Trip Cancellation/Interruption:</strong> Reimburses non-refundable trip costs if you must cancel or cut your trip short for covered reasons</li>
+            <li><strong>Emergency Medical Coverage:</strong> Pays for medical treatment while traveling, crucial when your regular health insurance has limited coverage abroad</li>
+            <li><strong>Emergency Evacuation:</strong> Covers transportation to nearest adequate medical facility or back home - can cost $50,000+ from remote locations</li>
+            <li><strong>Baggage Protection:</strong> Compensates for lost, stolen, or delayed luggage and personal belongings</li>
+            <li><strong>Travel Delay Coverage:</strong> Reimburses additional expenses (meals, lodging) due to covered travel delays</li>
+            <li><strong>Accidental Death & Dismemberment:</strong> Provides benefits for covered accidents during travel</li>
+          </ul>
+
+          <h3>Factors That Impact Your Premium</h3>
+
+          <p>
+            Several factors influence your travel insurance costs:
+          </p>
+
+          <ul>
+            <li><strong>Destination Risk Level:</strong> Some regions have higher medical costs, political instability, or natural disaster risks</li>
+            <li><strong>Trip Cost:</strong> Higher trip values require higher coverage limits for adequate protection</li>
+            <li><strong>Traveler Age:</strong> Premiums increase significantly with age, especially after 50</li>
+            <li><strong>Trip Length:</strong> Longer trips generally cost more to insure due to increased exposure</li>
+            <li><strong>Activities Planned:</strong> Adventure sports and high-risk activities increase premiums</li>
+            <li><strong>Pre-existing Conditions:</strong> Can be covered but may require specific timing and increase costs</li>
+            <li><strong>Coverage Type:</strong> Comprehensive policies cost more but provide broader protection</li>
+          </ul>
+
+          <h3>Destination-Specific Considerations</h3>
+
+          <h4>International Travel</h4>
+          <p>
+            International destinations typically require higher medical coverage limits due to potentially expensive 
+            healthcare systems and evacuation costs. Consider visa requirements (like Schengen area minimums) and 
+            specific risks like natural disasters or political instability.
+          </p>
+
+          <h4>Domestic Travel</h4>
+          <p>
+            While medical evacuation costs may be lower within the US, trip cancellation protection remains valuable 
+            for expensive domestic trips. Focus on coverage for non-refundable bookings and travel delays.
+          </p>
+
+          <h4>Adventure and High-Risk Travel</h4>
+          <p>
+            Activities like skiing, scuba diving, or mountain climbing require specialized coverage. Many standard 
+            policies exclude these activities, so verify coverage or purchase add-ons.
+          </p>
+
+          <h3>When to Purchase Travel Insurance</h3>
+
+          <p>
+            Timing is crucial for maximum benefits:
+          </p>
+
+          <ul>
+            <li><strong>Best Time:</strong> Within 10-21 days of making your initial trip deposit</li>
+            <li><strong>Benefits of Early Purchase:</strong> Pre-existing condition coverage, Cancel for Any Reason eligibility, full trip cancellation protection</li>
+            <li><strong>Last-Minute Options:</strong> Still valuable for medical coverage and emergency assistance, but with limited cancellation benefits</li>
+          </ul>
+
+          <h3>Types of Travel Insurance Policies</h3>
+
+          <ul>
+            <li><strong>Comprehensive:</strong> Full coverage including trip cancellation, medical, evacuation, and baggage protection</li>
+            <li><strong>Medical-Only:</strong> Focus on health-related coverage for travelers with good trip protection elsewhere</li>
+            <li><strong>Cancel for Any Reason (CFAR):</strong> Enhanced flexibility allowing cancellation for any reason (typically 75% reimbursement)</li>
+            <li><strong>Annual/Multi-Trip:</strong> Cost-effective for frequent travelers taking multiple trips per year</li>
+          </ul>
+
+          <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-lg border border-yellow-200 dark:border-yellow-700">
+            <h4 class="text-yellow-800 dark:text-yellow-200 font-semibold mb-2">Important Reminders</h4>
+            <ul class="text-yellow-700 dark:text-yellow-300 text-sm space-y-1">
+              <li>• These are estimates - actual quotes may vary between insurance companies</li>
+              <li>• Read policy exclusions carefully, especially for adventure activities and pre-existing conditions</li>
+              <li>• Consider your existing coverage from health insurance, credit cards, and other sources</li>
+              <li>• Purchase insurance as soon as you make your first trip payment for maximum benefits</li>
+              <li>• Keep emergency contact numbers and policy information easily accessible while traveling</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Resources -->
+    <section class="py-12 bg-white dark:bg-gray-800">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+          Related Travel Insurance Resources
+        </h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <a href="/travel-insurance/guide/" 
+             class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Complete Travel Insurance Guide
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Comprehensive guide covering all aspects of travel insurance, from basics to advanced strategies.
+            </p>
+          </a>
+
+          <a href="/travel-insurance/europe/" 
+             class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              European Travel Insurance
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Specific requirements and recommendations for European destinations and Schengen visa compliance.
+            </p>
+          </a>
+
+          <a href="/travel-insurance/adventure-travel/" 
+             class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg hover:shadow-lg transition-shadow">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Adventure Travel Insurance
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">
+              Specialized coverage for high-risk activities and extreme sports during travel.
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- AdSense Block -->
+    <AdSenseBlock slot="bottom-content" />
+  </main>
+</BaseLayout>
