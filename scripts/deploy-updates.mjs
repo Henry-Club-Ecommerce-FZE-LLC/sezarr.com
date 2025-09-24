@@ -11,7 +11,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 
 const COMMIT_MESSAGE = process.argv[2] || `Auto-deploy: ${new Date().toISOString()}`;
-const IIS_PATH = 'C:\\inetpub\\wwwroot\\sezarr.com';
+const IIS_PATH = process.env.IIS_DEPLOY_PATH || 'C:\\inetpub\\wwwroot\\sezarr.com';
 
 console.log('🚀 Starting Automated Deployment Process');
 console.log('========================================');
@@ -38,10 +38,15 @@ try {
   execSync('git push origin master', { stdio: 'inherit' });
   console.log('✅ Pushed to GitHub - CDN will update in 5-10 minutes');
 
-  // Step 5: Deploy to IIS
+  // Step 5: Deploy to IIS (if path exists)
   console.log('\n🖥️ Step 5: Deploying to IIS...');
-  execSync(`robocopy dist "${IIS_PATH}" /E /PURGE`, { stdio: 'pipe' });
-  console.log('✅ Deployed to IIS successfully');
+  try {
+    execSync(`robocopy dist "${IIS_PATH}" /E /PURGE`, { stdio: 'pipe' });
+    console.log('✅ Deployed to IIS successfully');
+  } catch (error) {
+    console.log('⚠️ IIS deployment skipped (check path or run manually):');
+    console.log(`   robocopy dist "${IIS_PATH}" /E /PURGE`);
+  }
 
   // Step 6: Test CDN (after a brief delay)
   console.log('\n🧪 Step 6: Testing deployment...');

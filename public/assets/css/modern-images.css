@@ -1,0 +1,118 @@
+/* Modern Image Format CSS - Auto-generated */
+
+.img-auto-insurance-hero {
+  background-image: image-set(
+    url('/images/auto-insurance-hero.avif') type('image/avif'),
+    url('/images/auto-insurance-hero.webp') type('image/webp'),
+    url('/images/auto-insurance-hero.jpg') 1x,
+    url('/images/auto-insurance-hero.png') 1x
+  );
+}
+
+.img-business-insurance-calculator {
+  background-image: image-set(
+    url('/images/business-insurance-calculator.avif') type('image/avif'),
+    url('/images/business-insurance-calculator.webp') type('image/webp'),
+    url('/images/business-insurance-calculator.jpg') 1x,
+    url('/images/business-insurance-calculator.png') 1x
+  );
+}
+
+.img-business-insurance-hero {
+  background-image: image-set(
+    url('/images/business-insurance-hero.avif') type('image/avif'),
+    url('/images/business-insurance-hero.webp') type('image/webp'),
+    url('/images/business-insurance-hero.jpg') 1x,
+    url('/images/business-insurance-hero.png') 1x
+  );
+}
+
+.img-disability-insurance-hero {
+  background-image: image-set(
+    url('/images/disability-insurance-hero.avif') type('image/avif'),
+    url('/images/disability-insurance-hero.webp') type('image/webp'),
+    url('/images/disability-insurance-hero.jpg') 1x,
+    url('/images/disability-insurance-hero.png') 1x
+  );
+}
+
+.img-health-insurance-hero {
+  background-image: image-set(
+    url('/images/health-insurance-hero.avif') type('image/avif'),
+    url('/images/health-insurance-hero.webp') type('image/webp'),
+    url('/images/health-insurance-hero.jpg') 1x,
+    url('/images/health-insurance-hero.png') 1x
+  );
+}
+
+.img-hero-insurance {
+  background-image: image-set(
+    url('/images/hero-insurance.avif') type('image/avif'),
+    url('/images/hero-insurance.webp') type('image/webp'),
+    url('/images/hero-insurance.jpg') 1x,
+    url('/images/hero-insurance.png') 1x
+  );
+}
+
+.img-home-insurance-hero {
+  background-image: image-set(
+    url('/images/home-insurance-hero.avif') type('image/avif'),
+    url('/images/home-insurance-hero.webp') type('image/webp'),
+    url('/images/home-insurance-hero.jpg') 1x,
+    url('/images/home-insurance-hero.png') 1x
+  );
+}
+
+.img-life-insurance-hero {
+  background-image: image-set(
+    url('/images/life-insurance-hero.avif') type('image/avif'),
+    url('/images/life-insurance-hero.webp') type('image/webp'),
+    url('/images/life-insurance-hero.jpg') 1x,
+    url('/images/life-insurance-hero.png') 1x
+  );
+}
+
+.img-pet-insurance-calculator {
+  background-image: image-set(
+    url('/images/pet-insurance-calculator.avif') type('image/avif'),
+    url('/images/pet-insurance-calculator.webp') type('image/webp'),
+    url('/images/pet-insurance-calculator.jpg') 1x,
+    url('/images/pet-insurance-calculator.png') 1x
+  );
+}
+
+.img-pet-insurance-hero {
+  background-image: image-set(
+    url('/images/pet-insurance-hero.avif') type('image/avif'),
+    url('/images/pet-insurance-hero.webp') type('image/webp'),
+    url('/images/pet-insurance-hero.jpg') 1x,
+    url('/images/pet-insurance-hero.png') 1x
+  );
+}
+
+.img-travel-insurance-calculator {
+  background-image: image-set(
+    url('/images/travel-insurance-calculator.avif') type('image/avif'),
+    url('/images/travel-insurance-calculator.webp') type('image/webp'),
+    url('/images/travel-insurance-calculator.jpg') 1x,
+    url('/images/travel-insurance-calculator.png') 1x
+  );
+}
+
+.img-travel-insurance-hero {
+  background-image: image-set(
+    url('/images/travel-insurance-hero.avif') type('image/avif'),
+    url('/images/travel-insurance-hero.webp') type('image/webp'),
+    url('/images/travel-insurance-hero.jpg') 1x,
+    url('/images/travel-insurance-hero.png') 1x
+  );
+}
+
+.img-disability-insurance-guide-2025 {
+  background-image: image-set(
+    url('/images/disability-insurance-guide-2025.avif') type('image/avif'),
+    url('/images/disability-insurance-guide-2025.webp') type('image/webp'),
+    url('/images/disability-insurance-guide-2025.jpg') 1x,
+    url('/images/disability-insurance-guide-2025.png') 1x
+  );
+}
