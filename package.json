@@ -15,7 +15,10 @@
     "cdn:optimize": "node scripts/cdn-optimizer.mjs",
     "cdn:update": "node scripts/update-cdn.mjs",
     "cdn:deploy": "cd cdn-repo && git add . && git commit -m \"Auto-update CDN assets\" && git push",
-    "test:cdn": "node scripts/test-cdn.mjs"
+    "test:cdn": "node scripts/test-cdn.mjs",
+    "deploy": "node scripts/deploy-updates.mjs",
+    "deploy:quick": "node scripts/quick-deploy.mjs",
+    "deploy:full": "node scripts/deploy-updates.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
