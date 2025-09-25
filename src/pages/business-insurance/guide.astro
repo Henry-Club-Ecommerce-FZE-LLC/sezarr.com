@@ -1,0 +1,7 @@
+---
+const post = await Astro.glob('../../content/posts/business-insurance-guide-2025.md');
+if (post.length > 0) {
+  return Astro.redirect('/posts/business-insurance-guide-2025/');
+}
+return Astro.redirect('/404');
+---

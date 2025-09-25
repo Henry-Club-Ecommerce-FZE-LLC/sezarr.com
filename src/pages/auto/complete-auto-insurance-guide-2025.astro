@@ -1,0 +1,14 @@
+---
+const { slug } = Astro.params;
+const post = await Astro.glob('../../content/posts/complete-auto-insurance-guide-2025.md');
+const postData = post[0];
+
+if (!postData) {
+  return Astro.redirect('/404');
+}
+---
+
+<script>
+// Redirect to the canonical posts URL
+window.location.href = '/posts/complete-auto-insurance-guide-2025/';
+</script>
