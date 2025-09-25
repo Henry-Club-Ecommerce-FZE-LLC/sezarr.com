@@ -50,6 +50,32 @@
       </div>
       
       <div>
+        <label class="block text-sm font-medium mb-2">Coverage Level</label>
+        <select id="coverage" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Coverage</option>
+          <option value="state-minimum">State Minimum</option>
+          <option value="25-50-25">Basic (25/50/25)</option>
+          <option value="50-100-50">Standard (50/100/50)</option>
+          <option value="100-300-100">Good (100/300/100)</option>
+          <option value="250-500-250">Better (250/500/250)</option>
+          <option value="500-500-500">Best (500/500/500)</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Deductible Amount</label>
+        <select id="deductible" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Deductible</option>
+          <option value="0">$0 (No deductible)</option>
+          <option value="250">$250</option>
+          <option value="500">$500</option>
+          <option value="1000">$1,000</option>
+          <option value="2000">$2,000</option>
+          <option value="2500">$2,500</option>
+        </select>
+      </div>
+      
+      <div>
         <label class="block text-sm font-medium mb-2">Vehicle Make</label>
         <select id="vehicleMake" class="w-full p-3 border rounded-lg" required>
           <option value="">Select Make</option>
@@ -525,39 +551,79 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('autoInsuranceCalculator').addEventListener('submit', async function(e) {
   e.preventDefault();
   
-  // Show loading state
-  document.getElementById('calculatorResults').classList.add('opacity-50');
+  console.log('Form submitted'); // Debug log
   
-  // Get all form values
-  const age = parseInt(document.getElementById('age').value);
-  const gender = document.getElementById('gender').value;
-  const maritalStatus = document.getElementById('maritalStatus').value;
-  const state = document.getElementById('state').value;
-  const zipCode = document.getElementById('zipCode').value;
-  const coverage = document.getElementById('coverage').value;
-  const deductible = document.getElementById('deductible').value;
-  const vehicleMake = document.getElementById('vehicleMake').value;
-  const vehicleYear = parseInt(document.getElementById('vehicleYear').value);
-  const vehicleType = document.getElementById('vehicleType').value;
-  const annualMileage = document.getElementById('annualMileage').value;
-  const vehicleUse = document.getElementById('vehicleUse').value;
-  const parkingLocation = document.getElementById('parkingLocation').value;
-  const drivingExperience = document.getElementById('drivingExperience').value;
-  const insuranceStatus = document.getElementById('insuranceStatus').value;
-  const creditScore = document.getElementById('creditScore').value;
-  const drivingRecord = document.getElementById('drivingRecord').value;
-  const education = document.getElementById('education').value;
-  const occupation = document.getElementById('occupation').value;
+  // Show loading state
+  const resultsContainer = document.getElementById('calculatorResults');
+  if (resultsContainer) {
+    resultsContainer.classList.add('opacity-50');
+  }
+  
+  // Get all form values with null checks
+  const ageEl = document.getElementById('age');
+  const genderEl = document.getElementById('gender');
+  const maritalStatusEl = document.getElementById('maritalStatus');
+  const stateEl = document.getElementById('state');
+  const zipCodeEl = document.getElementById('zipCode');
+  const coverageEl = document.getElementById('coverage');
+  const deductibleEl = document.getElementById('deductible');
+  const vehicleMakeEl = document.getElementById('vehicleMake');
+  const vehicleYearEl = document.getElementById('vehicleYear');
+  const vehicleTypeEl = document.getElementById('vehicleType');
+  const annualMileageEl = document.getElementById('annualMileage');
+  const vehicleUseEl = document.getElementById('vehicleUse');
+  const parkingLocationEl = document.getElementById('parkingLocation');
+  const drivingExperienceEl = document.getElementById('drivingExperience');
+  const insuranceStatusEl = document.getElementById('insuranceStatus');
+  const creditScoreEl = document.getElementById('creditScore');
+  const drivingRecordEl = document.getElementById('drivingRecord');
+  const educationEl = document.getElementById('education');
+  const occupationEl = document.getElementById('occupation');
+  
+  if (!ageEl || !stateEl || !coverageEl || !deductibleEl || !vehicleMakeEl || 
+      !vehicleYearEl || !vehicleTypeEl || !annualMileageEl || !vehicleUseEl || 
+      !parkingLocationEl || !drivingExperienceEl || !insuranceStatusEl || 
+      !creditScoreEl || !drivingRecordEl) {
+    console.error('Missing required form elements');
+    alert('Error: Some form fields are missing. Please refresh the page and try again.');
+    if (resultsContainer) resultsContainer.classList.remove('opacity-50');
+    return;
+  }
 
-  if (!age || !state || !coverage || !deductible || !vehicleMake || !vehicleYear || 
+  const age = parseInt(ageEl.value);
+  const gender = genderEl ? genderEl.value : 'not-specified';
+  const maritalStatus = maritalStatusEl ? maritalStatusEl.value : 'single';
+  const state = stateEl.value;
+  const zipCode = zipCodeEl ? zipCodeEl.value : '';
+  const coverage = coverageEl ? coverageEl.value : '50-100-50'; // Default coverage
+  const deductible = deductibleEl ? deductibleEl.value : '1000'; // Default deductible
+  const vehicleMake = vehicleMakeEl.value;
+  const vehicleYear = parseInt(vehicleYearEl.value);
+  const vehicleType = vehicleTypeEl.value;
+  const annualMileage = annualMileageEl.value;
+  const vehicleUse = vehicleUseEl.value;
+  const parkingLocation = parkingLocationEl.value;
+  const drivingExperience = drivingExperienceEl.value;
+  const insuranceStatus = insuranceStatusEl.value;
+  const creditScore = creditScoreEl.value;
+  const drivingRecord = drivingRecordEl.value;
+  const education = educationEl ? educationEl.value : '';
+  const occupation = occupationEl ? occupationEl.value : '';
+
+  console.log('Form values:', { age, state, coverage, deductible, vehicleMake, vehicleYear }); // Debug log
+
+  // Check only the truly required fields
+  if (!age || !state || !vehicleMake || !vehicleYear || 
       !vehicleType || !annualMileage || !vehicleUse || !parkingLocation || 
       !drivingExperience || !insuranceStatus || !creditScore || !drivingRecord) {
     alert('Please fill in all required fields.');
-    document.getElementById('calculatorResults').classList.remove('opacity-50');
+    if (resultsContainer) resultsContainer.classList.remove('opacity-50');
     return;
   }
   
   try {
+    console.log('Starting calculation'); // Debug log
+    
     // Use comprehensive calculation instead of live rate API
     const comprehensiveRates = calculateComprehensiveRates({
       age, gender, maritalStatus, state, zipCode, coverage, deductible,
@@ -565,6 +631,8 @@ document.addEventListener('DOMContentLoaded', () => {
       parkingLocation, drivingExperience, insuranceStatus, creditScore,
       drivingRecord, education, occupation
     });
+    
+    console.log('Calculation complete, displaying results'); // Debug log
     
     // Display the results with company quotes
     displayComprehensiveResults(comprehensiveRates);
@@ -576,22 +644,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Update location display
-    document.getElementById('rateLocation').textContent = `${state} ${zipCode || 'statewide average'}`;
+    const rateLocationEl = document.getElementById('rateLocation');
+    if (rateLocationEl) {
+      rateLocationEl.textContent = `${state} ${zipCode || 'statewide average'}`;
+    }
     
     // Update timestamp
-    document.getElementById('rateTimestamp').textContent = 
-      `Enhanced estimates as of: ${new Date().toLocaleDateString('en-US', {
-        year: 'numeric', month: 'long', day: 'numeric'
-      })}`;
+    const rateTimestampEl = document.getElementById('rateTimestamp');
+    if (rateTimestampEl) {
+      rateTimestampEl.textContent = 
+        `Enhanced estimates as of: ${new Date().toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        })}`;
+    }
     
     // Show results
-    document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
+    if (resultsContainer) {
+      resultsContainer.classList.remove('hidden', 'opacity-50');
+    }
+    
+    console.log('Results displayed successfully'); // Debug log
     
   } catch (error) {
     console.error('Error calculating insurance cost:', error);
     // Show error message
     alert('Error calculating rates. Please check your inputs and try again.');
-    document.getElementById('calculatorResults').classList.remove('opacity-50');
+    if (resultsContainer) resultsContainer.classList.remove('opacity-50');
   }
 });
 
@@ -726,12 +804,15 @@ function calculateComprehensiveRates(profile) {
 function displayComprehensiveResults(results) {
   const quotes = results.quotes;
   
-  // Replace the existing results display with company quotes
+  // Show the results container
   const resultsContainer = document.getElementById('calculatorResults');
+  resultsContainer.classList.remove('hidden');
+  
+  // Create a new section above the existing tabs for company quotes
   const existingContent = resultsContainer.innerHTML;
   
-  // Create new comprehensive results HTML
-  const comprehensiveHTML = `
+  // Insert company quotes section before existing content
+  resultsContainer.innerHTML = `
     <h3 class="text-xl font-semibold mb-4">Insurance Quote Estimates from Major Providers</h3>
     
     <div class="grid gap-4 mb-6">
@@ -765,10 +846,105 @@ function displayComprehensiveResults(results) {
       <p><em>*Estimates based on comprehensive industry data and your profile. Actual rates may vary significantly. These are not actual quotes - contact insurers directly for binding quotes.</em></p>
     </div>
     
+    <hr class="mb-6">
+    
     ${existingContent}
   `;
   
-  resultsContainer.innerHTML = comprehensiveHTML;
+  // Now populate the existing tabbed interface with the basic/standard/premium data
+  const standardRate = quotes.find(q => q.company === 'Progressive') || quotes[1] || quotes[0];
+  const basicRate = Math.round(standardRate.annual * 0.7);
+  const premiumRate = Math.round(standardRate.annual * 1.4);
+  
+  // Update basic coverage
+  const basicPremiumEl = document.getElementById('basicPremium');
+  const basicMonthlyEl = document.getElementById('basicMonthly');
+  if (basicPremiumEl) basicPremiumEl.textContent = `$${basicRate.toLocaleString()}/year`;
+  if (basicMonthlyEl) basicMonthlyEl.textContent = `$${Math.round(basicRate/12).toLocaleString()}/month`;
+  
+  // Update standard coverage
+  const standardPremiumEl = document.getElementById('standardPremium');
+  const standardMonthlyEl = document.getElementById('standardMonthly');
+  if (standardPremiumEl) standardPremiumEl.textContent = `$${standardRate.annual.toLocaleString()}/year`;
+  if (standardMonthlyEl) standardMonthlyEl.textContent = `$${standardRate.monthly.toLocaleString()}/month`;
+  
+  // Update premium coverage
+  const premiumPremiumEl = document.getElementById('premiumPremium');
+  const premiumMonthlyEl = document.getElementById('premiumMonthly');
+  if (premiumPremiumEl) premiumPremiumEl.textContent = `$${premiumRate.toLocaleString()}/year`;
+  if (premiumMonthlyEl) premiumMonthlyEl.textContent = `$${Math.round(premiumRate/12).toLocaleString()}/month`;
+  
+  // Update coverage breakdowns
+  updateCoverageBreakdowns(basicRate, standardRate.annual, premiumRate);
+}
+
+// Update coverage breakdowns for each tier
+function updateCoverageBreakdowns(basicAnnual, standardAnnual, premiumAnnual) {
+  // Basic coverage breakdown
+  const basicBreakdown = {
+    liability: Math.round(basicAnnual * 0.4),
+    collision: Math.round(basicAnnual * 0.25),
+    comprehensive: Math.round(basicAnnual * 0.2),
+    personalInjury: Math.round(basicAnnual * 0.1),
+    uninsured: Math.round(basicAnnual * 0.05)
+  };
+  
+  // Standard coverage breakdown
+  const standardBreakdown = {
+    liability: Math.round(standardAnnual * 0.35),
+    collision: Math.round(standardAnnual * 0.3),
+    comprehensive: Math.round(standardAnnual * 0.2),
+    personalInjury: Math.round(standardAnnual * 0.1),
+    uninsured: Math.round(standardAnnual * 0.05)
+  };
+  
+  // Premium coverage breakdown
+  const premiumBreakdown = {
+    liability: Math.round(premiumAnnual * 0.3),
+    collision: Math.round(premiumAnnual * 0.3),
+    comprehensive: Math.round(premiumAnnual * 0.25),
+    personalInjury: Math.round(premiumAnnual * 0.1),
+    uninsured: Math.round(premiumAnnual * 0.05)
+  };
+  
+  // Update basic coverage details
+  const basicLiabilityEl = document.getElementById('basicLiability');
+  const basicCollisionEl = document.getElementById('basicCollision');
+  const basicComprehensiveEl = document.getElementById('basicComprehensive');
+  const basicPipEl = document.getElementById('basicPip');
+  const basicUninsuredEl = document.getElementById('basicUninsured');
+  
+  if (basicLiabilityEl) basicLiabilityEl.textContent = `$${basicBreakdown.liability.toLocaleString()}`;
+  if (basicCollisionEl) basicCollisionEl.textContent = `$${basicBreakdown.collision.toLocaleString()}`;
+  if (basicComprehensiveEl) basicComprehensiveEl.textContent = `$${basicBreakdown.comprehensive.toLocaleString()}`;
+  if (basicPipEl) basicPipEl.textContent = `$${basicBreakdown.personalInjury.toLocaleString()}`;
+  if (basicUninsuredEl) basicUninsuredEl.textContent = `$${basicBreakdown.uninsured.toLocaleString()}`;
+  
+  // Update standard coverage details
+  const standardLiabilityEl = document.getElementById('standardLiability');
+  const standardCollisionEl = document.getElementById('standardCollision');
+  const standardComprehensiveEl = document.getElementById('standardComprehensive');
+  const standardPipEl = document.getElementById('standardPip');
+  const standardUninsuredEl = document.getElementById('standardUninsured');
+  
+  if (standardLiabilityEl) standardLiabilityEl.textContent = `$${standardBreakdown.liability.toLocaleString()}`;
+  if (standardCollisionEl) standardCollisionEl.textContent = `$${standardBreakdown.collision.toLocaleString()}`;
+  if (standardComprehensiveEl) standardComprehensiveEl.textContent = `$${standardBreakdown.comprehensive.toLocaleString()}`;
+  if (standardPipEl) standardPipEl.textContent = `$${standardBreakdown.personalInjury.toLocaleString()}`;
+  if (standardUninsuredEl) standardUninsuredEl.textContent = `$${standardBreakdown.uninsured.toLocaleString()}`;
+  
+  // Update premium coverage details
+  const premiumLiabilityEl = document.getElementById('premiumLiability');
+  const premiumCollisionEl = document.getElementById('premiumCollision');
+  const premiumComprehensiveEl = document.getElementById('premiumComprehensive');
+  const premiumPipEl = document.getElementById('premiumPip');
+  const premiumUninsuredEl = document.getElementById('premiumUninsured');
+  
+  if (premiumLiabilityEl) premiumLiabilityEl.textContent = `$${premiumBreakdown.liability.toLocaleString()}`;
+  if (premiumCollisionEl) premiumCollisionEl.textContent = `$${premiumBreakdown.collision.toLocaleString()}`;
+  if (premiumComprehensiveEl) premiumComprehensiveEl.textContent = `$${premiumBreakdown.comprehensive.toLocaleString()}`;
+  if (premiumPipEl) premiumPipEl.textContent = `$${premiumBreakdown.personalInjury.toLocaleString()}`;
+  if (premiumUninsuredEl) premiumUninsuredEl.textContent = `$${premiumBreakdown.uninsured.toLocaleString()}`;
 }
 
 // Enhanced rate factors display
