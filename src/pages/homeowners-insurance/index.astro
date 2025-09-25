@@ -9,6 +9,53 @@ import FeaturedPosts from '../../components/FeaturedPosts.astro';
 const title = 'Homeowners Insurance Guide 2025 - Coverage Types & Best Rates';
 const description = 'Complete homeowners insurance guide for 2025. Understand dwelling coverage, liability protection, deductibles, claims process & find the best home insurance rates.';
 
+// Homeowners Insurance Page Schema
+const homeownersInsuranceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Homeowners Insurance Guide 2025 - Coverage Types & Best Rates",
+  "description": "Complete homeowners insurance guide for 2025. Understand dwelling coverage, liability protection, deductibles, claims process & find the best home insurance rates.",
+  "url": "https://sezarr.com/homeowners-insurance/",
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does homeowners insurance typically cover?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard homeowners insurance covers dwelling (structure), other structures (detached garage, shed), personal property, liability protection, medical payments, and additional living expenses. It protects against covered perils like fire, theft, windstorm, and vandalism."
+        }
+      },
+      {
+        "@type": "Question", 
+        "name": "How much homeowners insurance coverage do I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You need enough dwelling coverage to rebuild your home at current construction costs, typically 80-100% of replacement cost. Personal property coverage should reflect the value of your belongings, and liability coverage should protect your assets and future income."
+        }
+      }
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://sezarr.com/"
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Homeowners Insurance",
+        "item": "https://sezarr.com/homeowners-insurance/"
+      }
+    ]
+  }
+};
+
 const homeownersInsuranceStats = [
   { label: 'Average Annual Premium', value: '$1,383', description: 'National average cost' },
   { label: 'Coverage Requirements', value: '6 Types', description: 'Standard policy coverage' },
@@ -234,50 +281,4 @@ const faqs = [
   <NewsletterCallout />
 </BaseLayout>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Homeowners Insurance Guide 2025 - Coverage Types & Best Rates",
-  "description": "Complete homeowners insurance guide for 2025. Understand dwelling coverage, liability protection, deductibles, claims process & find the best home insurance rates.",
-  "url": "https://sezarr.com/homeowners-insurance/",
-  "mainEntity": {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What does homeowners insurance typically cover?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Standard homeowners insurance covers dwelling (structure), other structures (detached garage, shed), personal property, liability protection, medical payments, and additional living expenses. It protects against covered perils like fire, theft, windstorm, and vandalism."
-        }
-      },
-      {
-        "@type": "Question", 
-        "name": "How much homeowners insurance coverage do I need?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "You need enough dwelling coverage to rebuild your home at current construction costs, typically 80-100% of replacement cost. Personal property coverage should reflect the value of your belongings, and liability coverage should protect your assets and future income."
-        }
-      }
-    ]
-  },
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://sezarr.com/"
-      },
-      {
-        "@type": "ListItem", 
-        "position": 2,
-        "name": "Homeowners Insurance",
-        "item": "https://sezarr.com/homeowners-insurance/"
-      }
-    ]
-  }
-}
-</script>
+<script type="application/ld+json" set:html={JSON.stringify(homeownersInsuranceSchema)}></script>

@@ -1,0 +1,16 @@
+---
+// JsonLdScript.astro - Reusable component for all JSON-LD structured data
+// This component ensures proper HTML escaping and prevents Search Console errors
+
+interface Props {
+  schema: object | object[];
+  id?: string;
+}
+
+const { schema, id } = Astro.props;
+
+// Ensure schema is valid JSON
+const jsonLdContent = typeof schema === 'object' ? JSON.stringify(schema) : schema;
+---
+
+<script type="application/ld+json" set:html={jsonLdContent} {id}></script>

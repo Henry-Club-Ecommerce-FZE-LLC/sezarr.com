@@ -9,6 +9,53 @@ import FeaturedPosts from '../../components/FeaturedPosts.astro';
 const title = 'Health Insurance Guide 2025 - ACA Plans, Medicare & Coverage Options';
 const description = 'Complete health insurance guide for 2025. Understand ACA marketplace plans, Medicare options, HMO vs PPO, deductibles & find the best coverage.';
 
+// Health Insurance Page Schema
+const healthInsuranceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Health Insurance Guide 2025 - ACA Plans, Medicare & Coverage Options",
+  "description": "Complete health insurance guide for 2025. Understand ACA marketplace plans, Medicare options, HMO vs PPO, deductibles & find the best coverage.",
+  "url": "https://sezarr.com/health-insurance/",
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between HMO and PPO health plans?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "HMO (Health Maintenance Organization) plans require you to choose a primary care physician and get referrals for specialists, but typically have lower costs. PPO (Preferred Provider Organization) plans offer more flexibility to see specialists directly and use out-of-network providers, but usually cost more."
+        }
+      },
+      {
+        "@type": "Question", 
+        "name": "How do health insurance deductibles work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A deductible is the amount you pay out-of-pocket before your insurance begins covering costs. For example, with a $2,000 deductible, you pay the first $2,000 of covered medical expenses, then insurance kicks in."
+        }
+      }
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://sezarr.com/"
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Health Insurance",
+        "item": "https://sezarr.com/health-insurance/"
+      }
+    ]
+  }
+};
+
 const healthInsuranceStats = [
   { label: 'Average Annual Premium', value: '$7,739', description: 'For individual coverage' },
   { label: 'ACA Marketplace Plans', value: '11.4M', description: 'Americans enrolled in 2024' },
@@ -234,50 +281,4 @@ const faqs = [
   <NewsletterCallout />
 </BaseLayout>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Health Insurance Guide 2025 - ACA Plans, Medicare & Coverage Options",
-  "description": "Complete health insurance guide for 2025. Understand ACA marketplace plans, Medicare options, HMO vs PPO, deductibles & find the best coverage.",
-  "url": "https://sezarr.com/health-insurance/",
-  "mainEntity": {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is the difference between HMO and PPO health plans?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "HMO (Health Maintenance Organization) plans require you to choose a primary care physician and get referrals for specialists, but typically have lower costs. PPO (Preferred Provider Organization) plans offer more flexibility to see specialists directly and use out-of-network providers, but usually cost more."
-        }
-      },
-      {
-        "@type": "Question", 
-        "name": "How do health insurance deductibles work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "A deductible is the amount you pay out-of-pocket before your insurance begins covering costs. For example, with a $2,000 deductible, you pay the first $2,000 of covered medical expenses, then insurance kicks in."
-        }
-      }
-    ]
-  },
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://sezarr.com/"
-      },
-      {
-        "@type": "ListItem", 
-        "position": 2,
-        "name": "Health Insurance",
-        "item": "https://sezarr.com/health-insurance/"
-      }
-    ]
-  }
-}
-</script>
+<script type="application/ld+json" set:html={JSON.stringify(healthInsuranceSchema)}></script>

@@ -24,7 +24,6 @@ import TextHighlighting from '../components/TextHighlighting.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
 import RecommendedTools from '../components/RecommendedTools.astro';
 import TrustIndicators from '../components/TrustIndicators.astro';
-import EnhancedSchema from '../components/EnhancedSchema.astro';
 import MobileEnhancements from '../components/MobileEnhancements.astro';
 
 interface Props {
@@ -243,24 +242,4 @@ const schema = [
       </div>
     </aside>
   </section>
-
-  <!-- Enhanced Schema -->
-  <EnhancedSchema 
-    title={frontmatter.title}
-    description={frontmatter.description}
-    url={url}
-    publishedDate={frontmatter.pubDate || '2025-01-01'}
-    modifiedDate={frontmatter.updatedDate}
-    author={authorEntry ? {
-      name: authorEntry.data.name,
-      url: `${siteUrl}/authors/${authorEntry.slug}/`,
-      image: authorEntry.data.image
-    } : undefined}
-    category={frontmatter.category}
-    tags={frontmatter.tags}
-    image={frontmatter.heroImage}
-    faqs={frontmatter.faqs}
-    howToSteps={frontmatter.howToSteps}
-    breadcrumbs={finalBreadcrumbs}
-  />
 </BaseLayout>

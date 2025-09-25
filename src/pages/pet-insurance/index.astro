@@ -9,6 +9,61 @@ import FeaturedPosts from '../../components/FeaturedPosts.astro';
 const title = 'Pet Insurance Guide 2025 - Coverage, Costs & Best Providers';
 const description = 'Complete pet insurance guide for 2025. Compare coverage options, costs, top providers & claims. Protect your furry friends with the right policy.';
 
+// Pet Insurance Page Schema
+const petInsuranceSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Pet Insurance Guide 2025 - Coverage, Costs & Best Providers",
+  "description": "Complete pet insurance guide for 2025. Compare coverage options, costs, top providers & claims. Protect your furry friends with the right policy.",
+  "url": "https://sezarr.com/pet-insurance/",
+  "mainEntity": {
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "When should I get pet insurance?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The best time to get pet insurance is when your pet is young and healthy, typically between 8 weeks and 12 months old. This ensures coverage before pre-existing conditions develop and often results in lower premiums."
+        }
+      },
+      {
+        "@type": "Question", 
+        "name": "What does pet insurance typically cover?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Pet insurance typically covers accidents, illnesses, diagnostic tests, treatments, surgeries, and prescription medications. Some plans also include wellness care like vaccinations and routine checkups. Coverage varies by provider and plan."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are pre-existing conditions covered?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, pre-existing conditions are typically not covered by pet insurance. This is why it's important to enroll your pet while they're healthy. Some conditions may be covered if they've been cured and symptom-free for a certain period."
+        }
+      }
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://sezarr.com/"
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Pet Insurance",
+        "item": "https://sezarr.com/pet-insurance/"
+      }
+    ]
+  }
+};
+
 const petInsuranceStats = [
   { label: 'Pet Insurance Growth', value: '22.8%', description: 'Annual market growth rate' },
   { label: 'Average Annual Cost', value: '$594', description: 'For comprehensive coverage' },
@@ -234,58 +289,4 @@ const faqs = [
   <NewsletterCallout />
 </BaseLayout>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Pet Insurance Guide 2025 - Coverage, Costs & Best Providers",
-  "description": "Complete pet insurance guide for 2025. Compare coverage options, costs, top providers & claims. Protect your furry friends with the right policy.",
-  "url": "https://sezarr.com/pet-insurance/",
-  "mainEntity": {
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "When should I get pet insurance?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The best time to get pet insurance is when your pet is young and healthy, typically between 8 weeks and 12 months old. This ensures coverage before pre-existing conditions develop and often results in lower premiums."
-        }
-      },
-      {
-        "@type": "Question", 
-        "name": "What does pet insurance typically cover?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Pet insurance typically covers accidents, illnesses, diagnostic tests, treatments, surgeries, and prescription medications. Some plans also include wellness care like vaccinations and routine checkups. Coverage varies by provider and plan."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are pre-existing conditions covered?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No, pre-existing conditions are typically not covered by pet insurance. This is why it's important to enroll your pet while they're healthy. Some conditions may be covered if they've been cured and symptom-free for a certain period."
-        }
-      }
-    ]
-  },
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://sezarr.com/"
-      },
-      {
-        "@type": "ListItem", 
-        "position": 2,
-        "name": "Pet Insurance",
-        "item": "https://sezarr.com/pet-insurance/"
-      }
-    ]
-  }
-}
-</script>
+<script type="application/ld+json" set:html={JSON.stringify(petInsuranceSchema)}></script>

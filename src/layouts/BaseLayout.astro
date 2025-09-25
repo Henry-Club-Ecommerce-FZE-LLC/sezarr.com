@@ -173,20 +173,24 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
     <link rel="manifest" href="/site.webmanifest" />
     
     <!-- Schema.org -->
-    {schema && (
+    {schema && Array.isArray(schema) && schema.length > 0 ? (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ) : (
       <script type="application/ld+json" set:html={JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Article',
+        '@type': type === 'article' ? 'Article' : 'WebSite',
+        'name': title,
         'headline': title,
         'description': description,
         'image': new URL(image, SITE.URL).toString(),
+        'url': url,
         'datePublished': publishedDate,
         'dateModified': modifiedDate || publishedDate,
-        'author': {
+        'author': author && author.name ? {
           '@type': 'Person',
           'name': author.name,
           'url': author.url
-        },
+        } : undefined,
         'publisher': {
           '@type': 'Organization',
           'name': SITE.NAME,
@@ -201,7 +205,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
           '@id': url
         },
         'articleSection': category,
-        'keywords': tags.join(',')
+        'keywords': tags && tags.length > 0 ? tags.join(',') : undefined
       })} />
     )}
     
