@@ -448,33 +448,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener to update zip codes when state changes
     stateSelect.addEventListener('change', handleStateChange);
     
-    // Set up coverage tab events
-    const tabs = document.querySelectorAll('#coverageTabs button');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        // Remove active class from all tabs
-        tabs.forEach(t => {
-          t.classList.remove('active-tab');
-          t.classList.add('inactive-tab');
-        });
-        
-        // Add active class to clicked tab
-        e.target.classList.remove('inactive-tab');
-        e.target.classList.add('active-tab');
-        
-        // Hide all panels
-        document.querySelectorAll('.coverage-panel').forEach(panel => {
-          panel.classList.add('hidden');
-        });
-        
-        // Show selected panel
-        const coverage = e.target.dataset.coverage;
-        document.getElementById(`${coverage}Coverage`).classList.remove('hidden');
-      });
-    });
+// Initialize tab functionality
+function initializeTabFunctionality() {
+  // Set up coverage tab events
+  const tabs = document.querySelectorAll('#coverageTabs button');
+  tabs.forEach(tab => {
+    // Remove any existing event listeners by cloning the element
+    const newTab = tab.cloneNode(true);
+    tab.parentNode.replaceChild(newTab, tab);
     
+    newTab.addEventListener('click', (e) => {
+      console.log('Tab clicked:', e.target.dataset.coverage); // Debug log
+      
+      // Remove active class from all tabs
+      const allTabs = document.querySelectorAll('#coverageTabs button');
+      allTabs.forEach(t => {
+        t.classList.remove('active-tab');
+        t.classList.add('inactive-tab');
+      });
+      
+      // Add active class to clicked tab
+      e.target.classList.remove('inactive-tab');
+      e.target.classList.add('active-tab');
+      
+      // Hide all panels
+      document.querySelectorAll('.coverage-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+      
+      // Show selected panel
+      const coverage = e.target.dataset.coverage;
+      const panelId = `${coverage}Coverage`;
+      const targetPanel = document.getElementById(panelId);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+        console.log('Showing panel:', panelId); // Debug log
+      } else {
+        console.error('Panel not found:', panelId); // Debug log
+      }
+    });
+  });
+}
+
+// Set up coverage tab events
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    initializeTabFunctionality();
   } catch (error) {
-    console.error('Error initializing calculator:', error);
+    console.error('Error initializing tab functionality:', error);
   }
 });
 
@@ -983,6 +1004,11 @@ function displayComprehensiveResults(results) {
   
   // Update coverage breakdowns
   updateCoverageBreakdowns(basicRate, standardRate.annual, premiumRate);
+  
+  // Re-initialize tab functionality after content is loaded
+  setTimeout(() => {
+    initializeTabFunctionality();
+  }, 100);
 }
 
 // Update coverage breakdowns for each tier
@@ -1324,25 +1350,90 @@ function calculateFallbackRates(profile = {}) {
   document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
 }
 
-// Styles for tab UI
+// Styles for tab UI and dark mode improvements
 document.head.insertAdjacentHTML('beforeend', `
   <style>
     .active-tab {
       color: #1d4ed8;
       border-color: #1d4ed8;
       font-weight: bold;
+      background-color: rgba(29, 78, 216, 0.1);
     }
     .inactive-tab {
       color: #6b7280;
       border-color: transparent;
+      background-color: transparent;
     }
+    .inactive-tab:hover {
+      color: #374151;
+      border-color: #d1d5db;
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    /* Dark mode improvements */
     .dark .active-tab {
-      color: #93c5fd;
-      border-color: #93c5fd;
+      color: #93c5fd !important;
+      border-color: #93c5fd !important;
+      background-color: rgba(147, 197, 253, 0.2) !important;
     }
     .dark .inactive-tab {
-      color: #9ca3af;
-      border-color: transparent;
+      color: #d1d5db !important;
+      border-color: transparent !important;
+      background-color: transparent !important;
+    }
+    .dark .inactive-tab:hover {
+      color: #f3f4f6 !important;
+      border-color: #4b5563 !important;
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    /* Improve text visibility in dark mode */
+    .dark .bg-blue-50 {
+      background-color: #1e3a8a !important;
+    }
+    .dark .text-blue-600 {
+      color: #93c5fd !important;
+    }
+    .dark .text-blue-700 {
+      color: #bfdbfe !important;
+    }
+    .dark .text-blue-800 {
+      color: #dbeafe !important;
+    }
+    .dark .text-gray-900 {
+      color: #f9fafb !important;
+    }
+    .dark .text-gray-700 {
+      color: #d1d5db !important;
+    }
+    .dark .text-gray-600 {
+      color: #9ca3af !important;
+    }
+    .dark .text-gray-500 {
+      color: #6b7280 !important;
+    }
+    
+    /* Company quote cards in dark mode */
+    .dark .bg-white {
+      background-color: #374151 !important;
+    }
+    .dark .border-gray-200 {
+      border-color: #4b5563 !important;
+    }
+    .dark .bg-green-50 {
+      background-color: #065f46 !important;
+    }
+    .dark .border-green-400 {
+      border-color: #10b981 !important;
+    }
+    .dark .bg-green-100 {
+      background-color: #047857 !important;
+    }
+    .dark .bg-gray-100 {
+      background-color: #4b5563 !important;
+    }
+    .dark .text-green-600 {
+      color: #34d399 !important;
     }
   </style>
 `);
