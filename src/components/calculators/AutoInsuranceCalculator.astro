@@ -808,10 +808,7 @@ function displayComprehensiveResults(results) {
   const resultsContainer = document.getElementById('calculatorResults');
   resultsContainer.classList.remove('hidden');
   
-  // Create a new section above the existing tabs for company quotes
-  const existingContent = resultsContainer.innerHTML;
-  
-  // Insert company quotes section before existing content
+  // Replace the title and add company quotes section at the top
   resultsContainer.innerHTML = `
     <h3 class="text-xl font-semibold mb-4">Insurance Quote Estimates from Major Providers</h3>
     
@@ -848,7 +845,117 @@ function displayComprehensiveResults(results) {
     
     <hr class="mb-6">
     
-    ${existingContent}
+    <!-- Coverage tabs -->
+    <div class="mb-4 border-b border-gray-200">
+      <ul class="flex flex-wrap -mb-px" id="coverageTabs">
+        <li class="mr-2">
+          <button class="active-tab inline-block p-3 rounded-t-lg border-b-2 border-blue-600" id="basicTab" data-coverage="basic">
+            Basic Coverage
+          </button>
+        </li>
+        <li class="mr-2">
+          <button class="inactive-tab inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:border-gray-300" id="standardTab" data-coverage="standard">
+            Standard Coverage
+          </button>
+        </li>
+        <li>
+          <button class="inactive-tab inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:border-gray-300" id="premiumTab" data-coverage="premium">
+            Premium Coverage
+          </button>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Live rate display -->
+    <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+      <!-- Basic coverage (default visible) -->
+      <div id="basicCoverage" class="coverage-panel">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="basicPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="basicMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="basicLiability">$0</span></li>
+              <li>Collision: <span id="basicCollision">$0</span></li>
+              <li>Comprehensive: <span id="basicComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="basicPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="basicUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>State minimum liability limits</li>
+              <li>$1,000 deductible for collision and comprehensive</li>
+              <li>Basic personal injury protection</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Standard coverage (hidden initially) -->
+      <div id="standardCoverage" class="coverage-panel hidden">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="standardPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="standardMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="standardLiability">$0</span></li>
+              <li>Collision: <span id="standardCollision">$0</span></li>
+              <li>Comprehensive: <span id="standardComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="standardPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="standardUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>50/100/50 liability limits</li>
+              <li>$500 deductible for collision and comprehensive</li>
+              <li>Enhanced personal injury protection</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Premium coverage (hidden initially) -->
+      <div id="premiumCoverage" class="coverage-panel hidden">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="premiumPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="premiumMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="premiumLiability">$0</span></li>
+              <li>Collision: <span id="premiumCollision">$0</span></li>
+              <li>Comprehensive: <span id="premiumComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="premiumPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="premiumUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>100/300/100 liability limits</li>
+              <li>$250 deductible for collision and comprehensive</li>
+              <li>Maximum personal injury protection</li>
+              <li>Rental car coverage included</li>
+              <li>Roadside assistance included</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Rate factors and other information -->
+    <div class="mt-6">
+      <h4 class="font-semibold mb-3">📊 Rate Factors Affecting Your Quote:</h4>
+      <ul class="list-disc list-inside text-sm space-y-1" id="rateFactors">
+        <!-- Factors will be populated by JavaScript -->
+      </ul>
+    </div>
   `;
   
   // Now populate the existing tabbed interface with the basic/standard/premium data
