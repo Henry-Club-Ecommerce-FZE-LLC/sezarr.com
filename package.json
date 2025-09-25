@@ -18,7 +18,12 @@
     "test:cdn": "node scripts/test-cdn.mjs",
     "deploy": "node scripts/deploy-updates.mjs",
     "deploy:quick": "node scripts/quick-deploy.mjs",
-    "deploy:full": "node scripts/deploy-updates.mjs"
+    "deploy:full": "node scripts/deploy-updates.mjs",
+    "content:generate": "node scripts/content-generator.mjs",
+    "content:states": "node scripts/content-generator.mjs states",
+    "content:reviews": "node scripts/content-generator.mjs reviews",
+    "content:calculators": "node scripts/content-generator.mjs calculators",
+    "content:all": "node scripts/content-generator.mjs all"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
