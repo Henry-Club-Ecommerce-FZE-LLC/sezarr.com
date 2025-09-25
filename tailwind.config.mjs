@@ -9,18 +9,14 @@ export default {
   ],
   theme: {
     fontFamily: {
-      'sans': ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
-      'mono': ['ui-monospace', 'SFMono-Regular', 'SF Mono', 'Consolas', 'Liberation Mono', 'Menlo', 'monospace'],
-      'serif': ['ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+      'sans': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+      'mono': ['ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace'],
     },
     extend: {
       colors: {
         brand: {
           50: "#eef6ff",
-          100: "#d9eaff",
-          200: "#bcd9ff",
-          300: "#90c0ff",
-          400: "#5c9eff",
+          100: "#d9eaff", 
           500: "#357eff",
           600: "#1f63f2",
           700: "#194fd2",
@@ -32,15 +28,47 @@ export default {
         DEFAULT: {
           css: {
             maxWidth: '72ch',
-            p: { marginTop: theme('spacing.3'), marginBottom: theme('spacing.3'), lineHeight: '1.8' },
-            h1: { marginTop: theme('spacing.6'), marginBottom: theme('spacing.3') },
-            h2: { marginTop: theme('spacing.6'), marginBottom: theme('spacing.3') },
-            h3: { marginTop: theme('spacing.5'), marginBottom: theme('spacing.2') },
-            ul: { marginTop: theme('spacing.3'), marginBottom: theme('spacing.3') },
-            ol: { marginTop: theme('spacing.3'), marginBottom: theme('spacing.3') },
-            li: { marginTop: theme('spacing.1'), marginBottom: theme('spacing.1') },
-            img: { marginTop: theme('spacing.5'), marginBottom: theme('spacing.5'), borderRadius: theme('borderRadius.lg') },
-            a: { textDecoration: 'underline', textUnderlineOffset: '3px' }
+            p: { 
+              marginTop: theme('spacing.3'), 
+              marginBottom: theme('spacing.3'), 
+              lineHeight: '1.7' 
+            },
+            h1: { 
+              marginTop: theme('spacing.6'), 
+              marginBottom: theme('spacing.3'),
+              fontSize: theme('fontSize.3xl'),
+              fontWeight: theme('fontWeight.bold')
+            },
+            h2: { 
+              marginTop: theme('spacing.5'), 
+              marginBottom: theme('spacing.2'),
+              fontSize: theme('fontSize.2xl'),
+              fontWeight: theme('fontWeight.bold')
+            },
+            h3: { 
+              marginTop: theme('spacing.4'), 
+              marginBottom: theme('spacing.2'),
+              fontSize: theme('fontSize.xl'),
+              fontWeight: theme('fontWeight.semibold')
+            },
+            ul: { 
+              marginTop: theme('spacing.3'), 
+              marginBottom: theme('spacing.3') 
+            },
+            li: { 
+              marginTop: theme('spacing.1'), 
+              marginBottom: theme('spacing.1') 
+            },
+            img: { 
+              marginTop: theme('spacing.4'), 
+              marginBottom: theme('spacing.4'), 
+              borderRadius: theme('borderRadius.lg') 
+            },
+            a: { 
+              color: theme('colors.blue.600'),
+              textDecoration: 'underline',
+              textUnderlineOffset: '2px'
+            }
           }
         },
         invert: {
@@ -49,8 +77,10 @@ export default {
             a: { color: theme('colors.sky.300') }
           }
         }
-      })
-    }
+      }),
+    },
   },
-  plugins: [typography]
+  plugins: [
+    typography,
+  ]
 };

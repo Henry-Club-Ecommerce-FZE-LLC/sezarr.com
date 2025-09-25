@@ -25,6 +25,9 @@ const {
   isLCP = false
 } = Astro.props;
 
+// Calculate aspect ratio to prevent layout shift
+const aspectRatio = (height / width * 100).toFixed(2);
+
 // Generate WebP and AVIF versions for better performance
 const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
 const avifSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.avif');
@@ -37,28 +40,50 @@ const lcpFetchPriority = isLCP ? 'high' : fetchpriority;
 const imgClass = `w-full h-auto object-cover ${isLCP ? 'lcp-image' : ''}`;
 ---
 
-<picture class={className}>
-  <!-- AVIF for modern browsers -->
-  <source srcset={avifSrc} type="image/avif" {sizes} />
-  <!-- WebP for wider browser support -->
-  <source srcset={webpSrc} type="image/webp" {sizes} />
-  <!-- Fallback to original format -->
-  <img 
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={lcpLoading}
-    fetchpriority={lcpFetchPriority}
-    decoding="async"
-    style={`aspect-ratio: ${width}/${height};`}
-    class={imgClass}
-  />
-</picture>
+<!-- Container with aspect ratio to prevent layout shift -->
+<div 
+  class={`relative overflow-hidden ${className}`}
+  style={`aspect-ratio: ${width}/${height}; padding-bottom: ${aspectRatio}%`}
+>
+  <picture class="absolute inset-0">
+    <!-- AVIF for modern browsers -->
+    <source srcset={avifSrc} type="image/avif" sizes={sizes} />
+    <!-- WebP for wider browser support -->
+    <source srcset={webpSrc} type="image/webp" sizes={sizes} />
+    <!-- Fallback to original format -->
+    <img 
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={lcpLoading}
+      fetchpriority={lcpFetchPriority}
+      decoding="async"
+      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+      style="color: transparent;"
+    />
+  </picture>
+</div>
 
 <style>
+  /* Prevent layout shift during image loading */
+  picture {
+    display: block;
+  }
+  
+  img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  img[loading="eager"],
+  img.loaded {
+    opacity: 1;
+  }
+  
   /* Special optimizations for LCP images */
   .lcp-image {
+    opacity: 1 !important;
     content-visibility: auto;
     contain-intrinsic-size: auto 400px;
     paint-order: paint;

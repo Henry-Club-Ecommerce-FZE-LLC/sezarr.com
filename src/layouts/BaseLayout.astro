@@ -108,6 +108,32 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
+    <!-- Performance Optimizer Component -->
+    <script is:inline>
+      // Critical inline theme script - prevents FOUC
+      (function() {
+        const theme = localStorage.getItem('theme') || 
+                     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    
+    <!-- Critical Resource Hints -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    
+    <!-- DNS Prefetch for third-parties -->
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    <link rel="dns-prefetch" href="//unpkg.com" />
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCo3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin />
+    
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -127,15 +153,6 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(image, SITE.URL).toString()} />
-    
-    <!-- Critical Resource Hints for Performance -->
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net" /><link rel="dns-prefetch" href="//unpkg.com" />
-    
-    <!-- Preconnect for critical third-party domains -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin /><!-- Preload critical assets (CDN or local) -->
-    <link rel="preload" href={USE_CDN ? `${CDN_BASE}/scripts/enhancedThemeScript.js` : '/scripts/enhancedThemeScript.js'} as="script" />
-    <link rel="preload" href={USE_CDN ? `${CDN_BASE}/sw.js` : '/sw.js'} as="script" />
-    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
     
     <!-- Favicons -->
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
@@ -176,106 +193,115 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
       })} />
     )}
     
-    <!-- Theme Script - Load immediately to prevent flash -->
-    <script is:inline>
-      // Initialize theme before page renders to prevent flash
-      (function() {
-        const theme = localStorage.getItem('theme') || 
-                     (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      })();
-    </script>
+    <!-- Critical CSS inlined for instant rendering -->
+    <style is:inline>
+      /* Ultra-critical above-the-fold styles only */
+      *,*::before,*::after{box-sizing:border-box}
+      html{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;-webkit-text-size-adjust:100%;scroll-behavior:smooth;text-rendering:optimizeSpeed}
+      body{margin:0;background:#fff;color:#111827;font-size:16px}
+      .dark body{background:#111827;color:#f9fafb}
+      .min-h-full{min-height:100vh}
+      .flex{display:flex}
+      .flex-col{flex-direction:column}
+      .sticky{position:sticky}
+      .top-0{top:0}
+      .z-50{z-index:50}
+      .border-b{border-bottom:1px solid #e5e7eb}
+      .dark .border-b{border-color:#374151}
+      .bg-white{background:#fff}
+      .dark .bg-white{background:#111827}
+      .backdrop-blur{backdrop-filter:blur(8px)}
+      .mx-auto{margin:0 auto}
+      .w-full{width:100%}
+      .max-w-\[var\(--max-w\)\]{max-width:var(--max-w)}
+      .px-4{padding-left:1rem;padding-right:1rem}
+      .py-3{padding-top:.75rem;padding-bottom:.75rem}
+      .py-4{padding-top:1rem;padding-bottom:1rem}
+      .items-center{align-items:center}
+      .justify-between{justify-content:space-between}
+      .font-bold{font-weight:700}
+      .text-xl{font-size:1.25rem;line-height:1.75rem}
+      .text-transparent{color:transparent}
+      .bg-gradient-to-r{background:linear-gradient(90deg,#2563eb,#9333ea)}
+      .from-blue-600{--tw-gradient-from:#2563eb}
+      .to-purple-600{--tw-gradient-to:#9333ea}
+      .bg-clip-text{background-clip:text;-webkit-background-clip:text}
+      .transition-colors{transition:color .15s ease}
+      .hover\:text-blue-600:hover{color:#2563eb}
+      .dark .dark\:hover\:text-blue-400:hover{color:#60a5fa}
+      .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      .focus\:not-sr-only:focus{position:static;width:auto;height:auto;padding:0;margin:0;overflow:visible;clip:auto;white-space:normal}
+      .no-underline{text-decoration:none}
+      :root{--max-w:72rem}
+      .hidden{display:none}
+      @media (min-width:768px){
+        .md\:flex{display:flex}
+        .md\:py-3{padding-top:.75rem;padding-bottom:.75rem}
+      }
+    </style>
     
-    <!-- Enhanced theme script -->
-    <!-- Theme Script with CDN Support -->
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="preload" href="/assets/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="/assets/css/main.css" /></noscript>
+    
+    <!-- Font CSS loaded asynchronously -->
+    <link rel="preload" href="/assets/css/optimized-fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="/assets/css/optimized-fonts.css" /></noscript>
+    
+    <!-- JavaScript loaded after page render -->
     <script is:inline define:vars={{ USE_CDN, CDN_BASE }}>
-      // Load theme script with CDN support
-      (function() {
-        const script = document.createElement('script');
-        // Use CDN in production, local in development
-        script.src = USE_CDN && CDN_BASE 
-          ? `${CDN_BASE}/scripts/enhancedThemeScript.js`
+      window.addEventListener('load', function() {
+        // Load theme script
+        const themeScript = document.createElement('script');
+        themeScript.src = USE_CDN && CDN_BASE 
+          ? CDN_BASE + '/scripts/enhancedThemeScript.js'
           : '/scripts/enhancedThemeScript.js';
-        script.async = true;
-        
-        // Add error handling with fallback
-        script.onerror = function() {
-          // Fallback to local if CDN fails
+        themeScript.async = true;
+        themeScript.onerror = function() {
           if (USE_CDN && CDN_BASE) {
-            const fallbackScript = document.createElement('script');
-            fallbackScript.src = '/scripts/enhancedThemeScript.js';
-            fallbackScript.async = true;
-            document.head.appendChild(fallbackScript);
-          } else {
-            console.warn('Theme script failed to load');
-            // Basic theme fallback
-            if (localStorage.getItem('theme') === 'dark') {
-              document.documentElement.classList.add('dark');
-            }
+            const fallback = document.createElement('script');
+            fallback.src = '/scripts/enhancedThemeScript.js';
+            fallback.async = true;
+            document.head.appendChild(fallback);
           }
         };
+        document.head.appendChild(themeScript);
         
-        document.head.appendChild(script);
-      })();
-    </script>
-    
-    <!-- Inline critical performance optimizations -->
-    <script is:inline define:vars={{ USE_CDN, CDN_BASE }}>
-      // Register service worker with CDN support
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          const swUrl = USE_CDN && CDN_BASE 
-            ? `${CDN_BASE}/sw.js`
-            : '/sw.js';
-          
-          navigator.serviceWorker.register(swUrl)
-            .then(registration => {
-              console.log('Service Worker registered successfully');
-            })
-            .catch(error => {
-              console.log('Service Worker registration failed:', error);
-              // Try local fallback if CDN fails
+        // Register service worker after page load
+        if ('serviceWorker' in navigator) {
+          setTimeout(function() {
+            const swUrl = USE_CDN && CDN_BASE ? CDN_BASE + '/sw.js' : '/sw.js';
+            navigator.serviceWorker.register(swUrl).catch(function() {
               if (USE_CDN && CDN_BASE) {
-                navigator.serviceWorker.register('/sw.js')
-                  .then(() => console.log('Service Worker registered via fallback'))
-                  .catch(() => console.log('Service Worker fallback also failed'));
+                navigator.serviceWorker.register('/sw.js').catch(function() {});
               }
             });
-        });
-      }
-      
-      // Lazy load images
-      if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const img = entry.target;
-              if (img.dataset.src) {
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-              }
-              img.loading = 'lazy';
-              imageObserver.unobserve(img);
-            }
-          });
-        });
+          }, 2000);
+        }
         
-        document.addEventListener('DOMContentLoaded', () => {
-          document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-          });
-        });
-      }
+        // Image lazy loading optimization
+        if ('IntersectionObserver' in window) {
+          const imageObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+              if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                  img.src = img.dataset.src;
+                  img.removeAttribute('data-src');
+                }
+                imageObserver.unobserve(img);
+              }
+            });
+          }, { rootMargin: '50px' });
+          
+          setTimeout(function() {
+            document.querySelectorAll('img[data-src]').forEach(function(img) {
+              imageObserver.observe(img);
+            });
+          }, 100);
+        }
+      });
     </script>
-      
-    <!-- Optimized System Fonts (Self-Hosted Performance) -->
-    <link rel="preload" href="/assets/css/optimized-fonts.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/assets/css/optimized-fonts.css"></noscript>
   </head>
   <body class="min-h-full flex flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100" role="document">
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-blue-600 text-white px-4 py-2 rounded-md z-50 font-medium">Skip to main content</a>
