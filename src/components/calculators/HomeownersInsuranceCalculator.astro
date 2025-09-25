@@ -378,108 +378,160 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    // Basic calculations
-    const homeSize = parseInt(data.homeSize) || 0;
+    // Get required fields for rate calculation
+    const homeValue = parseInt(data.homeValue) || parseInt(data.homeSize || 0) * 150; // Fallback based on size
     const yearBuilt = parseInt(data.yearBuilt) || new Date().getFullYear();
     const homeAge = new Date().getFullYear() - yearBuilt;
+    const zipCode = data.zipCode || '';
     
-    // Base cost per square foot (varies by region and construction type)
+    // Map to our rate system parameters
+    let ageCategory = 'medium';
+    if (homeAge < 10) ageCategory = 'new';
+    else if (homeAge > 30) ageCategory = 'old';
+    
+    // Map safety features to security level
+    let securityLevel = 'none';
+    if (data.safetyFeatures) {
+      if (data.safetyFeatures.includes('security_system') && data.safetyFeatures.includes('smoke_detectors')) {
+        securityLevel = 'advanced';
+      } else if (data.safetyFeatures.includes('sprinkler_system')) {
+        securityLevel = 'premium';
+      } else if (data.safetyFeatures.includes('smoke_detectors')) {
+        securityLevel = 'basic';
+      }
+    }
+    
+    // Default deductible
+    const deductible = 1000;
+
+    // Basic calculations for coverage display
+    const homeSize = parseInt(data.homeSize) || 0;
     let baseCostPerSqFt = 150; // National average
     
-    // Regional adjustment
-    const zipCode = data.zipCode || '';
     const state = getStateFromZip(zipCode);
     const regionalMultiplier = regionalMultipliers[state] || regionalMultipliers.default;
     baseCostPerSqFt *= regionalMultiplier;
 
-    // Construction type adjustment
     if (data.constructionType && constructionTypes[data.constructionType]) {
       baseCostPerSqFt *= constructionTypes[data.constructionType].multiplier;
     }
 
-    // Roof type adjustment
     if (data.roofType && roofTypes[data.roofType]) {
       baseCostPerSqFt *= roofTypes[data.roofType].multiplier;
     }
 
-    // Age adjustment (newer homes cost more to rebuild)
-    if (homeAge > 30) {
-      baseCostPerSqFt *= 0.95;
-    } else if (homeAge < 10) {
-      baseCostPerSqFt *= 1.05;
-    }
-
-    // Calculate base dwelling cost
     let dwellingCost = homeSize * baseCostPerSqFt;
 
-    // Add features
     const garageSize = parseInt(data.garageSize) || 0;
-    dwellingCost += garageSize * 15000; // $15k per car garage
+    dwellingCost += garageSize * 15000;
 
     if (data.basement === 'finished') {
-      dwellingCost += homeSize * 0.3 * 50; // Finished basement adds ~30% space at $50/sqft
+      dwellingCost += homeSize * 0.3 * 50;
     } else if (data.basement === 'unfinished') {
-      dwellingCost += homeSize * 0.3 * 25; // Unfinished basement
+      dwellingCost += homeSize * 0.3 * 25;
     }
 
     const stories = parseFloat(data.stories) || 1;
     if (stories > 1.5) {
-      dwellingCost *= 1.02; // Multi-story homes slightly more expensive
+      dwellingCost *= 1.02;
     }
 
     const fireplaces = parseInt(data.fireplaces) || 0;
-    dwellingCost += fireplaces * 5000; // $5k per fireplace
+    dwellingCost += fireplaces * 5000;
 
-    // Coverage calculations
     const dwellingCoverage = Math.round(dwellingCost);
-    const otherStructures = Math.round(dwellingCoverage * 0.1); // 10% of dwelling
+    const otherStructures = Math.round(dwellingCoverage * 0.1);
     let personalPropertyCoverage = parseInt(data.personalProperty) || Math.round(dwellingCoverage * 0.5);
-    const liabilityCoverage = Math.max(300000, Math.round(dwellingCoverage * 0.5)); // Min $300k or 50% dwelling
+    const liabilityCoverage = Math.max(300000, Math.round(dwellingCoverage * 0.5));
 
-    // Safety feature discounts
-    let totalDiscount = 0;
-    const appliedDiscounts = [];
-    
-    if (data.safetyFeatures) {
-      data.safetyFeatures.forEach(feature => {
-        if (safetyFeatures[feature]) {
-          totalDiscount += safetyFeatures[feature].discount;
-          appliedDiscounts.push(safetyFeatures[feature].label);
-        }
+    // Use the calculated or provided home value for insurance rates
+    const finalHomeValue = homeValue > 0 ? homeValue : dwellingCoverage;
+
+    // Get live insurance rates
+    if (window.ClientRateFetcher && zipCode && state) {
+      window.ClientRateFetcher.getHomeRates(state, zipCode, {
+        homeValue: finalHomeValue,
+        homeAge: ageCategory,
+        security: securityLevel,
+        claims: 'none', // Default assumption
+        deductible: deductible
+      }).then(rates => {
+        // Update coverage display
+        document.getElementById('dwelling-coverage').textContent = `$${dwellingCoverage.toLocaleString()}`;
+        document.getElementById('other-structures').textContent = `$${otherStructures.toLocaleString()}`;
+        document.getElementById('personal-property-coverage').textContent = `$${personalPropertyCoverage.toLocaleString()}`;
+        document.getElementById('liability-coverage').textContent = `$${liabilityCoverage.toLocaleString()}`;
+        document.getElementById('replacement-cost').textContent = `$${dwellingCoverage.toLocaleString()}`;
+        
+        // Display live premium rates
+        document.getElementById('annual-premium').innerHTML = `
+          <div class="space-y-2">
+            <div class="text-lg font-bold text-blue-600">Basic: $${rates.basic * 12}/year</div>
+            <div class="text-lg font-bold text-green-600">Comprehensive: $${rates.comprehensive * 12}/year</div>
+            <div class="text-lg font-bold text-purple-600">Premium: $${rates.premium * 12}/year</div>
+            <div class="text-sm text-gray-600 mt-2">Monthly rates: $${rates.basic}, $${rates.comprehensive}, $${rates.premium}</div>
+          </div>
+        `;
+        
+        results.classList.remove('hidden');
+        results.scrollIntoView({ behavior: 'smooth' });
+      }).catch(error => {
+        console.error('Live rate calculation failed:', error);
+        // Fall back to old calculation method
+        fallbackCalculation();
       });
+    } else {
+      // Fall back to old calculation if rate fetcher not available
+      fallbackCalculation();
     }
-
-    // Premium calculation (simplified)
-    let basePremium = dwellingCoverage * 0.005; // 0.5% of dwelling coverage
-    basePremium *= regionalMultiplier;
     
-    // Age adjustment for premium
-    if (homeAge > 30) {
-      basePremium *= 1.2; // Older homes cost more to insure
-    } else if (homeAge < 10) {
-      basePremium *= 0.9; // Newer homes get discount
+    function fallbackCalculation() {
+      // Safety feature discounts
+      let totalDiscount = 0;
+      const appliedDiscounts = [];
+      
+      if (data.safetyFeatures) {
+        data.safetyFeatures.forEach(feature => {
+          if (safetyFeatures[feature]) {
+            totalDiscount += safetyFeatures[feature].discount;
+            appliedDiscounts.push(safetyFeatures[feature].label);
+          }
+        });
+      }
+
+      // Premium calculation (simplified)
+      let basePremium = dwellingCoverage * 0.005;
+      basePremium *= regionalMultiplier;
+      
+      if (homeAge > 30) {
+        basePremium *= 1.2;
+      } else if (homeAge < 10) {
+        basePremium *= 0.9;
+      }
+
+      const discountedPremium = Math.round(basePremium * (1 - totalDiscount));
+
+      // Update display
+      document.getElementById('dwelling-coverage').textContent = `$${dwellingCoverage.toLocaleString()}`;
+      document.getElementById('other-structures').textContent = `$${otherStructures.toLocaleString()}`;
+      document.getElementById('personal-property-coverage').textContent = `$${personalPropertyCoverage.toLocaleString()}`;
+      document.getElementById('liability-coverage').textContent = `$${liabilityCoverage.toLocaleString()}`;
+      document.getElementById('replacement-cost').textContent = `$${dwellingCoverage.toLocaleString()}`;
+      document.getElementById('annual-premium').textContent = `$${discountedPremium.toLocaleString()}`;
+
+      // Safety discounts
+      if (totalDiscount > 0) {
+        document.getElementById('safety-discounts').classList.remove('hidden');
+        document.getElementById('total-discount').textContent = `${(totalDiscount * 100).toFixed(1)}%`;
+        document.getElementById('discount-details').textContent = `Applied: ${appliedDiscounts.join(', ')}`;
+      }
+
+      results.classList.remove('hidden');
+      results.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Apply safety discounts
-    const discountedPremium = Math.round(basePremium * (1 - totalDiscount));
-
-    // Update display
-    document.getElementById('dwelling-coverage').textContent = `$${dwellingCoverage.toLocaleString()}`;
-    document.getElementById('other-structures').textContent = `$${otherStructures.toLocaleString()}`;
-    document.getElementById('personal-property-coverage').textContent = `$${personalPropertyCoverage.toLocaleString()}`;
-    document.getElementById('liability-coverage').textContent = `$${liabilityCoverage.toLocaleString()}`;
-    document.getElementById('replacement-cost').textContent = `$${dwellingCoverage.toLocaleString()}`;
-    document.getElementById('annual-premium').textContent = `$${discountedPremium.toLocaleString()}`;
-
-    // Safety discounts
-    if (totalDiscount > 0) {
-      document.getElementById('safety-discounts').classList.remove('hidden');
-      document.getElementById('total-discount').textContent = `${(totalDiscount * 100).toFixed(1)}%`;
-      document.getElementById('discount-details').textContent = `Applied: ${appliedDiscounts.join(', ')}`;
-    }
-
-    // Generate recommendations
-    const recommendations = generateRecommendations(data, dwellingCoverage, homeAge, totalDiscount);
+    // Generate recommendations regardless of rate method
+    const recommendations = generateRecommendations(data, dwellingCoverage, homeAge, 0);
     const recommendationsList = document.getElementById('recommendations');
     recommendationsList.innerHTML = recommendations.map(rec => 
       `<li class="flex items-start">
@@ -487,9 +539,6 @@ document.addEventListener('DOMContentLoaded', function() {
         <span>${rec}</span>
       </li>`
     ).join('');
-
-    results.classList.remove('hidden');
-    results.scrollIntoView({ behavior: 'smooth' });
   }
 
   function getStateFromZip(zip) {

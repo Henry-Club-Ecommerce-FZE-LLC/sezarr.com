@@ -24,8 +24,7 @@ import type { BusinessInsuranceInputs, BusinessInsuranceResults } from '../types
           </label>
           <select id="industry" name="industry" required
                   class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-            <option value="">Select Industry</option>
-            <option value="retail">Retail</option>
+            <option value="retail" selected>Retail</option>
             <option value="restaurant">Restaurant/Food Service</option>
             <option value="construction">Construction/Contracting</option>
             <option value="professional">Professional Services</option>
@@ -222,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('business-insurance-calculator') as HTMLFormElement;
   const resultsDiv = document.getElementById('business-insurance-results') as HTMLElement;
 
-  form?.addEventListener('submit', function(e) {
+  form?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = new FormData(form);
@@ -240,10 +239,40 @@ document.addEventListener('DOMContentLoaded', function() {
       ownsVehicles: formData.has('ownsVehicles')
     };
 
-    const results = calculateBusinessInsurance(inputs);
-    displayResults(results);
-    
+    // Show loading state
+    resultsDiv.innerHTML = '<div class="text-center py-8"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><p class="mt-2">Calculating business insurance rates...</p></div>';
     resultsDiv.classList.remove('hidden');
+
+    try {
+      // Get live rates if available
+      if (window.ClientRateFetcher) {
+        const rates = await window.ClientRateFetcher.getBusinessRates('CA', {
+          revenue: inputs.annualRevenue,
+          industry: inputs.industry,
+          employees: inputs.employees,
+          claims: 'none', // Default assumption
+          zipCode: '90210' // Default zip
+        });
+
+        if (rates && rates.basic && rates.comprehensive && rates.premium) {
+          displayEnhancedBusinessResults(rates, inputs);
+        } else {
+          // Fall back to original calculation if rates are invalid
+          const results = calculateBusinessInsurance(inputs);
+          displayResults(results);
+        }
+      } else {
+        // Fall back to original calculation
+        const results = calculateBusinessInsurance(inputs);
+        displayResults(results);
+      }
+    } catch (error) {
+      console.error('Business insurance rate calculation error:', error);
+      // Fall back to original calculation
+      const results = calculateBusinessInsurance(inputs);
+      displayResults(results);
+    }
+    
     resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
@@ -403,6 +432,98 @@ document.addEventListener('DOMContentLoaded', function() {
       riskLevel,
       inputs
     };
+  }
+
+  function displayEnhancedBusinessResults(rates: any, inputs: any) {
+    const enhancedHTML = `
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Business Insurance Quote Summary</h3>
+        
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center">
+            <div class="text-lg font-bold text-blue-600">Essential Package</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.basic}/month</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Basic liability coverage</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center border-2 border-green-500">
+            <div class="text-lg font-bold text-green-600">Business Shield</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.comprehensive}/month</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Comprehensive protection</div>
+            <div class="text-xs text-green-600 font-medium mt-1">Recommended</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center">
+            <div class="text-lg font-bold text-purple-600">Enterprise Plus</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.premium}/month</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Full coverage + extras</div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Business Profile</h4>
+            <div class="text-sm space-y-1">
+              <div><span class="text-gray-600 dark:text-gray-400">Industry:</span> <span class="capitalize">${inputs.industry.replace('-', ' ')}</span></div>
+              <div><span class="text-gray-600 dark:text-gray-400">Annual Revenue:</span> $${inputs.annualRevenue.toLocaleString()}</div>
+              <div><span class="text-gray-600 dark:text-gray-400">Employees:</span> ${inputs.employees}</div>
+              <div><span class="text-gray-600 dark:text-gray-400">Business Size:</span> <span class="capitalize">${inputs.businessSize}</span></div>
+              <div><span class="text-gray-600 dark:text-gray-400">Property Value:</span> $${inputs.propertyValue.toLocaleString()}</div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Coverage Highlights</h4>
+            <div class="text-sm space-y-1">
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>General Liability Protection</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Property Insurance</span>
+              </div>
+              ${inputs.professionalServices ? '<div class="flex items-center"><span class="text-green-500 mr-2">✓</span><span>Professional Liability</span></div>' : ''}
+              ${inputs.handlesData ? '<div class="flex items-center"><span class="text-green-500 mr-2">✓</span><span>Cyber Liability</span></div>' : ''}
+              ${inputs.ownsVehicles ? '<div class="flex items-center"><span class="text-green-500 mr-2">✓</span><span>Commercial Auto</span></div>' : ''}
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Workers' Compensation</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm mb-4">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Annual Cost Comparison</h4>
+          <div class="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div class="text-lg font-bold text-blue-600">$${(rates.basic * 12).toLocaleString()}</div>
+              <div class="text-xs text-gray-600">Essential Package</div>
+            </div>
+            <div>
+              <div class="text-lg font-bold text-green-600">$${(rates.comprehensive * 12).toLocaleString()}</div>
+              <div class="text-xs text-gray-600">Business Shield</div>
+            </div>
+            <div>
+              <div class="text-lg font-bold text-purple-600">$${(rates.premium * 12).toLocaleString()}</div>
+              <div class="text-xs text-gray-600">Enterprise Plus</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+          <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-2">Next Steps & Important Information</h4>
+          <div class="text-sm text-yellow-700 dark:text-yellow-400 space-y-1">
+            <p>• These are estimated rates based on your business profile and industry averages</p>
+            <p>• Final premiums depend on detailed underwriting, claims history, and specific risk factors</p>
+            <p>• Consider bundling multiple policies for potential discounts (5-15% savings)</p>
+            <p>• Review coverage limits annually as your business grows</p>
+            <p>• Contact licensed commercial insurance agents for personalized quotes</p>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    resultsDiv.innerHTML = enhancedHTML;
   }
 
   function displayResults(results: any) {

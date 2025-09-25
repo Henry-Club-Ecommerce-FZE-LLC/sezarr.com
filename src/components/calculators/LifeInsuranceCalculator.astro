@@ -168,7 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const calculateBtn = document.getElementById('calculate-life-btn');
   const results = document.getElementById('life-results');
 
-  calculateBtn.addEventListener('click', function() {
+  calculateBtn.addEventListener('click', async function() {
+    console.log('Life calculator button clicked'); // DEBUG
+    
     const annualIncome = parseInt(document.getElementById('annual-income').value) || 0;
     const currentSavings = parseInt(document.getElementById('current-savings').value) || 0;
     const totalDebts = parseInt(document.getElementById('total-debts').value) || 0;
@@ -179,14 +181,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const yearsToRetirement = parseInt(document.getElementById('years-to-retirement').value);
     const collegePlanning = document.getElementById('college-planning').value;
 
-    // Calculate life insurance needs
-    const recommendation = calculateLifeInsurance(
-      annualIncome, currentSavings, totalDebts, monthlyExpenses,
-      yourAge, spouseIncome, numChildren, yearsToRetirement, collegePlanning
-    );
-    
-    // Display results
-    displayLifeResults(recommendation);
+    console.log('Form values:', { annualIncome, currentSavings, totalDebts, monthlyExpenses, yourAge, spouseIncome, numChildren, yearsToRetirement, collegePlanning }); // DEBUG
+
+    if (!yourAge || yourAge < 18 || yourAge > 85) {
+      alert('Please select your age range');
+      return;
+    }
+
+    // Show loading state
+    results.innerHTML = '<div class="text-center"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div><p class="mt-2">Calculating life insurance needs...</p></div>';
+    results.classList.remove('hidden');
+
+    try {
+      // Calculate basic life insurance needs first
+      const basicRecommendation = calculateLifeInsurance(
+        annualIncome, currentSavings, totalDebts, monthlyExpenses,
+        yourAge, spouseIncome, numChildren, yearsToRetirement, collegePlanning
+      );
+
+      // Get live rates if available
+      if (window.ClientRateFetcher) {
+        const rates = await window.ClientRateFetcher.getLifeRates('CA', {
+          age: yourAge,
+          health: 'good', // Default assumption
+          smoker: 'no', // Default assumption  
+          gender: 'male', // Default assumption (rates similar)
+          coverageAmount: basicRecommendation.totalCoverage,
+          zipCode: '90210' // Default zip
+        });
+
+        // Display enhanced results with live rates
+        displayEnhancedLifeResults(basicRecommendation, rates);
+      } else {
+        // Fall back to basic display
+        displayLifeResults(basicRecommendation);
+      }
+    } catch (error) {
+      console.error('Life insurance calculation error:', error);
+      // Fall back to basic calculation
+      const basicRecommendation = calculateLifeInsurance(
+        annualIncome, currentSavings, totalDebts, monthlyExpenses,
+        yourAge, spouseIncome, numChildren, yearsToRetirement, collegePlanning
+      );
+      displayLifeResults(basicRecommendation);
+    }
     
     // Track analytics
     if (typeof gtag !== 'undefined') {
@@ -196,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         custom_parameters: {
           annual_income: annualIncome,
           num_children: numChildren,
-          coverage_amount: recommendation.totalCoverage
+          coverage_amount: basicRecommendation?.totalCoverage || 0
         }
       });
     }
@@ -281,6 +319,83 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('term-recommendation').textContent = recommendation.termRecommendation;
     document.getElementById('life-explanation').textContent = recommendation.explanation;
     
+    results.classList.remove('hidden');
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function displayEnhancedLifeResults(recommendation, rates) {
+    // Create enhanced results HTML
+    const enhancedHTML = `
+      <div class="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Your Life Insurance Recommendation</h3>
+        
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Coverage Breakdown</h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Income Replacement:</span>
+                <span id="income-replacement" class="font-medium">${formatCurrency(recommendation.incomeReplacement)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Debt Coverage:</span>
+                <span id="debt-coverage" class="font-medium">${formatCurrency(recommendation.debtCoverage)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Education Funding:</span>
+                <span id="education-funding" class="font-medium">${formatCurrency(recommendation.educationFunding)}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Final Expenses:</span>
+                <span id="final-expenses" class="font-medium">${formatCurrency(recommendation.finalExpenses)}</span>
+              </div>
+              <div class="border-t pt-2 flex justify-between font-bold">
+                <span>Total Coverage Needed:</span>
+                <span id="total-coverage" class="text-purple-600">${formatCurrency(recommendation.totalCoverage)}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Live Premium Estimates</h4>
+            <div class="space-y-3">
+              <div class="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                <div class="text-lg font-bold text-green-600">Term Life (20-year)</div>
+                <div class="text-2xl font-bold">${formatCurrency(rates.term20)}/month</div>
+                <div class="text-xs text-gray-600">Best value for families</div>
+              </div>
+              <div class="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                <div class="text-lg font-bold text-blue-600">Term Life (30-year)</div>
+                <div class="text-2xl font-bold">${formatCurrency(rates.term30)}/month</div>
+                <div class="text-xs text-gray-600">Longer protection</div>
+              </div>
+              <div class="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded">
+                <div class="text-lg font-bold text-purple-600">Whole Life</div>
+                <div class="text-2xl font-bold">${formatCurrency(rates.whole)}/month</div>
+                <div class="text-xs text-gray-600">Permanent coverage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm mb-4">
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Recommendation</h4>
+          <p id="term-recommendation" class="text-gray-700 dark:text-gray-300">${recommendation.termRecommendation}</p>
+        </div>
+        
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+          <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-2">Important Notes</h4>
+          <p id="life-explanation" class="text-sm text-yellow-700 dark:text-yellow-400 mb-2">${recommendation.explanation}</p>
+          <p class="text-xs text-yellow-600 dark:text-yellow-500">
+            <strong>Disclaimer:</strong> These are estimates based on average rates for good health, non-smoker profiles. 
+            Actual rates depend on medical exam, lifestyle factors, and insurance company underwriting. 
+            Consult with licensed agents for accurate quotes.
+          </p>
+        </div>
+      </div>
+    `;
+    
+    results.innerHTML = enhancedHTML;
     results.classList.remove('hidden');
     results.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }

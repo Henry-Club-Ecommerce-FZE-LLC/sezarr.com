@@ -24,8 +24,7 @@ import type { TravelInsuranceInputs, TravelInsuranceResults } from '../types/ins
           </label>
           <select id="destination-type" name="destinationType" required
                   class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-            <option value="">Select Destination</option>
-            <option value="domestic">Domestic (US)</option>
+            <option value="domestic" selected>Domestic (US)</option>
             <option value="canada">Canada</option>
             <option value="europe">Europe</option>
             <option value="asia-pacific">Asia/Pacific</option>
@@ -43,8 +42,7 @@ import type { TravelInsuranceInputs, TravelInsuranceResults } from '../types/ins
           </label>
           <select id="trip-type" name="tripType" required
                   class="w-full border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-            <option value="">Select Trip Type</option>
-            <option value="leisure">Leisure/Vacation</option>
+            <option value="leisure" selected>Leisure/Vacation</option>
             <option value="business">Business Travel</option>
             <option value="cruise">Cruise</option>
             <option value="adventure">Adventure/Sports</option>
@@ -255,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('travel-insurance-calculator') as HTMLFormElement;
   const resultsDiv = document.getElementById('travel-insurance-results') as HTMLElement;
 
-  form?.addEventListener('submit', function(e) {
+  form?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = new FormData(form);
@@ -275,12 +273,124 @@ document.addEventListener('DOMContentLoaded', function() {
       rentalCar: formData.has('rentalCar')
     };
 
-    const results = calculateTravelInsurance(inputs);
-    displayResults(results);
-    
+    // Show loading state
+    resultsDiv.innerHTML = '<div class="text-center py-8"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div><p class="mt-2">Calculating travel insurance rates...</p></div>';
     resultsDiv.classList.remove('hidden');
+
+    try {
+      // Get live rates if available
+      if (window.ClientRateFetcher) {
+        const rates = await window.ClientRateFetcher.getTravelRates('CA', {
+          tripCost: inputs.tripCost,
+          destination: inputs.destinationType,
+          tripLength: inputs.tripLength,
+          travelers: inputs.travelers,
+          age: inputs.oldestTraveler,
+          zipCode: '90210' // Default zip
+        });
+
+        if (rates && rates.basic && rates.comprehensive && rates.premium) {
+          displayEnhancedTravelResults(rates, inputs);
+        } else {
+          // Fall back to original calculation if rates are invalid
+          const results = calculateTravelInsurance(inputs);
+          displayResults(results);
+        }
+      } else {
+        // Fall back to original calculation
+        const results = calculateTravelInsurance(inputs);
+        displayResults(results);
+      }
+    } catch (error) {
+      console.error('Travel insurance rate calculation error:', error);
+      // Fall back to original calculation
+      const results = calculateTravelInsurance(inputs);
+      displayResults(results);
+    }
+    
     resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+  
+  function displayEnhancedTravelResults(rates: any, inputs: any) {
+    const enhancedHTML = `
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Travel Insurance Quote Summary</h3>
+        
+        <div class="grid md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center">
+            <div class="text-lg font-bold text-blue-600">Essential</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.basic}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Basic protection</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center border-2 border-green-500">
+            <div class="text-lg font-bold text-green-600">Comprehensive</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.comprehensive}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Full coverage</div>
+            <div class="text-xs text-green-600 font-medium mt-1">Recommended</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center">
+            <div class="text-lg font-bold text-purple-600">Premium</div>
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.premium}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Maximum protection</div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Trip Details</h4>
+            <div class="text-sm space-y-1">
+              <div><span class="text-gray-600 dark:text-gray-400">Destination:</span> <span class="capitalize">${inputs.destinationType.replace('-', ' ')}</span></div>
+              <div><span class="text-gray-600 dark:text-gray-400">Trip Cost:</span> $${inputs.tripCost.toLocaleString()}</div>
+              <div><span class="text-gray-600 dark:text-gray-400">Duration:</span> ${inputs.tripLength} days</div>
+              <div><span class="text-gray-600 dark:text-gray-400">Travelers:</span> ${inputs.travelers}</div>
+              <div><span class="text-gray-600 dark:text-gray-400">Oldest Traveler:</span> ${inputs.oldestTraveler} years</div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Coverage Highlights</h4>
+            <div class="text-sm space-y-1">
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Trip Cancellation/Interruption</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Emergency Medical Coverage</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Emergency Evacuation</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Baggage Protection</span>
+              </div>
+              <div class="flex items-center">
+                <span class="text-green-500 mr-2">✓</span>
+                <span>Travel Delay Coverage</span>
+              </div>
+              ${inputs.cancelAnyReason ? '<div class="flex items-center"><span class="text-green-500 mr-2">✓</span><span>Cancel for Any Reason</span></div>' : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
+          <h4 class="font-semibold text-yellow-800 dark:text-yellow-300 mb-2">Travel Insurance Tips</h4>
+          <div class="text-sm text-yellow-700 dark:text-yellow-400 space-y-1">
+            <p>• Purchase travel insurance within 10-21 days of your initial trip deposit for full coverage</p>
+            <p>• Consider "Cancel for Any Reason" if your travel plans are uncertain</p>
+            <p>• Verify your regular health insurance coverage while traveling internationally</p>
+            <p>• Check if your credit card provides any travel insurance benefits</p>
+            <p>• Keep all receipts and documentation for potential claims</p>
+            <p>• Review the policy exclusions carefully before purchasing</p>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    resultsDiv.innerHTML = enhancedHTML;
+  }
 
   function calculateTravelInsurance(inputs: any) {
     let basePremium = 0;
