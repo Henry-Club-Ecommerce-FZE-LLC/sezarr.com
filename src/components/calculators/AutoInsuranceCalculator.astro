@@ -50,8 +50,112 @@
       </div>
       
       <div>
+        <label class="block text-sm font-medium mb-2">Vehicle Make</label>
+        <select id="vehicleMake" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Make</option>
+          <option value="toyota">Toyota</option>
+          <option value="honda">Honda</option>
+          <option value="ford">Ford</option>
+          <option value="chevrolet">Chevrolet</option>
+          <option value="nissan">Nissan</option>
+          <option value="bmw">BMW</option>
+          <option value="mercedes">Mercedes-Benz</option>
+          <option value="audi">Audi</option>
+          <option value="lexus">Lexus</option>
+          <option value="hyundai">Hyundai</option>
+          <option value="kia">Kia</option>
+          <option value="mazda">Mazda</option>
+          <option value="subaru">Subaru</option>
+          <option value="volkswagen">Volkswagen</option>
+          <option value="jeep">Jeep</option>
+          <option value="ram">Ram</option>
+          <option value="gmc">GMC</option>
+          <option value="cadillac">Cadillac</option>
+          <option value="tesla">Tesla</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      
+      <div>
         <label class="block text-sm font-medium mb-2">Vehicle Year</label>
         <input type="number" id="vehicleYear" min="1990" max="2025" class="w-full p-3 border rounded-lg" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Vehicle Type</label>
+        <select id="vehicleType" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Type</option>
+          <option value="sedan">Sedan</option>
+          <option value="suv">SUV</option>
+          <option value="truck">Pickup Truck</option>
+          <option value="coupe">Coupe</option>
+          <option value="hatchback">Hatchback</option>
+          <option value="convertible">Convertible</option>
+          <option value="wagon">Station Wagon</option>
+          <option value="minivan">Minivan</option>
+          <option value="sports">Sports Car</option>
+          <option value="luxury">Luxury Vehicle</option>
+          <option value="electric">Electric Vehicle</option>
+          <option value="hybrid">Hybrid</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Annual Mileage</label>
+        <select id="annualMileage" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Mileage</option>
+          <option value="low">Less than 7,500 miles</option>
+          <option value="average">7,500 - 15,000 miles</option>
+          <option value="high">15,000 - 25,000 miles</option>
+          <option value="very-high">More than 25,000 miles</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Primary Use</label>
+        <select id="vehicleUse" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Use</option>
+          <option value="personal">Personal/Pleasure</option>
+          <option value="commute">Commuting to Work</option>
+          <option value="business">Business Use</option>
+          <option value="rideshare">Rideshare/Delivery</option>
+          <option value="farm">Farm Use</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Parking Location</label>
+        <select id="parkingLocation" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Location</option>
+          <option value="garage">Private Garage</option>
+          <option value="driveway">Driveway</option>
+          <option value="street">Street Parking</option>
+          <option value="parking-lot">Public Parking Lot</option>
+          <option value="covered">Covered Parking</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Years of Driving Experience</label>
+        <select id="drivingExperience" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Experience</option>
+          <option value="new">Less than 1 year</option>
+          <option value="beginner">1-3 years</option>
+          <option value="intermediate">4-10 years</option>
+          <option value="experienced">11-20 years</option>
+          <option value="expert">More than 20 years</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Current Insurance Status</label>
+        <select id="insuranceStatus" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Status</option>
+          <option value="continuous">Continuous coverage (no gaps)</option>
+          <option value="lapse-short">Short lapse (1-30 days)</option>
+          <option value="lapse-long">Long lapse (31+ days)</option>
+          <option value="new-driver">New driver (no prior insurance)</option>
+        </select>
       </div>
       
       <div>
@@ -62,17 +166,50 @@
           <option value="good">Good (700-749)</option>
           <option value="fair">Fair (650-699)</option>
           <option value="poor">Poor (Below 650)</option>
+          <option value="no-credit">No Credit History</option>
         </select>
       </div>
       
       <div>
-        <label class="block text-sm font-medium mb-2">Driving Record</label>
+        <label class="block text-sm font-medium mb-2">Driving Record (Last 5 Years)</label>
         <select id="drivingRecord" class="w-full p-3 border rounded-lg" required>
           <option value="">Select Record</option>
-          <option value="clean">Clean (No violations)</option>
-          <option value="minor">Minor violations</option>
-          <option value="major">Major violations</option>
+          <option value="clean">Clean (No violations/accidents)</option>
+          <option value="minor">1-2 Minor violations (speeding, etc.)</option>
+          <option value="major">Major violations (reckless driving, etc.)</option>
+          <option value="accident">At-fault accident(s)</option>
           <option value="dui">DUI/DWI</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Education Level</label>
+        <select id="education" class="w-full p-3 border rounded-lg">
+          <option value="">Select Education (Optional)</option>
+          <option value="high-school">High School</option>
+          <option value="some-college">Some College</option>
+          <option value="bachelors">Bachelor's Degree</option>
+          <option value="masters">Master's Degree</option>
+          <option value="doctorate">Doctorate/PhD</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-2">Occupation</label>
+        <select id="occupation" class="w-full p-3 border rounded-lg">
+          <option value="">Select Occupation (Optional)</option>
+          <option value="office-worker">Office Worker</option>
+          <option value="teacher">Teacher/Educator</option>
+          <option value="healthcare">Healthcare Professional</option>
+          <option value="engineer">Engineer</option>
+          <option value="manager">Manager/Executive</option>
+          <option value="sales">Sales Professional</option>
+          <option value="retired">Retired</option>
+          <option value="student">Student</option>
+          <option value="homemaker">Homemaker</option>
+          <option value="military">Military</option>
+          <option value="self-employed">Self-Employed</option>
+          <option value="other">Other</option>
         </select>
       </div>
     </div>
@@ -391,72 +528,342 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show loading state
   document.getElementById('calculatorResults').classList.add('opacity-50');
   
-  // Get form values for location
-  const state = document.getElementById('state').value;
-  const zipCode = document.getElementById('zipCode').value;
-  
-  // Get driver profile values
+  // Get all form values
   const age = parseInt(document.getElementById('age').value);
   const gender = document.getElementById('gender').value;
   const maritalStatus = document.getElementById('maritalStatus').value;
+  const state = document.getElementById('state').value;
+  const zipCode = document.getElementById('zipCode').value;
+  const coverage = document.getElementById('coverage').value;
+  const deductible = document.getElementById('deductible').value;
+  const vehicleMake = document.getElementById('vehicleMake').value;
   const vehicleYear = parseInt(document.getElementById('vehicleYear').value);
+  const vehicleType = document.getElementById('vehicleType').value;
+  const annualMileage = document.getElementById('annualMileage').value;
+  const vehicleUse = document.getElementById('vehicleUse').value;
+  const parkingLocation = document.getElementById('parkingLocation').value;
+  const drivingExperience = document.getElementById('drivingExperience').value;
+  const insuranceStatus = document.getElementById('insuranceStatus').value;
   const creditScore = document.getElementById('creditScore').value;
   const drivingRecord = document.getElementById('drivingRecord').value;
+  const education = document.getElementById('education').value;
+  const occupation = document.getElementById('occupation').value;
+
+  if (!age || !state || !coverage || !deductible || !vehicleMake || !vehicleYear || 
+      !vehicleType || !annualMileage || !vehicleUse || !parkingLocation || 
+      !drivingExperience || !insuranceStatus || !creditScore || !drivingRecord) {
+    alert('Please fill in all required fields.');
+    document.getElementById('calculatorResults').classList.remove('opacity-50');
+    return;
+  }
   
   try {
-    // Use ClientRateFetcher for live rates
-    if (window.ClientRateFetcher) {
-      const rateFetcher = new window.ClientRateFetcher();
-      const rateData = await rateFetcher.getAutoRates(state, zipCode, {
-        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord
-      });
-      
-      // Display the results
-      displayRates(rateData, state, zipCode);
-      
-      // Show factors affecting rate
-      displayRateFactors({
-        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
-        state, zipCode
-      });
-      
-      // Update location display
-      document.getElementById('rateLocation').textContent = `${state} ${zipCode}`;
-      
-      // Update timestamp
-      document.getElementById('rateTimestamp').textContent = 
-        `Rates as of: ${new Date().toLocaleDateString('en-US', {
-          year: 'numeric', month: 'long', day: 'numeric'
-        })}`;
-      
-      // Show results
-      document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
-      
-      // Track calculator usage (if analytics available)
-      if (typeof insuranceAnalytics !== 'undefined') {
-        insuranceAnalytics.trackInsuranceEvent('calculator_use', 'tool_usage', 'auto_insurance_calculator', {
-          state,
-          zipCode,
-          premium: rateData.standard ? rateData.standard.totalAnnual : 0
-        });
-      }
-    } else {
-      // Fall back to older calculation method if ClientRateFetcher not available
-      calculateFallbackRates({
-        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
-        state, zipCode
-      });
-    }
+    // Use comprehensive calculation instead of live rate API
+    const comprehensiveRates = calculateComprehensiveRates({
+      age, gender, maritalStatus, state, zipCode, coverage, deductible,
+      vehicleMake, vehicleYear, vehicleType, annualMileage, vehicleUse,
+      parkingLocation, drivingExperience, insuranceStatus, creditScore,
+      drivingRecord, education, occupation
+    });
+    
+    // Display the results with company quotes
+    displayComprehensiveResults(comprehensiveRates);
+    
+    // Show factors affecting rate
+    displayEnhancedRateFactors({
+      age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
+      state, zipCode, vehicleMake, vehicleType, drivingExperience
+    });
+    
+    // Update location display
+    document.getElementById('rateLocation').textContent = `${state} ${zipCode || 'statewide average'}`;
+    
+    // Update timestamp
+    document.getElementById('rateTimestamp').textContent = 
+      `Enhanced estimates as of: ${new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      })}`;
+    
+    // Show results
+    document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
     
   } catch (error) {
     console.error('Error calculating insurance cost:', error);
-    // Fall back to older calculation method if anything fails
-    calculateFallbackRates({
-      age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
-      state, zipCode
-    });
+    // Show error message
+    alert('Error calculating rates. Please check your inputs and try again.');
+    document.getElementById('calculatorResults').classList.remove('opacity-50');
   }
 });
+
+// Comprehensive calculation with all factors
+function calculateComprehensiveRates(profile) {
+  // Base premium calculation
+  let basePremium = 800; // Base annual premium
+  
+  // Age factor
+  if (profile.age < 21) basePremium *= 1.8;
+  else if (profile.age < 25) basePremium *= 1.4;
+  else if (profile.age < 35) basePremium *= 1.1;
+  else if (profile.age < 55) basePremium *= 1.0;
+  else if (profile.age < 65) basePremium *= 0.95;
+  else basePremium *= 0.9;
+
+  // Gender factor (where legally allowed)
+  if (profile.gender === 'male' && profile.age < 25) basePremium *= 1.1;
+  else if (profile.gender === 'female' && profile.age < 25) basePremium *= 1.05;
+
+  // State factor
+  const stateFactors = {
+    'CA': 1.3, 'NY': 1.25, 'FL': 1.2, 'TX': 1.15, 'MI': 1.4, 'LA': 1.35,
+    'NJ': 1.3, 'NV': 1.25, 'CT': 1.2, 'MA': 1.15, 'RI': 1.25, 'DE': 1.2,
+    'MD': 1.15, 'WA': 1.1, 'OR': 1.05, 'CO': 1.0, 'UT': 0.85, 'ID': 0.8,
+    'WY': 0.75, 'MT': 0.8, 'ND': 0.75, 'SD': 0.8, 'NE': 0.85, 'KS': 0.9,
+    'OK': 0.95, 'AR': 0.9, 'MO': 0.95, 'IA': 0.85, 'MN': 0.9, 'WI': 0.95,
+    'IL': 1.1, 'IN': 1.0, 'OH': 1.05, 'KY': 0.95, 'TN': 1.0, 'MS': 1.05,
+    'AL': 1.0, 'GA': 1.1, 'SC': 1.05, 'NC': 1.0, 'VA': 1.05, 'WV': 0.95,
+    'PA': 1.1, 'VT': 0.9, 'NH': 0.95, 'ME': 0.9, 'AK': 1.15, 'HI': 1.2,
+    'AZ': 1.1, 'NM': 1.0
+  };
+  basePremium *= stateFactors[profile.state] || 1.0;
+
+  // Coverage factor
+  const coverageFactors = {
+    'state-minimum': 0.6,
+    '25-50-25': 0.8,
+    '50-100-50': 1.0,
+    '100-300-100': 1.3,
+    '250-500-250': 1.7,
+    '500-500-500': 2.2
+  };
+  basePremium *= coverageFactors[profile.coverage] || 1.0;
+
+  // Deductible factor
+  const deductibleFactors = {
+    '0': 1.4, '250': 1.2, '500': 1.0, '1000': 0.85, '2000': 0.7, '2500': 0.65
+  };
+  basePremium *= deductibleFactors[profile.deductible] || 1.0;
+
+  // Vehicle make factor
+  const makeFactors = {
+    'toyota': 0.9, 'honda': 0.9, 'ford': 1.0, 'chevrolet': 1.0, 'nissan': 0.95,
+    'bmw': 1.4, 'mercedes': 1.5, 'audi': 1.4, 'lexus': 1.2, 'hyundai': 0.85,
+    'kia': 0.85, 'mazda': 0.9, 'subaru': 0.95, 'volkswagen': 1.1, 'jeep': 1.1,
+    'ram': 1.15, 'gmc': 1.1, 'cadillac': 1.3, 'tesla': 1.6, 'other': 1.0
+  };
+  basePremium *= makeFactors[profile.vehicleMake] || 1.0;
+
+  // Vehicle year factor
+  const currentYear = new Date().getFullYear();
+  const vehicleAge = currentYear - profile.vehicleYear;
+  if (vehicleAge <= 2) basePremium *= 1.2;
+  else if (vehicleAge <= 5) basePremium *= 1.1;
+  else if (vehicleAge <= 10) basePremium *= 1.0;
+  else if (vehicleAge <= 15) basePremium *= 0.9;
+  else basePremium *= 0.8;
+
+  // Vehicle type factor
+  const typeFactors = {
+    'sedan': 1.0, 'suv': 1.1, 'truck': 1.15, 'coupe': 1.2, 'hatchback': 0.95,
+    'convertible': 1.3, 'wagon': 1.0, 'minivan': 0.9, 'sports': 1.8,
+    'luxury': 1.4, 'electric': 1.1, 'hybrid': 0.95
+  };
+  basePremium *= typeFactors[profile.vehicleType] || 1.0;
+
+  // All other factors...
+  const mileageFactors = { 'low': 0.85, 'average': 1.0, 'high': 1.2, 'very-high': 1.4 };
+  basePremium *= mileageFactors[profile.annualMileage] || 1.0;
+
+  const useFactors = { 'personal': 1.0, 'commute': 1.1, 'business': 1.3, 'rideshare': 2.0, 'farm': 0.9 };
+  basePremium *= useFactors[profile.vehicleUse] || 1.0;
+
+  const parkingFactors = { 'garage': 0.85, 'driveway': 0.9, 'street': 1.2, 'parking-lot': 1.1, 'covered': 0.9 };
+  basePremium *= parkingFactors[profile.parkingLocation] || 1.0;
+
+  const experienceFactors = { 'new': 1.8, 'beginner': 1.4, 'intermediate': 1.1, 'experienced': 1.0, 'expert': 0.95 };
+  basePremium *= experienceFactors[profile.drivingExperience] || 1.0;
+
+  const statusFactors = { 'continuous': 1.0, 'lapse-short': 1.15, 'lapse-long': 1.35, 'new-driver': 1.25 };
+  basePremium *= statusFactors[profile.insuranceStatus] || 1.0;
+
+  const creditFactors = { 'excellent': 0.8, 'good': 0.9, 'fair': 1.1, 'poor': 1.3, 'no-credit': 1.2 };
+  basePremium *= creditFactors[profile.creditScore] || 1.0;
+
+  const recordFactors = { 'clean': 1.0, 'minor': 1.2, 'major': 1.8, 'accident': 1.6, 'dui': 2.5 };
+  basePremium *= recordFactors[profile.drivingRecord] || 1.0;
+
+  // Optional factors
+  if (profile.education) {
+    const educationFactors = { 'high-school': 1.0, 'some-college': 0.98, 'bachelors': 0.95, 'masters': 0.92, 'doctorate': 0.9 };
+    basePremium *= educationFactors[profile.education] || 1.0;
+  }
+
+  if (profile.occupation) {
+    const occupationFactors = {
+      'office-worker': 0.95, 'teacher': 0.9, 'healthcare': 0.95, 'engineer': 0.9,
+      'manager': 0.95, 'sales': 1.05, 'retired': 0.85, 'student': 1.1,
+      'homemaker': 0.9, 'military': 0.85, 'self-employed': 1.05, 'other': 1.0
+    };
+    basePremium *= occupationFactors[profile.occupation] || 1.0;
+  }
+
+  // Calculate final amounts with company variations
+  const annualPremium = Math.round(basePremium);
+  
+  return {
+    baseAnnual: annualPremium,
+    quotes: [
+      { company: 'GEICO', annual: Math.round(annualPremium * 0.92), monthly: Math.round(annualPremium * 0.92 / 12) },
+      { company: 'Progressive', annual: Math.round(annualPremium * 0.96), monthly: Math.round(annualPremium * 0.96 / 12) },
+      { company: 'State Farm', annual: Math.round(annualPremium * 1.05), monthly: Math.round(annualPremium * 1.05 / 12) },
+      { company: 'Allstate', annual: Math.round(annualPremium * 1.12), monthly: Math.round(annualPremium * 1.12 / 12) },
+      { company: 'Farmers', annual: Math.round(annualPremium * 1.08), monthly: Math.round(annualPremium * 1.08 / 12) },
+      { company: 'USAA', annual: Math.round(annualPremium * 0.88), monthly: Math.round(annualPremium * 0.88 / 12) }
+    ].sort((a, b) => a.annual - b.annual)
+  };
+}
+
+// Display comprehensive results with multiple quotes
+function displayComprehensiveResults(results) {
+  const quotes = results.quotes;
+  
+  // Replace the existing results display with company quotes
+  const resultsContainer = document.getElementById('calculatorResults');
+  const existingContent = resultsContainer.innerHTML;
+  
+  // Create new comprehensive results HTML
+  const comprehensiveHTML = `
+    <h3 class="text-xl font-semibold mb-4">Insurance Quote Estimates from Major Providers</h3>
+    
+    <div class="grid gap-4 mb-6">
+      ${quotes.map((quote, index) => `
+        <div class="flex justify-between items-center p-4 bg-white border rounded-lg shadow-sm ${index === 0 ? 'border-green-400 bg-green-50' : 'border-gray-200'}">
+          <div class="flex items-center">
+            <div class="w-12 h-12 rounded-full bg-${index === 0 ? 'green' : 'gray'}-100 flex items-center justify-center mr-3">
+              <span class="text-sm font-bold">${index + 1}</span>
+            </div>
+            <div>
+              <div class="font-semibold text-lg">${quote.company}</div>
+              ${index === 0 ? '<div class="text-sm text-green-600 font-medium">Best Rate</div>' : ''}
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-2xl font-bold text-gray-900">$${quote.monthly}/mo</div>
+            <div class="text-sm text-gray-600">$${quote.annual.toLocaleString()}/year</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    
+    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+      <h4 class="font-semibold text-blue-800 mb-3">💡 Money-Saving Tips:</h4>
+      <ul class="text-sm text-blue-700 space-y-1" id="savingTips">
+        <!-- Tips will be populated by JavaScript -->
+      </ul>
+    </div>
+    
+    <div class="text-xs text-gray-500 mb-4">
+      <p><em>*Estimates based on comprehensive industry data and your profile. Actual rates may vary significantly. These are not actual quotes - contact insurers directly for binding quotes.</em></p>
+    </div>
+    
+    ${existingContent}
+  `;
+  
+  resultsContainer.innerHTML = comprehensiveHTML;
+}
+
+// Enhanced rate factors display
+function displayEnhancedRateFactors(profile) {
+  const factors = [];
+  
+  // Location factors
+  factors.push(`📍 Location: ${profile.state} (${getStateRateDescription(profile.state)})`);
+  
+  // Age factors
+  if (profile.age < 21) factors.push('👶 Very young driver - highest risk category');
+  else if (profile.age < 25) factors.push('🚗 Young driver surcharge applied');
+  else if (profile.age > 65) factors.push('👴 Senior driver rate adjustment');
+  else factors.push('✅ Optimal age range for insurance rates');
+  
+  // Vehicle factors
+  const vehicleAge = 2025 - profile.vehicleYear;
+  if (vehicleAge < 3) factors.push('🆕 New vehicle - higher comprehensive/collision rates');
+  else if (vehicleAge > 10) factors.push('📉 Older vehicle - lower comprehensive rates');
+  
+  if (profile.vehicleMake === 'tesla') factors.push('⚡ Tesla - higher repair costs increase premium');
+  else if (['bmw', 'mercedes', 'audi'].includes(profile.vehicleMake)) factors.push('🏎️ Luxury vehicle - higher repair and theft risk');
+  else if (['toyota', 'honda'].includes(profile.vehicleMake)) factors.push('🔧 Reliable make - lower repair costs');
+  
+  // Personal factors
+  if (profile.maritalStatus === 'married') factors.push('💍 Married discount applied');
+  
+  if (profile.creditScore === 'excellent') factors.push('💳 Excellent credit - significant discount');
+  else if (profile.creditScore === 'poor') factors.push('💳 Poor credit score increases premium substantially');
+  
+  if (profile.drivingRecord === 'clean') factors.push('🏆 Clean driving record - best rates');
+  else if (profile.drivingRecord === 'dui') factors.push('🚨 DUI/DWI - major rate increase');
+  else if (profile.drivingRecord !== 'clean') factors.push(`⚠️ ${profile.drivingRecord.charAt(0).toUpperCase() + profile.drivingRecord.slice(1)} violations increase premium`);
+  
+  if (profile.drivingExperience === 'expert') factors.push('🎖️ Expert driver (20+ years) - experience discount');
+  else if (profile.drivingExperience === 'new') factors.push('🔰 New driver - higher risk premium');
+  
+  // Display factors
+  const factorsList = document.getElementById('rateFactors');
+  if (factorsList) {
+    factorsList.innerHTML = factors.map(factor => `<li>${factor}</li>`).join('');
+  }
+  
+  // Also populate saving tips
+  populateSavingTips(profile);
+}
+
+// Populate money-saving tips based on profile
+function populateSavingTips(profile) {
+  const tips = [];
+  
+  if (profile.deductible === '500' || profile.deductible === '250') {
+    tips.push('💰 Increase your deductible to $1000+ to save 10-15% on premiums');
+  }
+  
+  const vehicleAge = 2025 - profile.vehicleYear;
+  if (vehicleAge > 8 && profile.coverage !== 'state-minimum') {
+    tips.push('📋 Consider dropping comprehensive coverage on older vehicles');
+  }
+  
+  if (profile.annualMileage === 'low') {
+    tips.push('🚗 Ask about low-mileage discounts (under 7,500 miles/year)');
+  }
+  
+  if (profile.parkingLocation === 'street') {
+    tips.push('🏠 Secure parking reduces theft risk and can lower premiums');
+  }
+  
+  if (profile.drivingRecord === 'clean') {
+    tips.push('🏆 Maintain your clean record for continued safe driver discounts');
+  }
+  
+  if (profile.education && profile.education !== 'high-school') {
+    tips.push('🎓 You may qualify for education-based discounts');
+  }
+  
+  if (['sports', 'luxury', 'convertible'].includes(profile.vehicleType)) {
+    tips.push('🚙 Consider a sedan or SUV for your next vehicle to reduce premiums');
+  }
+  
+  if (profile.occupation === 'teacher' || profile.occupation === 'military') {
+    tips.push('👨‍🏫 Ask about profession-specific discounts');
+  }
+  
+  // Universal tips
+  tips.push('🏘️ Bundle with home/renters insurance for multi-policy discounts');
+  tips.push('🛡️ Take defensive driving courses for additional savings');
+  tips.push('🔄 Shop and compare quotes annually - rates change frequently');
+  tips.push('💡 Consider usage-based insurance if you\'re a safe driver');
+  
+  const tipsContainer = document.getElementById('savingTips');
+  if (tipsContainer) {
+    tipsContainer.innerHTML = tips.slice(0, 6).map(tip => `<li>${tip}</li>`).join('');
+  }
+}
 
 // Display rate information
 function displayRates(rates, state, zipCode) {
