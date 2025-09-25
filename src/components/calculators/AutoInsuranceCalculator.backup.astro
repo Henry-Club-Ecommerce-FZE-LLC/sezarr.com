@@ -1,0 +1,657 @@
+---
+// Import rate service for live rate fetching
+// Data will be loaded from our API endpoints
+---
+
+<div class="calculator-container bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+  <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+    Auto Insurance Cost Calculator
+  </h2>
+  
+  <form id="autoInsuranceCalculator" class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Location info - Added for live rates -->
+      <div>
+        <label class="block text-sm font-medium mb-2">State</label>
+        <select id="state" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select State</option>
+          <!-- Will be populated via API -->
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">ZIP Code</label>
+        <input type="text" id="zipCode" pattern="[0-9]{5}" maxlength="5" class="w-full p-3 border rounded-lg" placeholder="5-digit ZIP" required>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Age</label>
+        <input type="number" id="age" min="16" max="100" class="w-full p-3 border rounded-lg" required>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Gender</label>
+        <select id="gender" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Marital Status</label>
+        <select id="maritalStatus" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Status</option>
+          <option value="single">Single</option>
+          <option value="married">Married</option>
+          <option value="divorced">Divorced</option>
+          <option value="widowed">Widowed</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Vehicle Year</label>
+        <input type="number" id="vehicleYear" min="1990" max="2025" class="w-full p-3 border rounded-lg" required>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Credit Score Range</label>
+        <select id="creditScore" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Range</option>
+          <option value="excellent">Excellent (750+)</option>
+          <option value="good">Good (700-749)</option>
+          <option value="fair">Fair (650-699)</option>
+          <option value="poor">Poor (Below 650)</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium mb-2">Driving Record</label>
+        <select id="drivingRecord" class="w-full p-3 border rounded-lg" required>
+          <option value="">Select Record</option>
+          <option value="clean">Clean (No violations)</option>
+          <option value="minor">Minor violations</option>
+          <option value="major">Major violations</option>
+          <option value="dui">DUI/DWI</option>
+        </select>
+      </div>
+    </div>
+    
+    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors">
+      Calculate Insurance Cost
+    </button>
+  </form>
+  
+  <div id="calculatorResults" class="mt-6 hidden">
+    <h3 class="text-xl font-semibold mb-4">Insurance Rate Estimates</h3>
+    
+    <!-- Coverage tabs -->
+    <div class="mb-4 border-b border-gray-200">
+      <ul class="flex flex-wrap -mb-px" id="coverageTabs">
+        <li class="mr-2">
+          <button class="active-tab inline-block p-3 rounded-t-lg border-b-2 border-blue-600" id="basicTab" data-coverage="basic">
+            Basic Coverage
+          </button>
+        </li>
+        <li class="mr-2">
+          <button class="inactive-tab inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:border-gray-300" id="standardTab" data-coverage="standard">
+            Standard Coverage
+          </button>
+        </li>
+        <li>
+          <button class="inactive-tab inline-block p-3 rounded-t-lg border-b-2 border-transparent hover:border-gray-300" id="premiumTab" data-coverage="premium">
+            Premium Coverage
+          </button>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Live rate display -->
+    <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+      <!-- Basic coverage (default visible) -->
+      <div id="basicCoverage" class="coverage-panel">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="basicPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="basicMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="basicLiability">$0</span></li>
+              <li>Collision: <span id="basicCollision">$0</span></li>
+              <li>Comprehensive: <span id="basicComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="basicPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="basicUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>State minimum liability limits</li>
+              <li>$1,000 deductible for collision and comprehensive</li>
+              <li>Basic personal injury protection</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Standard coverage (hidden initially) -->
+      <div id="standardCoverage" class="coverage-panel hidden">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="standardPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="standardMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="standardLiability">$0</span></li>
+              <li>Collision: <span id="standardCollision">$0</span></li>
+              <li>Comprehensive: <span id="standardComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="standardPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="standardUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>50/100/50 liability limits</li>
+              <li>$500 deductible for collision and comprehensive</li>
+              <li>Enhanced personal injury protection</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Premium coverage (hidden initially) -->
+      <div id="premiumCoverage" class="coverage-panel hidden">
+        <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2" id="premiumPremium">$0/year</div>
+        <p class="text-lg text-gray-700 dark:text-gray-300" id="premiumMonthly">$0/month</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <h4 class="font-semibold">Includes:</h4>
+            <ul class="list-disc list-inside text-sm">
+              <li>Liability Coverage: <span id="premiumLiability">$0</span></li>
+              <li>Collision: <span id="premiumCollision">$0</span></li>
+              <li>Comprehensive: <span id="premiumComprehensive">$0</span></li>
+              <li>Personal Injury: <span id="premiumPip">$0</span></li>
+              <li>Uninsured Motorist: <span id="premiumUninsured">$0</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-semibold">Coverage Details:</h4>
+            <ul class="text-sm space-y-1">
+              <li>100/300/100 liability limits</li>
+              <li>$250 deductible for collision and comprehensive</li>
+              <li>Maximum personal injury protection</li>
+              <li>Rental car coverage included</li>
+              <li>Roadside assistance included</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Rate metadata -->
+      <div class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+        <div id="rateTimestamp">Rates as of: September 25, 2025</div>
+        <div>Rate data for: <span id="rateLocation">US National Average</span></div>
+      </div>
+    </div>
+    
+    <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border-l-4 border-yellow-400 text-sm">
+      <p class="font-semibold text-yellow-800 dark:text-yellow-200">Rate Estimate Disclaimer:</p>
+      <ul class="list-disc list-inside mt-1 text-yellow-700 dark:text-yellow-300 text-xs space-y-1">
+        <li>Actual rates may be 15-30% higher or lower than these estimates</li>
+        <li>Estimates use live data adjusted for your location and profile</li>
+        <li>Individual insurers' rates will vary from these averages</li>
+        <li>Rates shown are for comparison only, not a guaranteed quote</li>
+        <li>Get personalized quotes from multiple insurers for binding rates</li>
+        <li>Always consult a licensed insurance agent before purchasing coverage</li>
+      </ul>
+    </div>
+    
+    <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+      <p><strong>Factors affecting your rate:</strong></p>
+      <ul id="rateFactors" class="list-disc list-inside mt-2"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// Initialize states dropdown when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    // Hardcoded states list since API endpoints don't work in static site
+    const states = [
+      { name: "Alabama", code: "AL" },
+      { name: "Alaska", code: "AK" },
+      { name: "Arizona", code: "AZ" },
+      { name: "Arkansas", code: "AR" },
+      { name: "California", code: "CA" },
+      { name: "Colorado", code: "CO" },
+      { name: "Connecticut", code: "CT" },
+      { name: "Delaware", code: "DE" },
+      { name: "Florida", code: "FL" },
+      { name: "Georgia", code: "GA" },
+      { name: "Hawaii", code: "HI" },
+      { name: "Idaho", code: "ID" },
+      { name: "Illinois", code: "IL" },
+      { name: "Indiana", code: "IN" },
+      { name: "Iowa", code: "IA" },
+      { name: "Kansas", code: "KS" },
+      { name: "Kentucky", code: "KY" },
+      { name: "Louisiana", code: "LA" },
+      { name: "Maine", code: "ME" },
+      { name: "Maryland", code: "MD" },
+      { name: "Massachusetts", code: "MA" },
+      { name: "Michigan", code: "MI" },
+      { name: "Minnesota", code: "MN" },
+      { name: "Mississippi", code: "MS" },
+      { name: "Missouri", code: "MO" },
+      { name: "Montana", code: "MT" },
+      { name: "Nebraska", code: "NE" },
+      { name: "Nevada", code: "NV" },
+      { name: "New Hampshire", code: "NH" },
+      { name: "New Jersey", code: "NJ" },
+      { name: "New Mexico", code: "NM" },
+      { name: "New York", code: "NY" },
+      { name: "North Carolina", code: "NC" },
+      { name: "North Dakota", code: "ND" },
+      { name: "Ohio", code: "OH" },
+      { name: "Oklahoma", code: "OK" },
+      { name: "Oregon", code: "OR" },
+      { name: "Pennsylvania", code: "PA" },
+      { name: "Rhode Island", code: "RI" },
+      { name: "South Carolina", code: "SC" },
+      { name: "South Dakota", code: "SD" },
+      { name: "Tennessee", code: "TN" },
+      { name: "Texas", code: "TX" },
+      { name: "Utah", code: "UT" },
+      { name: "Vermont", code: "VT" },
+      { name: "Virginia", code: "VA" },
+      { name: "Washington", code: "WA" },
+      { name: "West Virginia", code: "WV" },
+      { name: "Wisconsin", code: "WI" },
+      { name: "Wyoming", code: "WY" }
+    ];
+    
+    const stateSelect = document.getElementById('state');
+    
+    // Populate states dropdown
+    states.forEach(state => {
+      const option = document.createElement('option');
+      option.value = state.code;
+      option.textContent = state.name;
+      stateSelect.appendChild(option);
+    });
+    
+    // Add event listener to update zip codes when state changes
+    stateSelect.addEventListener('change', handleStateChange);
+    
+    // Set up coverage tab events
+    const tabs = document.querySelectorAll('#coverageTabs button');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        // Remove active class from all tabs
+        tabs.forEach(t => {
+          t.classList.remove('active-tab');
+          t.classList.add('inactive-tab');
+        });
+        
+        // Add active class to clicked tab
+        e.target.classList.remove('inactive-tab');
+        e.target.classList.add('active-tab');
+        
+        // Hide all panels
+        document.querySelectorAll('.coverage-panel').forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        
+        // Show selected panel
+        const coverage = e.target.dataset.coverage;
+        document.getElementById(`${coverage}Coverage`).classList.remove('hidden');
+      });
+    });
+    
+  } catch (error) {
+    console.error('Error initializing calculator:', error);
+  }
+});
+
+  // Function to handle state change and update placeholder with example zip code
+  function handleStateChange() {
+    const stateCode = document.getElementById('state').value;
+    const zipInput = document.getElementById('zipCode');
+    
+    if (!stateCode) {
+      zipInput.placeholder = "5-digit ZIP";
+      return;
+    }
+    
+    // Example zip codes for each state to use as placeholders
+    const zipCodesByState = {
+      'AL': '35213', // Birmingham
+      'AK': '99501', // Anchorage
+      'AZ': '85012', // Phoenix
+      'AR': '72201', // Little Rock
+      'CA': '90210', // Beverly Hills
+      'CO': '80202', // Denver
+      'CT': '06103', // Hartford
+      'DE': '19801', // Wilmington
+      'FL': '33139', // Miami Beach
+      'GA': '30303', // Atlanta
+      'HI': '96813', // Honolulu
+      'ID': '83702', // Boise
+      'IL': '60601', // Chicago
+      'IN': '46204', // Indianapolis
+      'IA': '50309', // Des Moines
+      'KS': '66603', // Topeka
+      'KY': '40202', // Louisville
+      'LA': '70112', // New Orleans
+      'ME': '04101', // Portland
+      'MD': '21202', // Baltimore
+      'MA': '02108', // Boston
+      'MI': '48226', // Detroit
+      'MN': '55401', // Minneapolis
+      'MS': '39201', // Jackson
+      'MO': '63101', // St. Louis
+      'MT': '59601', // Helena
+      'NE': '68508', // Lincoln
+      'NV': '89101', // Las Vegas
+      'NH': '03301', // Concord
+      'NJ': '08608', // Trenton
+      'NM': '87501', // Santa Fe
+      'NY': '10007', // New York
+      'NC': '27601', // Raleigh
+      'ND': '58501', // Bismarck
+      'OH': '43215', // Columbus
+      'OK': '73102', // Oklahoma City
+      'OR': '97204', // Portland
+      'PA': '19102', // Philadelphia
+      'RI': '02903', // Providence
+      'SC': '29201', // Columbia
+      'SD': '57501', // Pierre
+      'TN': '37219', // Nashville
+      'TX': '78701', // Austin
+      'UT': '84111', // Salt Lake City
+      'VT': '05602', // Montpelier
+      'VA': '23219', // Richmond
+      'WA': '98104', // Seattle
+      'WV': '25301', // Charleston
+      'WI': '53703', // Madison
+      'WY': '82001'  // Cheyenne
+    };
+    
+    // Update ZIP input placeholder with example from selected state
+    const exampleZip = zipCodesByState[stateCode] || '';
+    zipInput.placeholder = exampleZip ? `e.g., ${exampleZip}` : "5-digit ZIP";
+  }
+
+  // Calculate insurance cost with live rates
+  document.getElementById('autoInsuranceCalculator').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  // Show loading state
+  document.getElementById('calculatorResults').classList.add('opacity-50');
+  
+  // Get form values for location
+  const state = document.getElementById('state').value;
+  const zipCode = document.getElementById('zipCode').value;
+  
+  // Get driver profile values
+  const age = parseInt(document.getElementById('age').value);
+  const gender = document.getElementById('gender').value;
+  const maritalStatus = document.getElementById('maritalStatus').value;
+  const vehicleYear = parseInt(document.getElementById('vehicleYear').value);
+  const creditScore = document.getElementById('creditScore').value;
+  const drivingRecord = document.getElementById('drivingRecord').value;
+  
+  try {
+    // Use ClientRateFetcher for live rates
+    if (window.ClientRateFetcher) {
+      const rateFetcher = new window.ClientRateFetcher();
+      const rateData = await rateFetcher.getAutoRates(state, zipCode, {
+        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord
+      });
+      
+      // Display the results
+      displayRates(rateData, state, zipCode);
+      
+      // Show factors affecting rate
+      displayRateFactors({
+        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
+        state, zipCode
+      });
+      
+      // Update location display
+      document.getElementById('rateLocation').textContent = `${state} ${zipCode}`;
+      
+      // Update timestamp
+      document.getElementById('rateTimestamp').textContent = 
+        `Rates as of: ${new Date().toLocaleDateString('en-US', {
+          year: 'numeric', month: 'long', day: 'numeric'
+        })}`;
+      
+      // Show results
+      document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
+      
+      // Track calculator usage (if analytics available)
+      if (typeof insuranceAnalytics !== 'undefined') {
+        insuranceAnalytics.trackInsuranceEvent('calculator_use', 'tool_usage', 'auto_insurance_calculator', {
+          state,
+          zipCode,
+          premium: rateData.standard ? rateData.standard.totalAnnual : 0
+        });
+      }
+    } else {
+      // Fall back to older calculation method if ClientRateFetcher not available
+      calculateFallbackRates({
+        age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
+        state, zipCode
+      });
+    }
+    
+  } catch (error) {
+    console.error('Error calculating insurance cost:', error);
+    // Fall back to older calculation method if anything fails
+    calculateFallbackRates({
+      age, gender, maritalStatus, vehicleYear, creditScore, drivingRecord,
+      state, zipCode
+    });
+  }
+});
+
+// Display rate information
+function displayRates(rates, state, zipCode) {
+  // Display basic coverage
+  document.getElementById('basicPremium').textContent = `$${rates.basic.totalAnnual.toLocaleString()}/year`;
+  document.getElementById('basicMonthly').textContent = `$${rates.basic.totalMonthly.toLocaleString()}/month`;
+  document.getElementById('basicLiability').textContent = `$${rates.basic.liability.toLocaleString()}`;
+  document.getElementById('basicCollision').textContent = `$${rates.basic.collision.toLocaleString()}`;
+  document.getElementById('basicComprehensive').textContent = `$${rates.basic.comprehensive.toLocaleString()}`;
+  document.getElementById('basicPip').textContent = `$${rates.basic.personalInjury.toLocaleString()}`;
+  document.getElementById('basicUninsured').textContent = `$${rates.basic.uninsuredMotorist.toLocaleString()}`;
+  
+  // Display standard coverage
+  document.getElementById('standardPremium').textContent = `$${rates.standard.totalAnnual.toLocaleString()}/year`;
+  document.getElementById('standardMonthly').textContent = `$${rates.standard.totalMonthly.toLocaleString()}/month`;
+  document.getElementById('standardLiability').textContent = `$${rates.standard.liability.toLocaleString()}`;
+  document.getElementById('standardCollision').textContent = `$${rates.standard.collision.toLocaleString()}`;
+  document.getElementById('standardComprehensive').textContent = `$${rates.standard.comprehensive.toLocaleString()}`;
+  document.getElementById('standardPip').textContent = `$${rates.standard.personalInjury.toLocaleString()}`;
+  document.getElementById('standardUninsured').textContent = `$${rates.standard.uninsuredMotorist.toLocaleString()}`;
+  
+  // Display premium coverage
+  document.getElementById('premiumPremium').textContent = `$${rates.premium.totalAnnual.toLocaleString()}/year`;
+  document.getElementById('premiumMonthly').textContent = `$${rates.premium.totalMonthly.toLocaleString()}/month`;
+  document.getElementById('premiumLiability').textContent = `$${rates.premium.liability.toLocaleString()}`;
+  document.getElementById('premiumCollision').textContent = `$${rates.premium.collision.toLocaleString()}`;
+  document.getElementById('premiumComprehensive').textContent = `$${rates.premium.comprehensive.toLocaleString()}`;
+  document.getElementById('premiumPip').textContent = `$${rates.premium.personalInjury.toLocaleString()}`;
+  document.getElementById('premiumUninsured').textContent = `$${rates.premium.uninsuredMotorist.toLocaleString()}`;
+}
+
+// Display factors affecting rate
+function displayRateFactors(profile) {
+  const factors = [];
+  
+  // Location factors
+  factors.push(`Location: ${profile.state} (${getStateRateDescription(profile.state)})`);
+  
+  // Age factors
+  if (profile.age < 25) factors.push('Young driver surcharge applied (high risk category)');
+  else if (profile.age > 65) factors.push('Senior driver rate adjustment applied');
+  
+  // Other significant factors
+  if (profile.maritalStatus === 'married') factors.push('Married discount applied');
+  
+  if (profile.creditScore === 'excellent') factors.push('Excellent credit discount applied');
+  else if (profile.creditScore === 'poor') factors.push('Poor credit score increases premium');
+  
+  if (profile.drivingRecord !== 'clean') factors.push(`${profile.drivingRecord.charAt(0).toUpperCase() + profile.drivingRecord.slice(1)} violations increase premium`);
+  
+  const vehicleAge = 2025 - profile.vehicleYear;
+  if (vehicleAge < 3) factors.push('New vehicle premium adjustment');
+  else if (vehicleAge > 10) factors.push('Older vehicle discount applied');
+  
+  // Display factors
+  const factorsList = document.getElementById('rateFactors');
+  factorsList.innerHTML = factors.map(factor => `<li>${factor}</li>`).join('');
+}
+
+// Get description of state's rate position
+function getStateRateDescription(state) {
+  const highCostStates = ['FL', 'LA', 'NY', 'MI', 'NV', 'NJ', 'CA', 'CT', 'RI', 'MA'];
+  const lowCostStates = ['NH', 'VT', 'ME', 'ID', 'MT', 'WY', 'UT', 'NM', 'ND', 'SD'];
+  
+  if (highCostStates.includes(state)) return 'high-cost state';
+  if (lowCostStates.includes(state)) return 'low-cost state';
+  return 'average-cost state';
+}
+
+// Fallback calculation if API fails
+function calculateFallbackRates(profile = {}) {
+  // Base rates by state for 2025
+  const stateBaseRates = {
+    'FL': 2800, 'LA': 2650, 'NY': 2400, 'MI': 2350, 'NV': 2200, 'NJ': 2150, 
+    'CA': 2100, 'CT': 2000, 'RI': 1950, 'MA': 1900, 'TX': 1750, 'AZ': 1700,
+    'GA': 1650, 'IL': 1600, 'MD': 1550, 'NC': 1500, 'OH': 1450, 'TN': 1400,
+    'SC': 1350, 'AL': 1300, 'WA': 1280, 'OR': 1250, 'VA': 1200, 'PA': 1180,
+    'CO': 1150, 'IN': 1100, 'MN': 1080, 'WI': 1050, 'KS': 1000, 'MO': 980,
+    'NE': 950, 'IA': 920, 'UT': 900, 'WY': 850, 'MT': 830, 'ID': 800,
+    'SD': 780, 'ND': 760, 'VT': 750, 'NH': 720, 'ME': 700
+  };
+
+  const state = profile.state || 'CA';
+  let baseRate = stateBaseRates[state] || 1500;
+
+  // Apply driver factors
+  let multiplier = 1.0;
+
+  // Age factor
+  if (profile.age < 25) multiplier *= 2.3;
+  else if (profile.age < 30) multiplier *= 1.4;
+  else if (profile.age < 65) multiplier *= 1.0;
+  else multiplier *= 1.15;
+
+  // Gender factor (where legally allowed)
+  if (profile.gender === 'male' && profile.age < 25) multiplier *= 1.25;
+
+  // Marital status factor
+  if (profile.maritalStatus === 'married') multiplier *= 0.88;
+
+  // Vehicle age factor
+  const vehicleAge = 2025 - profile.vehicleYear;
+  if (vehicleAge > 10) multiplier *= 0.75;
+  else if (vehicleAge < 3) multiplier *= 1.25;
+
+  // Credit score factor
+  const creditMultipliers = {
+    'excellent': 0.75,
+    'good': 0.88,
+    'fair': 1.15,
+    'poor': 1.85
+  };
+  multiplier *= creditMultipliers[profile.creditScore] || 1.0;
+
+  // Driving record factor
+  const recordMultipliers = {
+    'clean': 1.0,
+    'minor': 1.35,
+    'major': 2.1,
+    'dui': 3.5
+  };
+  multiplier *= recordMultipliers[profile.drivingRecord] || 1.0;
+
+  // Calculate coverage levels
+  const standardAnnual = Math.round(baseRate * multiplier);
+  const basicAnnual = Math.round(standardAnnual * 0.7);
+  const premiumAnnual = Math.round(standardAnnual * 1.4);
+
+  const rates = {
+    basic: {
+      totalAnnual: basicAnnual,
+      totalMonthly: Math.round(basicAnnual / 12),
+      liability: Math.round(basicAnnual * 0.4),
+      collision: Math.round(basicAnnual * 0.25),
+      comprehensive: Math.round(basicAnnual * 0.2),
+      personalInjury: Math.round(basicAnnual * 0.1),
+      uninsuredMotorist: Math.round(basicAnnual * 0.05)
+    },
+    standard: {
+      totalAnnual: standardAnnual,
+      totalMonthly: Math.round(standardAnnual / 12),
+      liability: Math.round(standardAnnual * 0.35),
+      collision: Math.round(standardAnnual * 0.3),
+      comprehensive: Math.round(standardAnnual * 0.2),
+      personalInjury: Math.round(standardAnnual * 0.1),
+      uninsuredMotorist: Math.round(standardAnnual * 0.05)
+    },
+    premium: {
+      totalAnnual: premiumAnnual,
+      totalMonthly: Math.round(premiumAnnual / 12),
+      liability: Math.round(premiumAnnual * 0.3),
+      collision: Math.round(premiumAnnual * 0.3),
+      comprehensive: Math.round(premiumAnnual * 0.25),
+      personalInjury: Math.round(premiumAnnual * 0.1),
+      uninsuredMotorist: Math.round(premiumAnnual * 0.05)
+    }
+  };
+
+  // Display the results
+  displayRates(rates, profile.state, profile.zipCode);
+  
+  // Show factors affecting rate
+  displayRateFactors(profile);
+  
+  // Update location display
+  document.getElementById('rateLocation').textContent = `${profile.state} ${profile.zipCode || ''}`;
+  
+  // Update timestamp
+  document.getElementById('rateTimestamp').textContent = 
+    `Fallback rates as of: ${new Date().toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    })}`;
+  
+  // Show results
+  document.getElementById('calculatorResults').classList.remove('hidden', 'opacity-50');
+}
+
+// Styles for tab UI
+document.head.insertAdjacentHTML('beforeend', `
+  <style>
+    .active-tab {
+      color: #1d4ed8;
+      border-color: #1d4ed8;
+      font-weight: bold;
+    }
+    .inactive-tab {
+      color: #6b7280;
+      border-color: transparent;
+    }
+    .dark .active-tab {
+      color: #93c5fd;
+      border-color: #93c5fd;
+    }
+    .dark .inactive-tab {
+      color: #9ca3af;
+      border-color: transparent;
+    }
+  </style>

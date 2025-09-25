@@ -111,7 +111,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
   </div>
 
   <script>
-    document.getElementById('healthInsuranceCalculator').addEventListener('submit', function(e) {
+    document.getElementById('healthInsuranceCalculator').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const age = parseInt(document.getElementById('age').value);
@@ -124,6 +124,59 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         return;
       }
       
+      // Show loading state
+      const resultsDiv = document.getElementById('results');
+      const monthlyElement = document.getElementById('monthlyPremium');
+      const annualElement = document.getElementById('annualPremium');
+      
+      monthlyElement.textContent = 'Loading...';
+      annualElement.textContent = 'Calculating rates...';
+      resultsDiv.classList.remove('hidden');
+      
+      try {
+        let monthlyPremium, annualPremium;
+        
+        // Get live rates if available
+        if (window.ClientRateFetcher) {
+          const rates = await window.ClientRateFetcher.getHealthRates(state, {
+            age: age,
+            planType: planType,
+            income: income,
+            zipCode: '90210' // Default zip
+          });
+          
+          if (rates && rates[planType]) {
+            monthlyPremium = Math.round(rates[planType]);
+            annualPremium = monthlyPremium * 12;
+          } else {
+            // Fall back to original calculation if rates are invalid
+            const results = calculateHealthInsurance(age, state, income, planType);
+            monthlyPremium = results.monthly;
+            annualPremium = results.annual;
+          }
+        } else {
+          // Fall back to original calculation
+          const results = calculateHealthInsurance(age, state, income, planType);
+          monthlyPremium = results.monthly;
+          annualPremium = results.annual;
+        }
+        
+        monthlyElement.textContent = `$${monthlyPremium}`;
+        annualElement.textContent = `$${annualPremium.toLocaleString()} annually`;
+        
+      } catch (error) {
+        console.error('Health insurance rate calculation error:', error);
+        // Fall back to original calculation
+        const results = calculateHealthInsurance(age, state, income, planType);
+        monthlyElement.textContent = `$${results.monthly}`;
+        annualElement.textContent = `$${results.annual.toLocaleString()} annually`;
+      }
+      
+      // Scroll to results
+      resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    function calculateHealthInsurance(age, state, income, planType) {
       let basePremium = 300; // Base monthly premium
       
       // Age factor
@@ -140,7 +193,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         'gold': 1.3,
         'platinum': 1.6
       };
-      basePremium *= planFactors[planType];
+      basePremium *= planFactors[planType] || 1.0;
       
       // State factor
       const stateFactors = {
@@ -150,7 +203,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         'NY': 1.4,
         'other': 1.0
       };
-      basePremium *= stateFactors[state];
+      basePremium *= stateFactors[state] || 1.0;
       
       // Income-based subsidy estimate
       const incomeFactors = {
@@ -159,17 +212,17 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
         'high': 0.9,
         'very-high': 1.0
       };
-      basePremium *= incomeFactors[income];
+      basePremium *= incomeFactors[income] || 1.0;
       
       const monthlyPremium = Math.round(basePremium);
       const annualPremium = monthlyPremium * 12;
       
-      document.getElementById('monthlyPremium').textContent = `$${monthlyPremium}`;
-      document.getElementById('annualPremium').textContent = `$${annualPremium.toLocaleString()} annually`;
-      document.getElementById('results').classList.remove('hidden');
-      
-      // Scroll to results
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-    });
+      return {
+        monthly: monthlyPremium,
+        annual: annualPremium
+      };
+    }
   </script>
+
+  <script src="/js/clientRateFetcher.js" defer></script>
 </BaseLayout>

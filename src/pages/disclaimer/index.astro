@@ -1,10 +1,91 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-const url = 'https://www.example.com/disclaimer/';
+const url = 'https://sezarr.com/disclaimer/';
 ---
-<BaseLayout title="Disclaimer" description="Important disclaimers for Insurance Insights USA" {url}>
-  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10 prose">
-    <h1>Disclaimer</h1>
-    <p>Insurance information is complex and varies by state and carrier. Always read your policy and consult licensed professionals.</p>
+<BaseLayout title="Important Disclaimers - Sezarr Insurance Guide" description="Important disclaimers, limitations, and legal notices for insurance information and calculators provided on Sezarr.com" {url}>
+  <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <h1>Important Disclaimers</h1>
+      
+      <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 mb-8">
+        <p class="font-semibold text-red-800 dark:text-red-200 mb-2">⚠️ CRITICAL NOTICE</p>
+        <p class="text-red-700 dark:text-red-300">This website provides general educational information only. It is NOT financial, legal, or professional insurance advice. Always consult licensed professionals before making insurance decisions.</p>
+      </div>
+
+      <h2>General Information Disclaimer</h2>
+      <p><strong>Educational Content Only:</strong> All information on this website is provided for general educational and informational purposes only. This content is not intended as, and should not be construed as, professional insurance advice, recommendations, or endorsements.</p>
+
+      <p><strong>No Professional Relationship:</strong> No attorney-client, advisor-client, or other professional relationship is created through your use of this website or the information provided herein.</p>
+
+      <p><strong>Individual Circumstances:</strong> Insurance needs vary significantly based on individual circumstances, location, financial situation, and personal preferences. Information that may be appropriate for one person may not be suitable for another.</p>
+
+      <h2>Calculator Disclaimers</h2>
+      <p><strong>Estimates Only:</strong> All calculators and estimation tools on this website provide rough estimates based on general industry averages and simplified calculations. These are NOT quotes, guaranteed rates, or binding offers.</p>
+
+      <p><strong>Rate Variations:</strong> Actual insurance rates may vary significantly (often 30-80% higher or lower) from calculator estimates due to factors including but not limited to:</p>
+      <ul>
+        <li>Geographic location (state, county, zip code)</li>
+        <li>Specific coverage levels and deductibles selected</li>
+        <li>Vehicle make, model, year, and safety features</li>
+        <li>Detailed driving history and claims record</li>
+        <li>Credit score and financial history (where legally permitted)</li>
+        <li>Employment, education, and membership discounts</li>
+        <li>Individual insurer rating algorithms and risk assessments</li>
+        <li>Market conditions and insurer capacity</li>
+      </ul>
+
+      <p><strong>No Rate Guarantees:</strong> We do not guarantee that any insurance company will offer coverage at the estimated rates. All final rates are subject to underwriting approval by individual insurance companies.</p>
+
+      <h2>State and Regional Variations</h2>
+      <p><strong>State-Specific Requirements:</strong> Insurance requirements, regulations, and available coverages vary significantly by state. Information may not reflect the most current state-specific requirements or recent regulatory changes.</p>
+
+      <p><strong>Regional Availability:</strong> Not all insurance companies, coverages, or programs mentioned are available in all states or regions. Availability and specific terms may vary by location.</p>
+
+      <p><strong>Regulatory Changes:</strong> Insurance regulations change frequently. While we strive to maintain current information, there may be delays in updating content to reflect the most recent regulatory changes.</p>
+
+      <h2>Accuracy and Completeness</h2>
+      <p><strong>No Warranties:</strong> We make no representations or warranties regarding the accuracy, completeness, timeliness, or suitability of the information provided. Information is subject to change without notice.</p>
+
+      <p><strong>Third-Party Information:</strong> Some information may be obtained from third-party sources. We do not independently verify all third-party information and are not responsible for its accuracy.</p>
+
+      <p><strong>Data Sources:</strong> Rate estimates and industry data are compiled from various sources including insurance industry reports, regulatory filings, and publicly available information, but may not reflect the most current market conditions.</p>
+
+      <h2>Limitation of Liability</h2>
+      <p><strong>Use at Your Own Risk:</strong> Your use of this website and reliance on any information provided is at your own risk. We shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of this website or the information provided.</p>
+
+      <p><strong>No Liability for Decisions:</strong> We are not responsible for any insurance purchasing decisions, coverage selections, or financial losses that may result from using information or tools on this website.</p>
+
+      <h2>Professional Consultation Requirement</h2>
+      <p><strong>Always Consult Professionals:</strong> Before making any insurance decisions, you should consult with:</p>
+      <ul>
+        <li>Licensed insurance agents or brokers in your state</li>
+        <li>Insurance company representatives</li>
+        <li>Financial advisors (for comprehensive financial planning)</li>
+        <li>Legal professionals (for complex liability or business insurance needs)</li>
+        <li>Tax professionals (for tax implications of insurance decisions)</li>
+      </ul>
+
+      <p><strong>Get Multiple Quotes:</strong> Always obtain personalized quotes from multiple insurance companies or licensed agents to ensure accurate pricing and coverage comparisons.</p>
+
+      <h2>Affiliate Relationships</h2>
+      <p><strong>Compensation Disclosure:</strong> We may receive compensation when you click on links to insurance companies or submit information through forms on this website. This compensation may influence the placement and presentation of products and services, but does not affect our editorial judgment or the information provided.</p>
+
+      <p><strong>No Endorsement:</strong> Inclusion of any insurance company, product, or service on this website does not constitute an endorsement or recommendation. We encourage you to research all options thoroughly.</p>
+
+      <h2>Updates and Changes</h2>
+      <p><strong>Content Updates:</strong> Information on this website is updated periodically, but we cannot guarantee that all information is current at the time of your visit. Insurance industry information changes frequently.</p>
+
+      <p><strong>Disclaimer Changes:</strong> This disclaimer may be updated from time to time. Your continued use of the website constitutes acceptance of any changes.</p>
+
+      <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4 mt-8">
+        <p class="font-semibold text-blue-800 dark:text-blue-200 mb-2">📞 Get Professional Help</p>
+        <p class="text-blue-700 dark:text-blue-300">For personalized insurance advice and accurate quotes, contact licensed insurance professionals in your area or reach out directly to insurance companies.</p>
+      </div>
+
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-8 pt-4 border-t">
+        <strong>Last Updated:</strong> September 25, 2025<br>
+        <strong>Effective Date:</strong> September 25, 2025
+      </p>
+    </div>
   </section>
 </BaseLayout>

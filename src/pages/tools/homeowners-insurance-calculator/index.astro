@@ -1,234 +1,240 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import HomeownersInsuranceCalculator from '../../../components/calculators/HomeownersInsuranceCalculator.astro';
+import AdSenseBlock from '../../../components/AdSenseBlock.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import { SITE } from "../../../config/site";
+
+const title = "Homeowners Insurance Calculator - Get Instant Quotes & Coverage Estimates | Sezarr";
+const description = "Calculate homeowners insurance costs with our advanced calculator. Get personalized quotes, compare coverage options, and find the best rates for your home insurance needs.";
+const keywords = "homeowners insurance calculator, home insurance cost, property insurance calculator, dwelling coverage calculator, homeowners premium estimator";
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Tools', href: '/tools/' },
+  { label: 'Homeowners Insurance Calculator', href: '/tools/homeowners-insurance-calculator/' }
+];
+
+const siteUrl = SITE.URL;
+const currentUrl = `${siteUrl}/tools/homeowners-insurance-calculator/`;
+
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${currentUrl}#webpage`,
+    "url": currentUrl,
+    "name": title,
+    "description": description,
+    "inLanguage": "en-US",
+    "isPartOf": {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      "url": siteUrl,
+      "name": "Sezarr Insurance"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Homeowners Insurance Calculator",
+    "description": "Advanced calculator for estimating homeowners insurance premiums and coverage needs",
+    "url": currentUrl,
+    "operatingSystem": "Any",
+    "applicationCategory": "FinanceApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+];
 ---
 
 <BaseLayout 
-  title="Homeowners Insurance Calculator - Calculate Your Premiums"
-  description="Calculate homeowners insurance costs with our free calculator. Get estimates for dwelling coverage, personal property, and liability protection."
+  title={title} 
+  description={description} 
+  keywords={keywords}
+  schema={schema}
 >
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-8">Homeowners Insurance Calculator</h1>
-    
-    <div class="mb-8">
-      <p class="text-lg mb-4">
-        Calculate estimated homeowners insurance premiums based on your home's value, location, and coverage needs.
-      </p>
-    </div>
+  <main>
+    <!-- Breadcrumbs -->
+    <section class="bg-gray-50 dark:bg-gray-900 py-4">
+      <div class="container mx-auto px-4">
+        <Breadcrumbs items={breadcrumbItems} />
+      </div>
+    </section>
 
-    <div class="calculator-container bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-        Homeowners Insurance Calculator
-      </h2>
-      
-      <form id="homeInsuranceCalculator" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-2">Home Value</label>
-            <input type="number" id="homeValue" min="50000" class="w-full p-3 border rounded-lg" placeholder="e.g. 250000" required>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium mb-2">State</label>
-            <select id="state" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select State</option>
-              <option value="CA">California</option>
-              <option value="FL">Florida</option>
-              <option value="TX">Texas</option>
-              <option value="NY">New York</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium mb-2">Deductible</label>
-            <select id="deductible" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select Deductible</option>
-              <option value="500">$500</option>
-              <option value="1000">$1,000</option>
-              <option value="2500">$2,500</option>
-              <option value="5000">$5,000</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium mb-2">Home Age</label>
-            <select id="homeAge" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select Age</option>
-              <option value="new">0-10 years</option>
-              <option value="medium">11-30 years</option>
-              <option value="old">31+ years</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium mb-2">Security Features</label>
-            <select id="security" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select Security Level</option>
-              <option value="none">Basic/None</option>
-              <option value="basic">Smoke Detectors</option>
-              <option value="advanced">Security System</option>
-              <option value="premium">Full Monitoring</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium mb-2">Claims History</label>
-            <select id="claims" class="w-full p-3 border rounded-lg" required>
-              <option value="">Select History</option>
-              <option value="none">No Claims (5+ years)</option>
-              <option value="few">1-2 Claims</option>
-              <option value="many">3+ Claims</option>
-            </select>
-          </div>
+    <!-- Calculator Section -->
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Homeowners Insurance Calculator
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Get instant homeowners insurance quotes with our advanced calculator. Compare coverage options, 
+            calculate premiums, and find the best protection for your home.
+          </p>
         </div>
+
+        <!-- AdSense Block -->
+        <AdSenseBlock slot="top-content" />
         
-        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700">
-          Calculate Homeowners Insurance
-        </button>
-      </form>
-      
-      <div id="results" class="mt-8 hidden">
-        <h3 class="text-xl font-semibold mb-4">Estimated Annual Premium</h3>
-        <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
-          <div class="text-3xl font-bold text-blue-600 dark:text-blue-400" id="annualPremium">$0</div>
-          <div class="text-sm text-gray-600 dark:text-gray-400" id="monthlyPremium">$0 monthly</div>
+        <!-- Calculator Component -->
+        <div class="max-w-6xl mx-auto">
+          <HomeownersInsuranceCalculator />
         </div>
-        
-        <div class="mt-6 space-y-4">
-          <div>
-            <h4 class="font-semibold mb-2">Coverage Breakdown</h4>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <span>Dwelling Coverage:</span>
-                <span id="dwellingCoverage">$0</span>
+      </div>
+    </section>
+
+    <!-- Educational Content -->
+    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
+            Understanding Homeowners Insurance
+          </h2>
+          
+          <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Standard Coverage Types
+              </h3>
+              <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2 mt-1">•</span>
+                  <span><strong>Dwelling Coverage (HO-A):</strong> Protects your home's structure</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2 mt-1">•</span>
+                  <span><strong>Personal Property (HO-C):</strong> Covers your belongings</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2 mt-1">•</span>
+                  <span><strong>Liability Protection (HO-E):</strong> Legal protection from lawsuits</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2 mt-1">•</span>
+                  <span><strong>Additional Living Expenses (HO-D):</strong> Temporary housing costs</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-green-500 mr-2 mt-1">•</span>
+                  <span><strong>Medical Payments (HO-F):</strong> Guest medical expenses</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Factors Affecting Premiums
+              </h3>
+              <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2 mt-1">•</span>
+                  <span><strong>Home Value & Rebuild Cost:</strong> Higher values = higher premiums</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2 mt-1">•</span>
+                  <span><strong>Location & Climate:</strong> Natural disaster risk affects rates</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2 mt-1">•</span>
+                  <span><strong>Home Age & Condition:</strong> Older homes typically cost more</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2 mt-1">•</span>
+                  <span><strong>Security Features:</strong> Alarms and systems reduce premiums</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="text-blue-500 mr-2 mt-1">•</span>
+                  <span><strong>Claims History:</strong> Previous claims increase future rates</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-8">
+            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+              Why Use Our Calculator?
+            </h3>
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="text-center">
+                <div class="text-3xl text-blue-600 mb-2">🎯</div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Accurate Estimates</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Based on real market data and insurance industry standards
+                </p>
               </div>
-              <div class="flex justify-between">
-                <span>Personal Property:</span>
-                <span id="personalProperty">$0</span>
+              <div class="text-center">
+                <div class="text-3xl text-green-600 mb-2">⚡</div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Get multiple quote options in seconds, not days
+                </p>
               </div>
-              <div class="flex justify-between">
-                <span>Liability Coverage:</span>
-                <span id="liabilityCoverage">$300,000</span>
+              <div class="text-center">
+                <div class="text-3xl text-purple-600 mb-2">🔒</div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">No Personal Info</h4>
+                <p class="text-sm text-gray-600 dark:text-gray-300">
+                  Calculate anonymously without sharing personal details
+                </p>
               </div>
             </div>
           </div>
         </div>
-        
-        <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          <p>* Estimates based on average market rates and standard coverage amounts.</p>
-          <p>* Actual premiums vary by insurer, exact location, and specific policy terms.</p>
-        </div>
       </div>
-    </div>
+    </section>
 
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold mb-6">Understanding Homeowners Insurance</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Standard Coverage Types</h3>
-          <ul class="space-y-2 text-gray-600 dark:text-gray-400">
-            <li>• Dwelling coverage (structure)</li>
-            <li>• Personal property protection</li>
-            <li>• Liability coverage</li>
-            <li>• Additional living expenses</li>
-            <li>• Medical payments to others</li>
-          </ul>
+    <!-- Related Tools -->
+    <section class="py-12">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
+            Related Insurance Calculators
+          </h2>
           
-          <p class="mt-4 text-sm">
-            Learn more: <a href="/posts/home-insurance-deductible-explained/" class="text-blue-600 hover:underline">How Home Insurance Deductibles Work</a>
-          </p>
-        </div>
-        
-        <div>
-          <h3 class="text-xl font-semibold mb-4">Ways to Save Money</h3>
-          <ul class="space-y-2 text-gray-600 dark:text-gray-400">
-            <li>• Bundle with auto insurance</li>
-            <li>• Install security systems</li>
-            <li>• Increase deductibles</li>
-            <li>• Maintain good credit</li>
-            <li>• Stay claims-free</li>
-          </ul>
+          <div class="grid md:grid-cols-3 gap-6">
+            <a href="/tools/auto-insurance-calculator/" 
+               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
+              <div class="text-blue-600 text-2xl mb-3">🚗</div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 mb-2">
+                Auto Insurance Calculator
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Calculate car insurance premiums and compare coverage options.
+              </p>
+            </a>
+            
+            <a href="/tools/life-insurance-calculator/" 
+               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
+              <div class="text-green-600 text-2xl mb-3">👨‍👩‍👧‍👦</div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-green-600 mb-2">
+                Life Insurance Calculator
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Determine how much life insurance coverage you need.
+              </p>
+            </a>
+            
+            <a href="/tools/business-insurance-calculator/" 
+               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
+              <div class="text-purple-600 text-2xl mb-3">🏢</div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 mb-2">
+                Business Insurance Calculator
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm">
+                Calculate business insurance needs and estimated costs.
+              </p>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <script>
-    document.getElementById('homeInsuranceCalculator').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const homeValue = parseInt(document.getElementById('homeValue').value);
-      const state = document.getElementById('state').value;
-      const deductible = parseInt(document.getElementById('deductible').value);
-      const homeAge = document.getElementById('homeAge').value;
-      const security = document.getElementById('security').value;
-      const claims = document.getElementById('claims').value;
-      
-      if (!homeValue || !state || !deductible || !homeAge || !security || !claims) {
-        alert('Please fill in all fields');
-        return;
-      }
-      
-      // Base rate calculation (typically 0.3% to 1.5% of home value)
-      let basePremium = homeValue * 0.006; // Start at 0.6%
-      
-      // State factor adjustments
-      const stateFactors = {
-        'CA': 1.2,   // Higher due to earthquake risk
-        'FL': 1.8,   // Higher due to hurricane risk  
-        'TX': 1.1,   // Slightly higher due to weather
-        'NY': 1.1,   // Slightly higher
-        'other': 1.0
-      };
-      basePremium *= stateFactors[state];
-      
-      // Deductible factor (higher deductible = lower premium)
-      const deductibleFactors = {
-        500: 1.3,
-        1000: 1.0,
-        2500: 0.85,
-        5000: 0.7
-      };
-      basePremium *= deductibleFactors[deductible];
-      
-      // Home age factor
-      const ageFactors = {
-        'new': 0.9,
-        'medium': 1.0,
-        'old': 1.2
-      };
-      basePremium *= ageFactors[homeAge];
-      
-      // Security features discount
-      const securityFactors = {
-        'none': 1.0,
-        'basic': 0.95,
-        'advanced': 0.9,
-        'premium': 0.85
-      };
-      basePremium *= securityFactors[security];
-      
-      // Claims history factor
-      const claimsFactors = {
-        'none': 0.9,
-        'few': 1.1,
-        'many': 1.4
-      };
-      basePremium *= claimsFactors[claims];
-      
-      const annualPremium = Math.round(basePremium);
-      const monthlyPremium = Math.round(annualPremium / 12);
-      const dwellingCoverage = homeValue;
-      const personalProperty = Math.round(homeValue * 0.5);
-      
-      document.getElementById('annualPremium').textContent = `$${annualPremium.toLocaleString()}`;
-      document.getElementById('monthlyPremium').textContent = `$${monthlyPremium} monthly`;
-      document.getElementById('dwellingCoverage').textContent = `$${dwellingCoverage.toLocaleString()}`;
-      document.getElementById('personalProperty').textContent = `$${personalProperty.toLocaleString()}`;
-      
-      document.getElementById('results').classList.remove('hidden');
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-    });
-  </script>
+    <!-- AdSense Block -->
+    <AdSenseBlock slot="bottom-content" />
+
+    <script src="/js/clientRateFetcher.js" defer></script>
+  </main>
 </BaseLayout>

@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import JsonLdScript from '../../components/JsonLdScript.astro';
+
+const jsonLdData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Workers' Compensation Calculator",
+  "description": "Calculate estimated workers' compensation insurance costs by industry and payroll. Get instant quotes for your business protection needs.",
+  "applicationCategory": "FinanceApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "Sezarr Insurance Guide"
+  }
+};
+---
+
+<BaseLayout
+  title="Workers' Compensation Calculator | Free Business Insurance Quotes"
+  description="Calculate workers' compensation insurance costs instantly. Get personalized quotes based on your industry, payroll, and employee count. Free business insurance calculator."
+  canonical="https://sezarr.com/tools/workers-comp-calculator/"
+>
+  <JsonLdScript data={jsonLdData} />
+  
+  <div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+        Workers' Compensation Calculator
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+        Calculate estimated workers' compensation insurance costs based on your industry, payroll, and number of employees.
+      </p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-12">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div>
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-6">Business Information</h2>
+          
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Industry Type
+              </label>
+              <select id="industryType" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                <option value="office">Office/Professional Services</option>
+                <option value="retail">Retail/Sales</option>
+                <option value="construction">Construction</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="restaurant">Restaurant/Food Service</option>
+                <option value="transportation">Transportation</option>
+                <option value="warehouse">Warehouse/Distribution</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Number of Employees
+              </label>
+              <input 
+                type="number" 
+                id="employeeCount" 
+                min="1" 
+                value="5"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Annual Payroll ($)
+              </label>
+              <input 
+                type="number" 
+                id="annualPayroll" 
+                min="1000" 
+                value="250000"
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                State
+              </label>
+              <select id="state" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                <option value="CA">California</option>
+                <option value="TX">Texas</option>
+                <option value="FL">Florida</option>
+                <option value="NY">New York</option>
+                <option value="IL">Illinois</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="OH">Ohio</option>
+                <option value="GA">Georgia</option>
+                <option value="NC">North Carolina</option>
+                <option value="MI">Michigan</option>
+              </select>
+            </div>
+
+            <button 
+              onclick="calculateWorkersComp()" 
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            >
+              Calculate Premium
+            </button>
+          </div>
+        </div>
+
+        <div id="results" class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6" style="display: none;">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Estimated Premium</h3>
+          <div id="resultsContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Information Section -->
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">How It's Calculated</h3>
+        <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-2">•</span>
+            Based on industry risk classification codes
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-2">•</span>
+            Calculated per $100 of payroll
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-2">•</span>
+            Varies by state regulations
+          </li>
+          <li class="flex items-start">
+            <span class="text-blue-600 mr-2">•</span>
+            Adjusted for company safety record
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Coverage Benefits</h3>
+        <ul class="space-y-2 text-gray-600 dark:text-gray-400">
+          <li class="flex items-start">
+            <span class="text-green-600 mr-2">✓</span>
+            Medical expenses for work injuries
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-600 mr-2">✓</span>
+            Lost wage compensation
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-600 mr-2">✓</span>
+            Disability benefits
+          </li>
+          <li class="flex items-start">
+            <span class="text-green-600 mr-2">✓</span>
+            Legal protection for employers
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    function calculateWorkersComp() {
+      const industryType = document.getElementById('industryType').value;
+      const employeeCount = parseInt(document.getElementById('employeeCount').value);
+      const annualPayroll = parseFloat(document.getElementById('annualPayroll').value);
+      const state = document.getElementById('state').value;
+
+      // Industry risk rates per $100 of payroll
+      const industryRates = {
+        'office': 0.12,
+        'retail': 0.18,
+        'construction': 2.50,
+        'manufacturing': 1.25,
+        'healthcare': 0.95,
+        'restaurant': 1.80,
+        'transportation': 3.20,
+        'warehouse': 2.10
+      };
+
+      // State multipliers
+      const stateMultipliers = {
+        'CA': 1.25,
+        'TX': 0.90,
+        'FL': 1.00,
+        'NY': 1.35,
+        'IL': 1.10,
+        'PA': 1.05,
+        'OH': 0.95,
+        'GA': 0.88,
+        'NC': 0.85,
+        'MI': 1.15
+      };
+
+      const baseRate = industryRates[industryType] || 1.0;
+      const stateMultiplier = stateMultipliers[state] || 1.0;
+      
+      const estimatedPremium = (annualPayroll / 100) * baseRate * stateMultiplier;
+      const monthlyPremium = estimatedPremium / 12;
+
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('resultsContent').innerHTML = `
+        <div class="space-y-4">
+          <div class="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4">
+            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">$${estimatedPremium.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Annual Premium</div>
+          </div>
+          <div class="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            $${monthlyPremium.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}/month
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-400 border-t pt-3">
+            <p><strong>Industry:</strong> ${industryType.charAt(0).toUpperCase() + industryType.slice(1)}</p>
+            <p><strong>Rate:</strong> $${baseRate}/100 payroll</p>
+            <p><strong>State Factor:</strong> ${stateMultiplier}x</p>
+            <p class="mt-2 text-xs">*Estimate only. Actual rates may vary based on claims history, safety programs, and insurer underwriting.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // Calculate on page load
+    document.addEventListener('DOMContentLoaded', calculateWorkersComp);
+  </script>
+</BaseLayout>
