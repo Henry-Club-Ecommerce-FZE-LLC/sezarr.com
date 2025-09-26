@@ -1,0 +1,118 @@
+---
+// Post-specific analytics tracking
+const { postTitle, postCategory, postTags = [], readingTime } = Astro.props;
+---
+
+<!-- Post Engagement Tracking -->
+<script is:inline define:vars={{ postTitle, postCategory, postTags, readingTime }}>
+  // Track post view
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'page_view', {
+      event_category: 'content',
+      content_type: 'blog_post',
+      content_title: postTitle,
+      content_category: postCategory,
+      content_tags: postTags.join(','),
+      estimated_reading_time: readingTime
+    });
+  }
+
+  // Track reading progress
+  function initializeReadingProgress() {
+    const article = document.querySelector('article') || document.querySelector('.post-content') || document.querySelector('main');
+    if (!article) return;
+
+    const milestones = [25, 50, 75, 100];
+    const trackedMilestones = new Set();
+
+    function checkReadingProgress() {
+      const articleTop = article.offsetTop;
+      const articleHeight = article.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const scrollTop = window.pageYOffset;
+
+      const progress = Math.min(100, Math.round(
+        ((scrollTop + windowHeight - articleTop) / articleHeight) * 100
+      ));
+
+      milestones.forEach(milestone => {
+        if (progress >= milestone && !trackedMilestones.has(milestone)) {
+          trackedMilestones.add(milestone);
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'reading_progress', {
+              event_category: 'content_engagement',
+              content_title: postTitle,
+              progress_percent: milestone
+            });
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', checkReadingProgress);
+    window.addEventListener('resize', checkReadingProgress);
+  }
+
+  // Track social shares (if social buttons exist)
+  function initializeSocialTracking() {
+    document.querySelectorAll('[data-social-share]').forEach(button => {
+      button.addEventListener('click', () => {
+        const platform = button.getAttribute('data-social-share');
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'social_share', {
+            event_category: 'engagement',
+            content_title: postTitle,
+            social_platform: platform
+          });
+        }
+      });
+    });
+  }
+
+  // Track related post clicks
+  function initializeRelatedPostTracking() {
+    document.querySelectorAll('.related-posts a, .recommended-posts a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'related_post_click', {
+            event_category: 'content_navigation',
+            source_post: postTitle,
+            target_post: link.textContent.trim(),
+            target_url: link.href
+          });
+        }
+      });
+    });
+  }
+
+  // Track newsletter signup (if form exists)
+  function initializeNewsletterTracking() {
+    const newsletterForms = document.querySelectorAll('[data-newsletter-form], .newsletter-signup form');
+    newsletterForms.forEach(form => {
+      form.addEventListener('submit', () => {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'newsletter_signup', {
+            event_category: 'conversion',
+            source_post: postTitle,
+            form_location: 'blog_post'
+          });
+        }
+      });
+    });
+  }
+
+  // Initialize all tracking when page loads
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeReadingProgress();
+      initializeSocialTracking();
+      initializeRelatedPostTracking();
+      initializeNewsletterTracking();
+    });
+  } else {
+    initializeReadingProgress();
+    initializeSocialTracking();
+    initializeRelatedPostTracking();
+    initializeNewsletterTracking();
+  }
+</script>

@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/pre-compress.js",
+    "build:fast": "astro build",
     "preview": "astro preview",
     "check": "astro check",
     "lint": "echo Linting... (add ESLint to enable)",
@@ -23,7 +24,8 @@
     "content:states": "node scripts/content-generator.mjs states",
     "content:reviews": "node scripts/content-generator.mjs reviews",
     "content:calculators": "node scripts/content-generator.mjs calculators",
-    "content:all": "node scripts/content-generator.mjs all"
+    "content:all": "node scripts/content-generator.mjs all",
+    "compress": "node scripts/pre-compress.js"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

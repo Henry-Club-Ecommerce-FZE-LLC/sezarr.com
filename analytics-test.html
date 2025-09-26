@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Test - Sezarr Insurance</title>
+</head>
+<body>
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;">
+        <h1>Google Analytics Test Page</h1>
+        
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h2>Analytics Status</h2>
+            <div id="analytics-status"></div>
+        </div>
+
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h2>Test Events</h2>
+            <button onclick="testEvent()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">
+                Fire Test Event
+            </button>
+            <button onclick="testCalculatorEvent()" style="background: #059669; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">
+                Test Calculator Event
+            </button>
+        </div>
+
+        <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h2>Instructions</h2>
+            <ol>
+                <li>Open Chrome DevTools (F12)</li>
+                <li>Go to Network tab</li>
+                <li>Filter by "collect" or "gtm" to see GA4 requests</li>
+                <li>Click the test buttons above</li>
+                <li>Verify that analytics requests are sent</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JTKSVSN27X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function(){dataLayer.push(arguments);}
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-JTKSVSN27X', {
+            debug_mode: true,
+            send_page_view: true
+        });
+
+        // Helper functions for testing
+        window.getInsuranceTypeFromPath = function() {
+            const path = window.location.pathname.toLowerCase();
+            if (path.includes('auto')) return 'auto';
+            if (path.includes('home')) return 'home';
+            if (path.includes('business')) return 'business';
+            if (path.includes('life')) return 'life';
+            if (path.includes('pet')) return 'pet';
+            if (path.includes('travel')) return 'travel';
+            if (path.includes('health')) return 'health';
+            if (path.includes('disability')) return 'disability';
+            return 'general';
+        };
+
+        window.getContentCategoryFromPath = function() {
+            const path = window.location.pathname;
+            if (path.includes('/posts/')) return 'article';
+            if (path.includes('/tools/')) return 'calculator';
+            if (path.includes('/blog/')) return 'blog';
+            return 'page';
+        };
+
+        function checkAnalytics() {
+            const status = document.getElementById('analytics-status');
+            let html = '';
+            
+            html += '<p><strong>DataLayer exists:</strong> ' + (!!window.dataLayer) + '</p>';
+            html += '<p><strong>Gtag function exists:</strong> ' + (typeof window.gtag !== 'undefined') + '</p>';
+            html += '<p><strong>Insurance Type Helper:</strong> ' + (typeof window.getInsuranceTypeFromPath === 'function') + '</p>';
+            html += '<p><strong>Content Category Helper:</strong> ' + (typeof window.getContentCategoryFromPath === 'function') + '</p>';
+            html += '<p><strong>Current Insurance Type:</strong> ' + window.getInsuranceTypeFromPath() + '</p>';
+            html += '<p><strong>Current Content Category:</strong> ' + window.getContentCategoryFromPath() + '</p>';
+            
+            status.innerHTML = html;
+        }
+
+        function testEvent() {
+            if (typeof window.gtag !== 'undefined') {
+                window.gtag('event', 'test_button_click', {
+                    event_category: 'testing',
+                    event_label: 'analytics_test_page',
+                    value: 1
+                });
+                alert('Test event fired! Check Network tab in DevTools for "collect" requests.');
+            } else {
+                alert('Error: gtag function not available!');
+            }
+        }
+
+        function testCalculatorEvent() {
+            if (typeof window.gtag !== 'undefined') {
+                window.gtag('event', 'calculator_test', {
+                    event_category: 'calculator',
+                    calculator_type: window.getInsuranceTypeFromPath(),
+                    content_category: window.getContentCategoryFromPath(),
+                    event_label: 'test_calculation',
+                    value: 1
+                });
+                alert('Calculator test event fired! Check Network tab in DevTools.');
+            } else {
+                alert('Error: gtag function not available!');
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', checkAnalytics);
+    </script>
+</body>
+</html>

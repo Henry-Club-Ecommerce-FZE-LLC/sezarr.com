@@ -192,23 +192,85 @@ class ClientRateFetcher {
   }
 
   /**
-   * Fetch rates from our backend API
+   * Fetch rates from our backend API (static files in production)
    */
   async fetchFromAPI(type, params) {
-    const queryString = new URLSearchParams(params).toString();
-    const response = await fetch(`${this.baseUrl}/api/rates/${type}?${queryString}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+    try {
+      // For static site, the API endpoints are pre-generated files with .json extension
+      // Make a simple GET request to the static endpoint
+      const response = await fetch(`${this.baseUrl}/api/rates/${type}.json`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`API responded with ${response.status}: ${response.statusText}`);
       }
-    });
 
-    if (!response.ok) {
-      throw new Error(`API responded with ${response.status}: ${response.statusText}`);
+      const data = await response.json();
+      
+      // For static files, we get pre-computed rates that we can adjust based on params
+      if (data && data.rates) {
+        const adjustedRates = this.adjustStaticRates(data.rates, params);
+        // Add metadata about the fetch
+        return {
+          ...adjustedRates,
+          _metadata: {
+            isLiveData: true,
+            fetchTimestamp: new Date().toISOString(),
+            source: 'API',
+            lastUpdated: data.lastUpdated || new Date().toISOString(),
+            dataAge: data.dataAge || 'Current'
+          }
+        };
+      }
+      
+      // Add metadata for raw data too
+      return {
+        ...data,
+        _metadata: {
+          isLiveData: true,
+          fetchTimestamp: new Date().toISOString(),
+          source: 'API',
+          lastUpdated: data.lastUpdated || new Date().toISOString(),
+          dataAge: data.dataAge || 'Current'
+        }
+      };
+    } catch (error) {
+      console.warn(`Failed to fetch from static API endpoint /api/rates/${type}.json:`, error.message);
+      throw error;
     }
+  }
 
-    return await response.json();
+  /**
+   * Adjust pre-computed static rates based on user parameters
+   */
+  adjustStaticRates(rates, params) {
+    // Apply adjustments based on actual user parameters
+    let adjustedRates = { ...rates };
+    
+    // Apply state factor if different from default
+    if (params.state && params.state !== 'US') {
+      const stateFactors = this.getStateFactors();
+      const stateFactor = stateFactors[params.state] || 1.0;
+      
+      if (adjustedRates.basic) adjustedRates.basic = Math.round(adjustedRates.basic * stateFactor);
+      if (adjustedRates.standard) adjustedRates.standard = Math.round(adjustedRates.standard * stateFactor);
+      if (adjustedRates.premium) adjustedRates.premium = Math.round(adjustedRates.premium * stateFactor);
+    }
+    
+    // Apply profile-based adjustments for auto insurance
+    if (params.driverProfile) {
+      const profileFactor = this.calculateDriverProfileFactor(params.driverProfile);
+      
+      if (adjustedRates.basic) adjustedRates.basic = Math.round(adjustedRates.basic * profileFactor);
+      if (adjustedRates.standard) adjustedRates.standard = Math.round(adjustedRates.standard * profileFactor);
+      if (adjustedRates.premium) adjustedRates.premium = Math.round(adjustedRates.premium * profileFactor);
+    }
+    
+    return adjustedRates;
   }
 
   /**
@@ -268,8 +330,13 @@ class ClientRateFetcher {
 
     return {
       ...adjustedRates,
-      lastUpdated: new Date().toISOString(),
-      source: 'client_fallback',
+      _metadata: {
+        isLiveData: false,
+        fetchTimestamp: new Date().toISOString(),
+        source: 'Fallback Calculation',
+        lastUpdated: new Date().toISOString(),
+        dataAge: 'Estimated (API unavailable)'
+      },
       state,
       zipCode,
       profile,

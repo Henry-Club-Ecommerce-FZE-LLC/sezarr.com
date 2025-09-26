@@ -4,7 +4,7 @@ export const SITE = {
   TAGLINE: 'Your Smart Insurance Guide',
   LOGO: '/logo-512.png',
   BRAND_COLOR: '#357eff',
-  GA4_ID: 'G-XXXXXXXXXX',
+  GA4_ID: 'G-JTKSVSN27X',
   ADSENSE_CLIENT: 'ca-pub-1189140861538062',
   SOCIAL: {
     TWITTER: '@Sezarr'

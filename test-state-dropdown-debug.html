@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test State Dropdown</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-weight: bold;
+        }
+        select, input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .debug { 
+            margin-top: 20px; 
+            padding: 10px; 
+            background: #f0f0f0; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>State Dropdown Test</h1>
+    
+    <div class="form-group">
+        <label for="state">State:</label>
+        <select id="state" required>
+            <option value="">Select State</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="zipCode">ZIP Code:</label>
+        <input type="text" id="zipCode" placeholder="5-digit ZIP" maxlength="5">
+    </div>
+    
+    <div class="debug">
+        <h3>Debug Info:</h3>
+        <div id="debug-output"></div>
+    </div>
+
+    <script>
+        function logDebug(message) {
+            const debugOutput = document.getElementById('debug-output');
+            debugOutput.innerHTML += '<p>' + message + '</p>';
+            console.log(message);
+        }
+
+        function handleStateChange() {
+            const stateCode = document.getElementById('state').value;
+            const zipInput = document.getElementById('zipCode');
+            
+            logDebug('State changed to: ' + stateCode);
+            
+            if (!stateCode) {
+                zipInput.placeholder = "5-digit ZIP";
+                return;
+            }
+            
+            // Example zip codes for each state to use as placeholders
+            const zipCodesByState = {
+                'AL': '35213', // Birmingham
+                'AK': '99501', // Anchorage  
+                'AZ': '85012', // Phoenix
+                'AR': '72201', // Little Rock
+                'CA': '90210', // Beverly Hills
+                'CO': '80202', // Denver
+                'CT': '06103', // Hartford
+                'DE': '19801', // Wilmington
+                'FL': '32801', // Orlando
+                'GA': '30301', // Atlanta
+                'HI': '96801', // Honolulu
+                'ID': '83701', // Boise
+                'IL': '60601', // Chicago
+                'IN': '46201', // Indianapolis
+                'IA': '50301', // Des Moines
+                'KS': '66101', // Kansas City
+                'KY': '40201', // Louisville
+                'LA': '70112', // New Orleans
+                'ME': '04101', // Portland
+                'MD': '21201', // Baltimore
+                'MA': '02101', // Boston
+                'MI': '48201', // Detroit
+                'MN': '55401', // Minneapolis
+                'MS': '39201', // Jackson
+                'MO': '63101', // St. Louis
+                'MT': '59101', // Billings
+                'NE': '68101', // Omaha
+                'NV': '89101', // Las Vegas
+                'NH': '03101', // Manchester
+                'NJ': '07001', // Newark
+                'NM': '87101', // Albuquerque
+                'NY': '10001', // New York
+                'NC': '27601', // Raleigh
+                'ND': '58101', // Fargo
+                'OH': '43201', // Columbus
+                'OK': '73101', // Oklahoma City
+                'OR': '97201', // Portland
+                'PA': '19101', // Philadelphia
+                'RI': '02901', // Providence
+                'SC': '29201', // Columbia
+                'SD': '57101', // Sioux Falls
+                'TN': '37201', // Nashville
+                'TX': '75201', // Dallas
+                'UT': '84101', // Salt Lake City
+                'VT': '05401', // Burlington
+                'VA': '23219', // Richmond
+                'WA': '98101', // Seattle
+                'WV': '25301', // Charleston
+                'WI': '53201', // Milwaukee
+                'WY': '82001', // Cheyenne
+                'DC': '20001'  // Washington DC
+            };
+            
+            const exampleZip = zipCodesByState[stateCode];
+            if (exampleZip) {
+                zipInput.placeholder = `e.g., ${exampleZip}`;
+                logDebug('ZIP placeholder updated to: ' + zipInput.placeholder);
+            } else {
+                zipInput.placeholder = "5-digit ZIP";
+                logDebug('No example ZIP found for state: ' + stateCode);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            logDebug('DOM Content Loaded');
+            
+            try {
+                // Hardcoded states list since API endpoints don't work in static site
+                const states = [
+                    { name: "Alabama", code: "AL" },
+                    { name: "Alaska", code: "AK" },
+                    { name: "Arizona", code: "AZ" },
+                    { name: "Arkansas", code: "AR" },
+                    { name: "California", code: "CA" },
+                    { name: "Colorado", code: "CO" },
+                    { name: "Connecticut", code: "CT" },
+                    { name: "Delaware", code: "DE" },
+                    { name: "Florida", code: "FL" },
+                    { name: "Georgia", code: "GA" },
+                    { name: "Hawaii", code: "HI" },
+                    { name: "Idaho", code: "ID" },
+                    { name: "Illinois", code: "IL" },
+                    { name: "Indiana", code: "IN" },
+                    { name: "Iowa", code: "IA" },
+                    { name: "Kansas", code: "KS" },
+                    { name: "Kentucky", code: "KY" },
+                    { name: "Louisiana", code: "LA" },
+                    { name: "Maine", code: "ME" },
+                    { name: "Maryland", code: "MD" },
+                    { name: "Massachusetts", code: "MA" },
+                    { name: "Michigan", code: "MI" },
+                    { name: "Minnesota", code: "MN" },
+                    { name: "Mississippi", code: "MS" },
+                    { name: "Missouri", code: "MO" },
+                    { name: "Montana", code: "MT" },
+                    { name: "Nebraska", code: "NE" },
+                    { name: "Nevada", code: "NV" },
+                    { name: "New Hampshire", code: "NH" },
+                    { name: "New Jersey", code: "NJ" },
+                    { name: "New Mexico", code: "NM" },
+                    { name: "New York", code: "NY" },
+                    { name: "North Carolina", code: "NC" },
+                    { name: "North Dakota", code: "ND" },
+                    { name: "Ohio", code: "OH" },
+                    { name: "Oklahoma", code: "OK" },
+                    { name: "Oregon", code: "OR" },
+                    { name: "Pennsylvania", code: "PA" },
+                    { name: "Rhode Island", code: "RI" },
+                    { name: "South Carolina", code: "SC" },
+                    { name: "South Dakota", code: "SD" },
+                    { name: "Tennessee", code: "TN" },
+                    { name: "Texas", code: "TX" },
+                    { name: "Utah", code: "UT" },
+                    { name: "Vermont", code: "VT" },
+                    { name: "Virginia", code: "VA" },
+                    { name: "Washington", code: "WA" },
+                    { name: "West Virginia", code: "WV" },
+                    { name: "Wisconsin", code: "WI" },
+                    { name: "Wyoming", code: "WY" },
+                    { name: "District of Columbia", code: "DC" }
+                ];
+                
+                logDebug('States array loaded with ' + states.length + ' states');
+                
+                const stateSelect = document.getElementById('state');
+                
+                if (!stateSelect) {
+                    logDebug('ERROR: State select element not found');
+                    return;
+                }
+                
+                logDebug('State select element found');
+                
+                // Populate states dropdown
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.code;
+                    option.textContent = state.name;
+                    stateSelect.appendChild(option);
+                });
+                
+                // Add event listener to update zip codes when state changes
+                stateSelect.addEventListener('change', handleStateChange);
+                
+                logDebug('State dropdown populated successfully with ' + states.length + ' states');
+                logDebug('Event listener added for state change');
+                
+            } catch (error) {
+                logDebug('ERROR: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
