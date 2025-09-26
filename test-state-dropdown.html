@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Dropdown Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-container { max-width: 600px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        select, input { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Auto Insurance Calculator - State Dropdown Test</h1>
+        
+        <div id="status" class="status"></div>
+        
+        <form>
+            <label for="state">State:</label>
+            <select id="state">
+                <option value="">Select State</option>
+                <!-- Will be populated by JavaScript -->
+            </select>
+            
+            <label for="zipCode">ZIP Code:</label>
+            <input type="text" id="zipCode" placeholder="5-digit ZIP">
+        </form>
+        
+        <div id="testResults">
+            <h3>Test Results:</h3>
+            <ul id="resultsList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle state change and update placeholder with example zip code
+        function handleStateChange() {
+            const stateCode = document.getElementById('state').value;
+            const zipInput = document.getElementById('zipCode');
+            
+            if (!stateCode) {
+                zipInput.placeholder = "5-digit ZIP";
+                return;
+            }
+            
+            // Example zip codes for each state to use as placeholders
+            const zipCodesByState = {
+                'AL': '35213', 'AK': '99501', 'AZ': '85012', 'AR': '72201', 'CA': '90210',
+                'CO': '80202', 'CT': '06103', 'DE': '19801', 'FL': '32801', 'GA': '30309',
+                'HI': '96813', 'ID': '83702', 'IL': '60601', 'IN': '46204', 'IA': '50309',
+                'KS': '66603', 'KY': '40202', 'LA': '70112', 'ME': '04101', 'MD': '21201',
+                'MA': '02108', 'MI': '48226', 'MN': '55401', 'MS': '39201', 'MO': '63101',
+                'MT': '59101', 'NE': '68102', 'NV': '89101', 'NH': '03101', 'NJ': '07102',
+                'NM': '87101', 'NY': '10001', 'NC': '27601', 'ND': '58102', 'OH': '43215',
+                'OK': '73102', 'OR': '97201', 'PA': '19107', 'RI': '02903', 'SC': '29201',
+                'SD': '57101', 'TN': '37203', 'TX': '75201', 'UT': '84101', 'VT': '05401',
+                'VA': '23219', 'WA': '98101', 'WV': '25301', 'WI': '53202', 'WY': '82001'
+            };
+            
+            const exampleZip = zipCodesByState[stateCode] || "12345";
+            zipInput.placeholder = `e.g., ${exampleZip}`;
+            
+            // Log for testing
+            addTestResult(`✅ State ${stateCode} selected, ZIP placeholder updated to: ${zipInput.placeholder}`);
+        }
+
+        // Test functions
+        function addTestResult(message) {
+            const resultsList = document.getElementById('resultsList');
+            const listItem = document.createElement('li');
+            listItem.textContent = message;
+            resultsList.appendChild(listItem);
+        }
+
+        function setStatus(message, isSuccess = true) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = isSuccess ? 'status success' : 'status error';
+        }
+
+        // Initialize states dropdown when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const states = [
+                    { name: "Alabama", code: "AL" }, { name: "Alaska", code: "AK" },
+                    { name: "Arizona", code: "AZ" }, { name: "Arkansas", code: "AR" },
+                    { name: "California", code: "CA" }, { name: "Colorado", code: "CO" },
+                    { name: "Connecticut", code: "CT" }, { name: "Delaware", code: "DE" },
+                    { name: "Florida", code: "FL" }, { name: "Georgia", code: "GA" },
+                    { name: "Hawaii", code: "HI" }, { name: "Idaho", code: "ID" },
+                    { name: "Illinois", code: "IL" }, { name: "Indiana", code: "IN" },
+                    { name: "Iowa", code: "IA" }, { name: "Kansas", code: "KS" },
+                    { name: "Kentucky", code: "KY" }, { name: "Louisiana", code: "LA" },
+                    { name: "Maine", code: "ME" }, { name: "Maryland", code: "MD" },
+                    { name: "Massachusetts", code: "MA" }, { name: "Michigan", code: "MI" },
+                    { name: "Minnesota", code: "MN" }, { name: "Mississippi", code: "MS" },
+                    { name: "Missouri", code: "MO" }, { name: "Montana", code: "MT" },
+                    { name: "Nebraska", code: "NE" }, { name: "Nevada", code: "NV" },
+                    { name: "New Hampshire", code: "NH" }, { name: "New Jersey", code: "NJ" },
+                    { name: "New Mexico", code: "NM" }, { name: "New York", code: "NY" },
+                    { name: "North Carolina", code: "NC" }, { name: "North Dakota", code: "ND" },
+                    { name: "Ohio", code: "OH" }, { name: "Oklahoma", code: "OK" },
+                    { name: "Oregon", code: "OR" }, { name: "Pennsylvania", code: "PA" },
+                    { name: "Rhode Island", code: "RI" }, { name: "South Carolina", code: "SC" },
+                    { name: "South Dakota", code: "SD" }, { name: "Tennessee", code: "TN" },
+                    { name: "Texas", code: "TX" }, { name: "Utah", code: "UT" },
+                    { name: "Vermont", code: "VT" }, { name: "Virginia", code: "VA" },
+                    { name: "Washington", code: "WA" }, { name: "West Virginia", code: "WV" },
+                    { name: "Wisconsin", code: "WI" }, { name: "Wyoming", code: "WY" }
+                ];
+                
+                const stateSelect = document.getElementById('state');
+                
+                if (!stateSelect) {
+                    throw new Error('State select element not found');
+                }
+                
+                // Populate states dropdown
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state.code;
+                    option.textContent = state.name;
+                    stateSelect.appendChild(option);
+                });
+                
+                // Add event listener
+                stateSelect.addEventListener('change', handleStateChange);
+                
+                setStatus(`✅ State dropdown populated successfully with ${states.length} states`);
+                addTestResult(`✅ Dropdown initialized with ${states.length} states`);
+                addTestResult('✅ Event listener attached to state dropdown');
+                addTestResult('🧪 Try selecting different states to test ZIP code placeholder updates');
+                
+            } catch (error) {
+                setStatus(`❌ Error: ${error.message}`, false);
+                addTestResult(`❌ Error during initialization: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

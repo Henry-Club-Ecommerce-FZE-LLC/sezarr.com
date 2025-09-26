@@ -378,6 +378,74 @@
 </div>
 
 <script is:inline>
+// Function to handle state change and update placeholder with example zip code
+function handleStateChange() {
+  const stateCode = document.getElementById('state').value;
+  const zipInput = document.getElementById('zipCode');
+  
+  if (!stateCode) {
+    zipInput.placeholder = "5-digit ZIP";
+    return;
+  }
+  
+  // Example zip codes for each state to use as placeholders
+  const zipCodesByState = {
+    'AL': '35213', // Birmingham
+    'AK': '99501', // Anchorage
+    'AZ': '85012', // Phoenix
+    'AR': '72201', // Little Rock
+    'CA': '90210', // Beverly Hills
+    'CO': '80202', // Denver
+    'CT': '06103', // Hartford
+    'DE': '19801', // Wilmington
+    'FL': '32801', // Orlando
+    'GA': '30309', // Atlanta
+    'HI': '96813', // Honolulu
+    'ID': '83702', // Boise
+    'IL': '60601', // Chicago
+    'IN': '46204', // Indianapolis
+    'IA': '50309', // Des Moines
+    'KS': '66603', // Topeka
+    'KY': '40202', // Louisville
+    'LA': '70112', // New Orleans
+    'ME': '04101', // Portland
+    'MD': '21201', // Baltimore
+    'MA': '02108', // Boston
+    'MI': '48226', // Detroit
+    'MN': '55401', // Minneapolis
+    'MS': '39201', // Jackson
+    'MO': '63101', // St. Louis
+    'MT': '59101', // Billings
+    'NE': '68102', // Omaha
+    'NV': '89101', // Las Vegas
+    'NH': '03101', // Manchester
+    'NJ': '07102', // Newark
+    'NM': '87101', // Albuquerque
+    'NY': '10001', // New York
+    'NC': '27601', // Raleigh
+    'ND': '58102', // Fargo
+    'OH': '43215', // Columbus
+    'OK': '73102', // Oklahoma City
+    'OR': '97201', // Portland
+    'PA': '19107', // Philadelphia
+    'RI': '02903', // Providence
+    'SC': '29201', // Columbia
+    'SD': '57101', // Sioux Falls
+    'TN': '37203', // Nashville
+    'TX': '75201', // Dallas
+    'UT': '84101', // Salt Lake City
+    'VT': '05401', // Burlington
+    'VA': '23219', // Richmond
+    'WA': '98101', // Seattle
+    'WV': '25301', // Charleston
+    'WI': '53202', // Milwaukee
+    'WY': '82001'  // Cheyenne
+  };
+  
+  const exampleZip = zipCodesByState[stateCode] || "12345";
+  zipInput.placeholder = `e.g., ${exampleZip}`;
+}
+
 // Initialize states dropdown when page loads
 document.addEventListener('DOMContentLoaded', () => {
   try {
@@ -437,6 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const stateSelect = document.getElementById('state');
     
+    if (!stateSelect) {
+      console.error('State select element not found');
+      return;
+    }
+    
     // Populate states dropdown
     states.forEach(state => {
       const option = document.createElement('option');
@@ -448,77 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add event listener to update zip codes when state changes
     stateSelect.addEventListener('change', handleStateChange);
     
-// Function to handle state change and update placeholder with example zip code
-function handleStateChange() {
-  const stateCode = document.getElementById('state').value;
-  const zipInput = document.getElementById('zipCode');
-  
-  if (!stateCode) {
-    zipInput.placeholder = "5-digit ZIP";
-    return;
-  }
-  
-  // Example zip codes for each state to use as placeholders
-  const zipCodesByState = {
-    'AL': '35213', // Birmingham
-    'AK': '99501', // Anchorage
-    'AZ': '85012', // Phoenix
-    'AR': '72201', // Little Rock
-    'CA': '90210', // Beverly Hills
-    'CO': '80202', // Denver
-    'CT': '06103', // Hartford
-    'DE': '19801', // Wilmington
-    'FL': '32801', // Orlando
-    'GA': '30309', // Atlanta
-    'HI': '96813', // Honolulu
-    'ID': '83702', // Boise
-    'IL': '60601', // Chicago
-    'IN': '46204', // Indianapolis
-    'IA': '50309', // Des Moines
-    'KS': '66603', // Topeka
-    'KY': '40202', // Louisville
-    'LA': '70112', // New Orleans
-    'ME': '04101', // Portland
-    'MD': '21201', // Baltimore
-    'MA': '02108', // Boston
-    'MI': '48226', // Detroit
-    'MN': '55401', // Minneapolis
-    'MS': '39201', // Jackson
-    'MO': '63101', // St. Louis
-    'MT': '59101', // Billings
-    'NE': '68102', // Omaha
-    'NV': '89101', // Las Vegas
-    'NH': '03101', // Manchester
-    'NJ': '07102', // Newark
-    'NM': '87101', // Albuquerque
-    'NY': '10001', // New York
-    'NC': '27601', // Raleigh
-    'ND': '58102', // Fargo
-    'OH': '43215', // Columbus
-    'OK': '73102', // Oklahoma City
-    'OR': '97201', // Portland
-    'PA': '19107', // Philadelphia
-    'RI': '02903', // Providence
-    'SC': '29201', // Columbia
-    'SD': '57104', // Sioux Falls
-    'TN': '37203', // Nashville
-    'TX': '75201', // Dallas
-    'UT': '84101', // Salt Lake City
-    'VT': '05401', // Burlington
-    'VA': '23219', // Richmond
-    'WA': '98101', // Seattle
-    'WV': '25301', // Charleston
-    'WI': '53202', // Milwaukee
-    'WY': '82001'  // Cheyenne
-  };
-  
-  const exampleZip = zipCodesByState[stateCode];
-  if (exampleZip) {
-    zipInput.placeholder = `e.g., ${exampleZip}`;
-  } else {
-    zipInput.placeholder = "5-digit ZIP";
-  }
-}
+    console.log('State dropdown populated successfully with', states.length, 'states');
 
 // Initialize tab functionality
 function initializeTabFunctionality() {
