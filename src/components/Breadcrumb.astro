@@ -1,18 +1,20 @@
----
-interface Props {
-  items: {
-    label: string;
-    href: string;
-  }[];
-}
-
-const { items } = Astro.props;
+      <a
+        href={item.href}
+        class={
+          `text-blue-600 dark:text-blue-400 hover:underline px-3 py-3 min-w-[44px] min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-blue-500`
+        }
+        aria-current={item.current ? 'page' : undefined}
+        style="display:inline-flex;align-items:center;justify-content:center;width:44px;min-width:44px;height:44px;min-height:44px;touch-action:manipulation;"
+        tabIndex="0"
+      >
+        {item.name}
+      </a>
 ---
 
 <nav aria-label="Breadcrumb" class="py-2 text-sm" role="navigation">
   <ol class="list-none p-0 inline-flex items-center space-x-1" role="list" itemscope itemtype="https://schema.org/BreadcrumbList">
     <li class="inline-flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-      <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1" itemprop="item">
+      <a href="/" class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 min-w-[44px] min-h-[44px]" style="display:inline-flex;align-items:center;justify-content:center;width:44px;min-width:44px;height:44px;min-height:44px;touch-action:manipulation;" itemprop="item">
         <span itemprop="name">Home</span>
       </a>
       <meta itemprop="position" content="1" />
@@ -22,7 +24,7 @@ const { items } = Astro.props;
       <li class="inline-flex items-center" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
         <a 
           href={item.href} 
-          class={`${index === items.length - 1 ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1`}
+          class={`${index === items.length - 1 ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'} transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-3 py-3 min-w-[44px] min-h-[44px]`}
           itemprop="item"
           aria-current={index === items.length - 1 ? 'page' : undefined}
         >

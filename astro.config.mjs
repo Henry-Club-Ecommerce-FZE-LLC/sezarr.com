@@ -27,6 +27,31 @@ export default {
         // Optimize for smaller bundle size
         corePlugins: {
           preflight: true,
+        },
+        // Purge unused styles
+        purge: {
+          enabled: true,
+          content: [
+            './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'
+          ],
+          safelist: [
+            'text-2xl',
+            'text-3xl',
+            'text-4xl',
+            'font-bold',
+            'font-semibold',
+            'text-gray-800',
+            'text-gray-900'
+          ]
+        },
+        // Minimize CSS
+        cssnano: {
+          preset: ['advanced', {
+            discardComments: { removeAll: true },
+            discardUnused: true,
+            mergeIdents: true,
+            reduceIdents: true
+          }]
         }
       }
     }), 
@@ -63,10 +88,31 @@ export default {
       minify: 'terser',
       cssMinify: true,
       sourcemap: false,
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log'],
+        },
+        format: {
+          comments: false
+        }
+      },
       rollupOptions: {
         output: {
-          manualChunks: {
-            'vendor': ['astro']
+          manualChunks: (id) => {
+            // Vendors
+            if (id.includes('node_modules')) {
+              if (id.includes('@astrojs')) return 'vendor-astro';
+              if (id.includes('react')) return 'vendor-react';
+              if (id.includes('tailwind')) return 'vendor-tailwind';
+              return 'vendor';
+            }
+            // Route-based code splitting
+            if (id.includes('/pages/')) {
+              const match = id.match(/\/pages\/([^/]+)/);
+              if (match) return `page-${match[1]}`;
+            }
           },
           assetFileNames: (assetInfo) => {
             const info = assetInfo.name.split('.');

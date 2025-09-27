@@ -9,7 +9,7 @@ import FeaturedPosts from "../components/FeaturedPosts.astro";
 import WhyTrustUs from "../components/WhyTrustUs.astro";
 import RealTimeRateWidget from "../components/RealTimeRateWidget.astro";
 import InsuranceCompanyRatings from "../components/InsuranceCompanyRatings.astro";
-import TestimonialsCarousel from "../components/TestimonialsCarousel.astro";
+  import TestimonialsCarouselFixed from "../TestimonialsCarouselFixed.astro";
 
 const siteUrl = SITE.URL;
 const schema = [
@@ -108,7 +108,7 @@ const schema = [
 <BaseLayout title={`${SITE.NAME} - ${SITE.TAGLINE}`} description="Your trusted insurance guide. Compare rates, understand coverage, and make smart insurance decisions with Sezarr's expert insights and tools." url={siteUrl} type="website" {schema}>
   <Hero />
   <CategoryGrid />
-  <TestimonialsCarousel />
+  <TestimonialsCarouselFixed />
   <WhyTrustUs />
   
   <section class="mx-auto max-w-[var(--max-w)] px-4 py-10">

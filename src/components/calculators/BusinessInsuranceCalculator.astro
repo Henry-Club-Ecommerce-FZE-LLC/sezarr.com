@@ -207,7 +207,7 @@ import type { BusinessInsuranceInputs, BusinessInsuranceResults } from '../types
 
       <!-- Disclaimer -->
       <div class="mt-6 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
-        <p class="text-xs text-gray-500 dark:text-gray-400">
+  <p class="text-sm text-gray-500 dark:text-gray-400">
           <strong>Disclaimer:</strong> This calculator provides estimates only and should not be considered professional advice. 
           Actual insurance needs and costs may vary. Consult with licensed insurance professionals for personalized recommendations.
         </p>
@@ -221,7 +221,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('business-insurance-calculator') as HTMLFormElement;
   const resultsDiv = document.getElementById('business-insurance-results') as HTMLElement;
 
-  form?.addEventListener('submit', async function(e) {
+  if (!form || !resultsDiv) {
+    console.log('Business insurance calculator elements not found');
+    return;
+  }
+
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     const formData = new FormData(form);
@@ -449,7 +454,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="text-lg font-bold text-green-600">Business Shield</div>
             <div class="text-2xl font-bold text-gray-900 dark:text-white">$${rates.comprehensive}/month</div>
             <div class="text-sm text-gray-600 dark:text-gray-400">Comprehensive protection</div>
-            <div class="text-xs text-green-600 font-medium mt-1">Recommended</div>
+            <div class="text-sm text-green-600 font-medium mt-1">Recommended</div>
           </div>
           <div class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm text-center">
             <div class="text-lg font-bold text-purple-600">Enterprise Plus</div>
@@ -497,15 +502,15 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="grid grid-cols-3 gap-4 text-center">
             <div>
               <div class="text-lg font-bold text-blue-600">$${(rates.basic * 12).toLocaleString()}</div>
-              <div class="text-xs text-gray-600">Essential Package</div>
+              <div class="text-sm text-gray-600">Essential Package</div>
             </div>
             <div>
               <div class="text-lg font-bold text-green-600">$${(rates.comprehensive * 12).toLocaleString()}</div>
-              <div class="text-xs text-gray-600">Business Shield</div>
+              <div class="text-sm text-gray-600">Business Shield</div>
             </div>
             <div>
               <div class="text-lg font-bold text-purple-600">$${(rates.premium * 12).toLocaleString()}</div>
-              <div class="text-xs text-gray-600">Enterprise Plus</div>
+              <div class="text-sm text-gray-600">Enterprise Plus</div>
             </div>
           </div>
         </div>

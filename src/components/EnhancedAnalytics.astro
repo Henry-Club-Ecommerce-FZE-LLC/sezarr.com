@@ -4,12 +4,13 @@
 import { SITE } from '../config/site.ts';
 ---
 
-<!-- Google AdSense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1189140861538062"
-     crossorigin="anonymous"></script>
+<!-- Google AdSense (deferred) -->
+<script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1189140861538062"
+  crossorigin="anonymous" defer></script>
 
-<!-- Google tag (gtag.js) -->
-<script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.GA4_ID}`}></script>
+<!-- Google tag (gtag.js, deferred) -->
+<script src={`https://www.googletagmanager.com/gtag/js?id=${SITE.GA4_ID}`}
+     defer></script>
 <script is:inline define:vars={{ GA4_ID: SITE.GA4_ID }}>
   window.dataLayer = window.dataLayer || [];
   window.gtag = function(){dataLayer.push(arguments);}

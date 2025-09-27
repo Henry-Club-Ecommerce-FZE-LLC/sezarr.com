@@ -29,4 +29,19 @@ const postCollection = defineCollection({
   })
 });
 
-export const collections = { posts: postCollection, authors: authorsCollection };
+const toolsCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().max(160),
+    category: z.enum(['auto','health','homeowners','life','disability','business','travel','pets']),
+    icon: z.string().optional(),
+    sortOrder: z.number().optional(),
+  })
+});
+
+export const collections = { 
+  posts: postCollection, 
+  authors: authorsCollection,
+  tools: toolsCollection 
+};

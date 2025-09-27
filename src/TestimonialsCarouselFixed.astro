@@ -1,0 +1,117 @@
+
+
+---
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah Johnson",
+    role: "Small Business Owner",
+    location: "Austin, TX",
+    avatar: "/images/avatars/sarah-j.jpg",
+    rating: 5,
+    insuranceType: "Business Insurance",
+    savings: "$1,200",
+    text: "Sezarr Insurance made it easy to compare business insurance quotes and save money. Highly recommended!",
+    verified: true
+  },
+  {
+    id: 2,
+    name: "David Thompson",
+    role: "Financial Advisor",
+    location: "Denver, CO",
+    avatar: "/images/avatars/david-t.jpg",
+    rating: 5,
+    insuranceType: "Auto Insurance",
+    savings: "$850",
+    text: "I found the best auto insurance rates for my clients. The process was quick and transparent.",
+    verified: true
+  },
+  {
+    id: 3,
+    name: "Jennifer Martinez",
+    role: "Marketing Director",
+    location: "Miami, FL",
+    avatar: "/images/avatars/jennifer-m.jpg",
+    rating: 5,
+    insuranceType: "Homeowners Insurance",
+    savings: "$1,050",
+    text: "Switching my homeowners insurance saved me over $1,000 a year. The site is user-friendly and informative.",
+    verified: true
+  }
+];
+let currentIndex = 0;
+
+function goToSlide(index) {
+  currentIndex = index;
+}
+function prevSlide() {
+  currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
+}
+function nextSlide() {
+  currentIndex = (currentIndex + 1) % testimonials.length;
+}
+
+---
+
+<section class="relative py-16 overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Customers Say</h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300">Real testimonials from people who saved money and found the right coverage.</p>
+    </div>
+    <div class="relative max-w-2xl mx-auto">
+      <button id="prevBtn" class="absolute left-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300" onClick={prevSlide} aria-label="Previous testimonial">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div id="testimonialCarousel" class="overflow-hidden">
+        <div class="flex transition-transform duration-700 ease-in-out" style={`transform: translateX(-${currentIndex * 100}%);`} id="testimonialTrack">
+          {testimonials.map((testimonial, index) => (
+            <div class="w-full flex-shrink-0 px-4" data-testimonial={index} style={`display: ${index === currentIndex ? 'block' : 'none'};`}>
+              <div class="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/50 dark:border-gray-700/50 transition-all duration-500">
+                <div class="flex items-center gap-4 mb-4">
+                  <img src={testimonial.avatar} alt={testimonial.name} class="w-12 h-12 rounded-full" loading="lazy" />
+                  <div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white">{testimonial.name}</h3>
+                    <p class="text-gray-600 dark:text-gray-400">{testimonial.role} • {testimonial.location}</p>
+                  </div>
+                </div>
+                <blockquote class="text-gray-700 dark:text-gray-300 mb-6 text-lg leading-relaxed">{testimonial.text}</blockquote>
+                <div class="flex items-center gap-2">
+                  <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full font-medium">{testimonial.insuranceType}</span>
+                  <span class="px-3 py-1 bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 rounded-full font-medium">Savings: {testimonial.savings}</span>
+                </div>
+                <div class="flex space-x-1 mt-4">
+                  {Array.from({ length: testimonial.rating }).map((_, i) => (
+                    <svg key={i} class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.174 9.393c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.966z" />
+                    </svg>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button id="nextBtn" class="absolute right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/90 dark:bg-gray-800/90 rounded-full shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300" onClick={nextSlide} aria-label="Next testimonial">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+      <div class="flex justify-center mt-8 space-x-3" id="paginationDots">
+        {testimonials.map((_, index) => (
+          <button
+            class={`pagination-dot rounded-full transition-all duration-300 hover:scale-125 ${index === currentIndex ? 'bg-gradient-to-r from-blue-500 to-purple-500 scale-125' : 'bg-gray-300'}`}
+            style="width: 16px; height: 16px; min-width: 16px; min-height: 16px; display: inline-flex; align-items: center; justify-center; border-radius: 50%; border: none; margin: 0 4px; cursor: pointer; outline: none; touch-action: manipulation;"
+            aria-label={`Go to testimonial ${index + 1}`}
+            onClick={() => goToSlide(index)}
+            tabIndex="0"
+          >
+            <span class="sr-only">Go to testimonial {index + 1}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

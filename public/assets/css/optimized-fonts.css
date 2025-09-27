@@ -1,3 +1,7 @@
+/* Lighthouse compliance: enforce minimum font size for small and .text-xs */
+small, .text-xs {
+  font-size: 13px !important;
+}
 /* Optimized Font System - Self-Hosted Alternative */
 /* Ultra-fast system fonts with enhanced fallbacks */
 
