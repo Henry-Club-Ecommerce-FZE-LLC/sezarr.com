@@ -1,7 +1,10 @@
 ---
 import '../styles/base.css';
+import '../styles/professional-theme.css';
+import '../styles/professional-ads.css';
 import { getCollection } from 'astro:content';
 import ThemeToggle from "../components/ThemeToggle.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 import EnhancedAnalytics from "../components/EnhancedAnalytics.astro";
 import { SITE } from "../config/site";
 
@@ -72,22 +75,40 @@ const blogCategories = [...new Set(allPosts.map(post => post.data.category))].ma
   return categoryMapping[cat] || { url: `/blog/${cat}/`, name: cat.charAt(0).toUpperCase() + cat.slice(1), icon: '📄' };
 }).sort((a, b) => a.name.localeCompare(b.name));
 
-// Get dynamic tools data
-const toolsData = [
-  { url: '/tools/', name: 'All Tools', icon: '🧮' },
-  { url: '/tools/auto-insurance-calculator/', name: 'Auto Calculator', icon: '🚗' },
-  { url: '/tools/business-insurance-calculator/', name: 'Business Calculator', icon: '🏢' },
-  { url: '/tools/claims-probability-calculator/', name: 'Claims Calculator', icon: '📋' },
-  { url: '/tools/disability-insurance-calculator/', name: 'Disability Calculator', icon: '🦽' },
-  { url: '/tools/health-insurance-calculator/', name: 'Health Calculator', icon: '🏥' },
-  { url: '/tools/homeowners-insurance-calculator/', name: 'Home Calculator', icon: '🏠' },
-  { url: '/tools/insurance-quote-comparison/', name: 'Quote Comparison', icon: '📊' },
-  { url: '/tools/life-insurance-calculator/', name: 'Life Calculator', icon: '💰' },
-  { url: '/tools/pet-health-costs/', name: 'Pet Health Costs', icon: '🐾' },
-  { url: '/tools/pet-insurance-calculator/', name: 'Pet Calculator', icon: '🐕' },
-  { url: '/tools/professional-liability-calculator/', name: 'Professional Liability', icon: '⚖️' },
-  { url: '/tools/travel-insurance-calculator/', name: 'Travel Calculator', icon: '✈️' },
-  { url: '/tools/workers-comp-calculator/', name: 'Workers Comp', icon: '👷' }
+// Get dynamic tools data organized by categories
+const toolsCategories = [
+  {
+    name: 'Personal Tools',
+    icon: '👤',
+    tools: [
+      { url: '/tools/auto-insurance-calculator/', name: 'Auto Calculator', icon: '🚗' },
+    { url: '/tools/health-insurance-calculator/', name: 'Health Calculator', icon: '🏥' },
+    { url: '/tools/homeowners-insurance-calculator/', name: 'Home Calculator', icon: '🏠' },
+    { url: '/tools/life-insurance-calculator/', name: 'Life Calculator', icon: '💰' },
+    { url: '/tools/disability-insurance-calculator/', name: 'Disability Calculator', icon: '🦽' },
+    { url: '/tools/travel-insurance-calculator/', name: 'Travel Calculator', icon: '✈️' }
+    ]
+  },
+  {
+    name: 'Business Tools',
+    icon: '🏢',
+    tools: [
+      { url: '/tools/business-insurance-calculator/', name: 'Business Calculator', icon: '�' },
+    { url: '/tools/professional-liability-calculator/', name: 'Professional Liability', icon: '⚖️' },
+    { url: '/tools/workers-comp-calculator/', name: 'Workers Comp', icon: '🦺' }
+    ]
+  },
+  {
+    name: 'Other Tools',
+    icon: '🔧',
+    tools: [
+      { url: '/tools/', name: 'All Tools', icon: '🧮' },
+    { url: '/tools/insurance-quote-comparison/', name: 'Quote Comparison', icon: '📊' },
+    { url: '/tools/claims-probability-calculator/', name: 'Claims Calculator', icon: '📋' },
+    { url: '/tools/pet-insurance-calculator/', name: 'Pet Calculator', icon: '🐕' },
+    { url: '/tools/pet-health-costs/', name: 'Pet Health Costs', icon: '💲' }
+    ]
+  }
 ];
 
 // Get dynamic insurance data
@@ -120,8 +141,10 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
           const menuId = btn.getAttribute('aria-controls');
           const menu = document.getElementById(menuId);
           if (!menu) return;
+          
           // Open/close on click
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent any form submission behavior
             const expanded = btn.getAttribute('aria-expanded') === 'true';
             btn.setAttribute('aria-expanded', !expanded);
             menu.style.opacity = !expanded ? '1' : '';
@@ -132,6 +155,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
               if (firstItem) firstItem.focus();
             }
           });
+          
           // Keyboard navigation
           btn.addEventListener('keydown', e => {
             if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
@@ -143,6 +167,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
               if (firstItem) firstItem.focus();
             }
           });
+          
           // Close on ESC
           menu.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
@@ -162,6 +187,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
               items[idx].focus();
             }
           });
+          
           // Close menu when focus leaves
           menu.addEventListener('focusout', e => {
             setTimeout(() => {
@@ -172,21 +198,49 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
               }
             }, 10);
           });
+          
+          // Close dropdown when clicking outside
+          document.addEventListener('click', (e) => {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+              btn.setAttribute('aria-expanded', 'false');
+              menu.style.opacity = '';
+              menu.style.visibility = '';
+            }
+          });
         });
       });
     </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     
-    <!-- Performance Optimizer Component -->
+    <!-- Enhanced Theme Management Script -->
     <script is:inline>
-      // Critical inline theme script - prevents FOUC
+      // Critical inline theme script - prevents FOUC and implements professional theme system
       (function() {
         const theme = localStorage.getItem('theme') || 
                      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply theme using data attribute for professional theme system
         if (theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
           document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.classList.remove('dark');
         }
+        
+        // Listen for theme changes
+        window.addEventListener('storage', function(e) {
+          if (e.key === 'theme') {
+            const newTheme = e.newValue || 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            if (newTheme === 'dark') {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+          }
+        });
       })();
     </script>
     
@@ -200,11 +254,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
     <link rel="dns-prefetch" href="//www.google-analytics.com" />
     
     <!-- Critical resource preloading for LCP optimization -->
-    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
-    <link rel="preload" href="/assets/fonts/inter/inter-regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/assets/fonts/inter/inter-medium.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/assets/fonts/inter/inter-semibold.woff2" as="font" type="font/woff2" crossorigin />
-    <!-- Removed unused or incorrectly preloaded fonts and favicon.svg -->
+    <!-- Font preloading removed - using Google Fonts CDN -->
 
     <!-- Web App Manifest and Icons -->
     <link rel="manifest" href="/manifest.json" />
@@ -282,53 +332,17 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
 
     <!-- Progressive Loading & Core Functionality -->
     <script type="module">
-      // Load and initialize progressive loading
-      import('/js/progressive-loading.js').then(module => {
-        window.ProgressiveLoading = module.default;
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', () => module.default.init());
-        } else {
-          module.default.init();
-        }
-      });
-      
       // Load core functionality during idle time
       requestIdleCallback(() => {
         import('/js/business-insurance-calculator.js');
       });
     </script>
     
-    <!-- Initialize interactive elements with progressive loading -->
-    <script>
-      const observer = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const el = entry.target;
-              const handler = el.dataset.handler;
-              const event = el.dataset.event || 'click';
-              
-              if (handler && typeof window[handler] === 'function') {
-                el.addEventListener(event, window[handler]);
-                observer.unobserve(el);
-              }
-            }
-          });
-        },
-        {
-          rootMargin: '50px 0px',
-          threshold: 0.01
-        }
-      );
-      
-      // Observe interactive elements
-      document.querySelectorAll('[data-interactive]').forEach(el => {
-        observer.observe(el);
-      });
-    </script>
-
+    <!-- Critical Performance Script - Inlined and Minified -->
+    <script src="/js/critical-performance.min.js" async></script>
+    
     <!-- Search functionality - loaded after core content -->
-    <script src="/js/search.js" async defer></script>
+    <script src="/js/search.min.js" async defer></script>
     
     <!-- SEO Meta Tags -->
     <title>{title}</title>
@@ -681,7 +695,7 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
                     aria-labelledby="tools-button"
                   >
                     <div class="py-2">
-                      {toolsData.map(tool => (
+                      {toolsCategories.flatMap(category => category.tools).map(tool => (
                         <a href={tool.url} class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" role="menuitem">
                           <span class="mr-3 text-lg">{tool.icon}</span>
                           {tool.name}
@@ -774,12 +788,45 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
             </div>
           </nav>
 
-          <!-- Mobile Menu Button -->
-          <div class="md:hidden flex items-center">
+          <!-- Mobile Search Bar and Menu Button -->
+          <div class="md:hidden flex items-center gap-3 flex-1 justify-end">
+            <!-- Mobile Search Bar (after logo, before menu button) -->
+            <form action="/search/" method="GET" class="relative flex-1 max-w-xs">
+              <input 
+                type="search" 
+                name="q" 
+                id="mobile-search"
+                placeholder="Search..." 
+                class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[40px]"
+                aria-label="Search site"
+                autocomplete="off"
+              />
+              <button 
+                type="submit"
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+                aria-label="Submit search"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </button>
+              
+              <!-- Mobile Search Dropdown -->
+              <div 
+                id="mobile-search-results"
+                class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200 z-50 max-h-80 overflow-y-auto"
+              >
+                <div id="mobile-search-list" class="py-2">
+                  <!-- Search results will be populated here -->
+                </div>
+              </div>
+            </form>
+            
+            <!-- Mobile Menu Button -->
             <button 
               id="mobile-menu-button" 
               type="button" 
-              class="p-3 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] flex items-center justify-center" 
+              class="p-3 rounded-md text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0" 
               aria-expanded="false"
               aria-controls="mobile-menu"
               aria-haspopup="true"
@@ -824,24 +871,32 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
                   Home
                 </a></li>
                 
-                <!-- Tools Menu Item -->
-                <li>
-                  <button 
-                    type="button"
-                    class="w-full flex items-center justify-between px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]"
-                    data-menu-trigger="tools"
-                    aria-expanded="false"
-                    aria-controls="tools-submenu"
-                  >
-                    <div class="flex items-center">
-                      <span class="mr-3 text-lg">🧮</span>
-                      Tools
-                    </div>
-                    <svg class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </button>
-                </li>
+                <!-- Direct Calculator Links for Mobile -->
+                <li><a href="/tools/auto-insurance-calculator/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center">
+                  <span class="mr-3 text-lg">🚗</span>
+                  Auto Calculator
+                </a></li>
+                
+                <li><a href="/tools/homeowners-insurance-calculator/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center">
+                  <span class="mr-3 text-lg">🏠</span>
+                  Home Calculator
+                </a></li>
+                
+                <li><a href="/tools/life-insurance-calculator/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center">
+                  <span class="mr-3 text-lg">💰</span>
+                  Life Calculator
+                </a></li>
+                
+                <li><a href="/tools/business-insurance-calculator/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center">
+                  <span class="mr-3 text-lg">🏢</span>
+                  Business Calculator
+                </a></li>
+                
+                <!-- All Tools Link -->
+                <li><a href="/tools/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center">
+                  <span class="mr-3 text-lg">🧮</span>
+                  All Tools
+                </a></li>
 
                 <!-- Insurance Menu Item -->
                 <li>
@@ -879,40 +934,6 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                   </button>
-                </li>
-                
-                <!-- Mobile Search Bar -->
-                <li class="px-4">
-                  <form action="/search/" method="GET" class="relative">
-                    <input 
-                      type="search" 
-                      name="q" 
-                      id="mobile-search"
-                      placeholder="Search..." 
-                      class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[44px]"
-                      aria-label="Search site"
-                      autocomplete="off"
-                    />
-                    <button 
-                      type="submit"
-                      class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-600 focus:outline-none focus:text-blue-600 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                      aria-label="Submit search"
-                    >
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                      </svg>
-                    </button>
-                    
-                    <!-- Mobile Search Dropdown -->
-                    <div 
-                      id="mobile-search-results"
-                      class="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200 z-50 max-h-80 overflow-y-auto"
-                    >
-                      <div id="mobile-search-list" class="py-2">
-                        <!-- Search results will be populated here -->
-                      </div>
-                    </div>
-                  </form>
                 </li>
                 
                 <li><a href="/about/" class="block px-4 py-3 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px] flex items-center" aria-current={currentPath === '/about/' ? 'page' : undefined}>
@@ -955,7 +976,129 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
               </div>
               
               <ul class="space-y-1" role="list">
-                {toolsData.map(tool => (
+                {toolsCategories.map(category => (
+                  <li>
+                    <button 
+                      type="button"
+                      class="w-full flex items-center justify-between px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]"
+                      data-menu-trigger={category.name.toLowerCase().replace(' ', '-')}
+                      aria-expanded="false"
+                      aria-controls={`${category.name.toLowerCase().replace(' ', '-')}-submenu`}
+                    >
+                      <div class="flex items-center">
+                        <span class="mr-3 text-lg">{category.icon}</span>
+                        {category.name}
+                      </div>
+                      <svg class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Personal Tools Submenu -->
+          <div 
+            id="personal-tools-submenu" 
+            class="absolute inset-0 bg-white dark:bg-gray-900 border-t dark:border-gray-700 translate-x-full transition-transform duration-300 ease-out z-20"
+            role="menu"
+            aria-labelledby="personal-tools-submenu-title"
+          >
+            <div class="pt-4">
+              <!-- Back Button -->
+              <div class="flex items-center px-4 py-3 border-b dark:border-gray-700 mb-4">
+                <button 
+                  type="button"
+                  class="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  data-menu-back="personal-tools"
+                  aria-label="Go back to tools menu"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  Back
+                </button>
+                <h3 id="personal-tools-submenu-title" class="ml-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Personal Tools</h3>
+              </div>
+              
+              <ul class="space-y-1" role="list">
+                {toolsCategories[0].tools.map(tool => (
+                  <li>
+                    <a href={tool.url} class="flex items-center px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]" role="menuitem">
+                      <span class="mr-3 text-lg">{tool.icon}</span>
+                      {tool.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Business Tools Submenu -->
+          <div 
+            id="business-tools-submenu" 
+            class="absolute inset-0 bg-white dark:bg-gray-900 border-t dark:border-gray-700 translate-x-full transition-transform duration-300 ease-out z-20"
+            role="menu"
+            aria-labelledby="business-tools-submenu-title"
+          >
+            <div class="pt-4">
+              <!-- Back Button -->
+              <div class="flex items-center px-4 py-3 border-b dark:border-gray-700 mb-4">
+                <button 
+                  type="button"
+                  class="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  data-menu-back="business-tools"
+                  aria-label="Go back to tools menu"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  Back
+                </button>
+                <h3 id="business-tools-submenu-title" class="ml-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Business Tools</h3>
+              </div>
+              
+              <ul class="space-y-1" role="list">
+                {toolsCategories[1].tools.map(tool => (
+                  <li>
+                    <a href={tool.url} class="flex items-center px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]" role="menuitem">
+                      <span class="mr-3 text-lg">{tool.icon}</span>
+                      {tool.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <!-- Other Tools Submenu -->
+          <div 
+            id="other-tools-submenu" 
+            class="absolute inset-0 bg-white dark:bg-gray-900 border-t dark:border-gray-700 translate-x-full transition-transform duration-300 ease-out z-20"
+            role="menu"
+            aria-labelledby="other-tools-submenu-title"
+          >
+            <div class="pt-4">
+              <!-- Back Button -->
+              <div class="flex items-center px-4 py-3 border-b dark:border-gray-700 mb-4">
+                <button 
+                  type="button"
+                  class="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                  data-menu-back="other-tools"
+                  aria-label="Go back to tools menu"
+                >
+                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                  Back
+                </button>
+                <h3 id="other-tools-submenu-title" class="ml-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Other Tools</h3>
+              </div>
+              
+              <ul class="space-y-1" role="list">
+                {toolsCategories[2].tools.map(tool => (
                   <li>
                     <a href={tool.url} class="flex items-center px-4 py-3 text-base text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]" role="menuitem">
                       <span class="mr-3 text-lg">{tool.icon}</span>
@@ -1068,216 +1211,9 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
           } else {
             module.default.init();
           }
+        }).catch(error => {
+          console.warn('Mobile menu failed to load:', error);
         });
-            
-            if (!menuButton || !mobileMenu || !openIcon || !closeIcon || !mainMenu) {
-              console.log('Mobile menu elements not found');
-              return;
-            }
-            
-            // Get all menu triggers
-            const menuTriggers = document.querySelectorAll('[data-menu-trigger]');
-            const backButtons = document.querySelectorAll('[data-menu-back]');
-            
-            let isMenuOpen = false;
-            let activeSubmenu = null;
-            
-            function toggleMenu() {
-              isMenuOpen = !isMenuOpen;
-              
-              if (isMenuOpen) {
-                mobileMenu.classList.remove('hidden');
-                openIcon.classList.add('hidden');
-                closeIcon.classList.remove('hidden');
-                menuButton.setAttribute('aria-expanded', 'true');
-                
-                // Ensure main menu is visible and all submenus are hidden
-                if (mainMenu) {
-                  mainMenu.style.transform = 'translateX(0)';
-                }
-                hideAllSubmenus();
-              } else {
-                mobileMenu.classList.add('hidden');
-                openIcon.classList.remove('hidden');
-                closeIcon.classList.add('hidden');
-                menuButton.setAttribute('aria-expanded', 'false');
-                hideAllSubmenus();
-                activeSubmenu = null;
-              }
-            }
-            
-            function hideAllSubmenus() {
-              [toolsSubmenu, insuranceSubmenu, blogSubmenu].forEach(submenu => {
-                if (submenu) {
-                  submenu.style.transform = 'translateX(100%)';
-                }
-              });
-              
-              // Reset all menu trigger icons
-              menuTriggers.forEach(trigger => {
-                const icon = trigger.querySelector('svg');
-                if (icon) {
-                  icon.style.transform = 'rotate(0deg)';
-                }
-                trigger.setAttribute('aria-expanded', 'false');
-              });
-            }
-            
-            function showSubmenu(submenuType) {
-              if (!mainMenu) return;
-              
-              const submenuMap = {
-                'tools': toolsSubmenu,
-                'insurance': insuranceSubmenu,
-                'blog': blogSubmenu
-              };
-              
-              const submenu = submenuMap[submenuType];
-              if (!submenu) {
-                console.log(`Submenu ${submenuType} not found`);
-                return;
-              }
-              
-              // Hide all other submenus first
-              Object.values(submenuMap).forEach(sub => {
-                if (sub && sub !== submenu) {
-                  sub.style.transform = 'translateX(100%)';
-                }
-              });
-              
-              // Show the selected submenu with slide-in animation
-              submenu.style.transform = 'translateX(0)';
-              activeSubmenu = submenuType;
-              
-              // Update the trigger icon
-              const trigger = document.querySelector(`[data-menu-trigger="${submenuType}"]`);
-              if (trigger) {
-                const icon = trigger.querySelector('svg');
-                if (icon) {
-                  icon.style.transform = 'rotate(90deg)';
-                }
-                trigger.setAttribute('aria-expanded', 'true');
-              }
-            }
-            
-            function hideSubmenu() {
-              if (activeSubmenu) {
-                const submenuMap = {
-                  'tools': toolsSubmenu,
-                  'insurance': insuranceSubmenu,
-                  'blog': blogSubmenu
-                };
-                
-                const submenu = submenuMap[activeSubmenu];
-                if (submenu) {
-                  submenu.style.transform = 'translateX(100%)';
-                }
-                
-                // Reset the trigger icon
-                const trigger = document.querySelector(`[data-menu-trigger="${activeSubmenu}"]`);
-                if (trigger) {
-                  const icon = trigger.querySelector('svg');
-                  if (icon) {
-                    icon.style.transform = 'rotate(0deg)';
-                  }
-                  trigger.setAttribute('aria-expanded', 'false');
-                }
-                
-                activeSubmenu = null;
-              }
-            }
-            
-            // Main menu toggle
-            if (menuButton) menuButton.addEventListener('click', toggleMenu);
-            
-            // Menu trigger buttons
-            if (menuTriggers && menuTriggers.length) {
-              menuTriggers.forEach(trigger => {
-                if (trigger) {
-                  trigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const submenuType = trigger.getAttribute('data-menu-trigger');
-                    if (activeSubmenu === submenuType) {
-                      hideSubmenu();
-                    } else {
-                      showSubmenu(submenuType);
-                    }
-                  });
-                }
-              });
-            }
-            
-            // Back buttons
-            if (backButtons && backButtons.length) {
-              backButtons.forEach(button => {
-                if (button) {
-                  button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    hideSubmenu();
-                  });
-                }
-              });
-            }
-            
-            // Close menu when clicking on a link
-            if (mobileMenu) {
-              const mobileLinks = mobileMenu.querySelectorAll('a:not([data-menu-trigger]):not([data-menu-back])');
-              mobileLinks.forEach(link => {
-                if (link) {
-                  link.addEventListener('click', () => {
-                    if (isMenuOpen) {
-                      toggleMenu();
-                    }
-                  });
-                }
-              });
-            }
-            
-            // Close menu on escape key
-            document.addEventListener('keydown', (e) => {
-              if (e.key === 'Escape' && isMenuOpen) {
-                if (activeSubmenu) {
-                  hideSubmenu();
-                } else {
-                  toggleMenu();
-                }
-              }
-            });
-            
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-              if (isMenuOpen && !menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-                toggleMenu();
-              }
-            });
-            
-            // Handle mobile menu positioning
-            function updateMobileMenuPosition() {
-              if (mobileMenu) {
-                const rect = mobileMenu.getBoundingClientRect();
-                [toolsSubmenu, insuranceSubmenu, blogSubmenu].forEach(submenu => {
-                  if (submenu) {
-                    submenu.style.top = '0';
-                    submenu.style.left = '0';
-                    submenu.style.right = '0';
-                    submenu.style.bottom = '0';
-                  }
-                });
-              }
-            }
-            
-            // Update position on resize
-            window.addEventListener('resize', updateMobileMenuPosition);
-            updateMobileMenuPosition();
-          }
-          
-          // Initialize when DOM is ready
-          if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initMobileMenu);
-          } else {
-            initMobileMenu();
-          }
-        })();
       </script>
       
       <!-- Search Functionality -->
@@ -1464,5 +1400,9 @@ const USE_CDN = import.meta.env.USE_CDN === 'true' && import.meta.env.PROD;
         <small style="font-size:13px;">© {currentYear} {SITE.NAME}. All rights reserved.</small>
       </div>
     </footer>
+    
+    <!-- GDPR Cookie Consent Banner -->
+    <CookieBanner />
+    
   </body>
 </html>

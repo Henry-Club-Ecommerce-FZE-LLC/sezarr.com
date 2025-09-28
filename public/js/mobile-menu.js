@@ -22,6 +22,9 @@ const MobileMenu = {
       closeIcon: document.getElementById('mobile-menu-close'),
       mainMenu: document.getElementById('main-menu'),
       toolsSubmenu: document.getElementById('tools-submenu'),
+      personalToolsSubmenu: document.getElementById('personal-tools-submenu'),
+      businessToolsSubmenu: document.getElementById('business-tools-submenu'),
+      otherToolsSubmenu: document.getElementById('other-tools-submenu'),
       insuranceSubmenu: document.getElementById('insurance-submenu'),
       blogSubmenu: document.getElementById('blog-submenu')
     };
@@ -60,7 +63,7 @@ const MobileMenu = {
       return;
     }
     
-    // Handle submenu triggers
+    // Handle submenu triggers - prevent default only for trigger buttons
     const trigger = target.closest('[data-menu-trigger]');
     if (trigger) {
       event.preventDefault();
@@ -69,7 +72,7 @@ const MobileMenu = {
       return;
     }
     
-    // Handle back buttons
+    // Handle back buttons - prevent default only for back buttons
     const backButton = target.closest('[data-menu-back]');
     if (backButton) {
       event.preventDefault();
@@ -77,10 +80,12 @@ const MobileMenu = {
       return;
     }
     
-    // Handle menu links
-    const menuLink = target.closest('#mobile-menu a:not([data-menu-trigger]):not([data-menu-back])');
-    if (menuLink && this.state.isOpen) {
-      requestAnimationFrame(() => this.toggleMenu());
+    // Handle regular menu links - DO NOT prevent default, allow normal navigation
+    const menuLink = target.closest('#mobile-menu a[href]');
+    if (menuLink && this.state.isOpen && !trigger && !backButton) {
+      // Allow normal navigation, just close menu after a delay
+      setTimeout(() => this.toggleMenu(), 100);
+      // Don't prevent default - let the link work normally
     }
   },
   
@@ -126,8 +131,8 @@ const MobileMenu = {
   },
   
   hideAllSubmenus() {
-    const { toolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
-    const submenus = [toolsSubmenu, insuranceSubmenu, blogSubmenu];
+    const { toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
+    const submenus = [toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu];
     
     requestAnimationFrame(() => {
       submenus.forEach(submenu => {
@@ -158,9 +163,12 @@ const MobileMenu = {
   },
   
   showSubmenu(submenuType) {
-    const { toolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
+    const { toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
     const submenuMap = {
       'tools': toolsSubmenu,
+      'personal-tools': personalToolsSubmenu,
+      'business-tools': businessToolsSubmenu,
+      'other-tools': otherToolsSubmenu,
       'insurance': insuranceSubmenu,
       'blog': blogSubmenu
     };
@@ -169,10 +177,18 @@ const MobileMenu = {
     if (!submenu) return;
     
     requestAnimationFrame(() => {
-      // Hide other submenus
-      Object.values(submenuMap).forEach(sub => {
+      // Hide other submenus at the same level
+      Object.entries(submenuMap).forEach(([key, sub]) => {
         if (sub && sub !== submenu) {
-          sub.style.transform = 'translateX(100%)';
+          // Keep parent menus visible for nested navigation
+          if (submenuType.includes('-tools') && key === 'tools') {
+            // Don't hide tools submenu when showing tool categories
+          } else if (key.includes('-tools') && submenuType === 'tools') {
+            // Hide tool category submenus when showing tools main menu
+            sub.style.transform = 'translateX(100%)';
+          } else if (!key.includes('-tools') || !submenuType.includes('-tools')) {
+            sub.style.transform = 'translateX(100%)';
+          }
         }
       });
       
@@ -194,9 +210,12 @@ const MobileMenu = {
   },
   
   hideSubmenu() {
-    const { toolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
+    const { toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
     const submenuMap = {
       'tools': toolsSubmenu,
+      'personal-tools': personalToolsSubmenu,
+      'business-tools': businessToolsSubmenu,
+      'other-tools': otherToolsSubmenu,
       'insurance': insuranceSubmenu,
       'blog': blogSubmenu
     };
@@ -219,17 +238,22 @@ const MobileMenu = {
         });
       }
       
-      this.state.activeSubmenu = null;
+      // If hiding a nested submenu, go back to parent
+      if (this.state.activeSubmenu.includes('-tools')) {
+        this.state.activeSubmenu = 'tools';
+      } else {
+        this.state.activeSubmenu = null;
+      }
     }
   },
   
   updatePosition() {
-    const { mobileMenu, toolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
+    const { mobileMenu, toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu } = this.elements;
     if (!mobileMenu) return;
     
     requestAnimationFrame(() => {
       const rect = mobileMenu.getBoundingClientRect();
-      [toolsSubmenu, insuranceSubmenu, blogSubmenu].forEach(submenu => {
+      [toolsSubmenu, personalToolsSubmenu, businessToolsSubmenu, otherToolsSubmenu, insuranceSubmenu, blogSubmenu].forEach(submenu => {
         if (submenu) {
           submenu.style.top = '0';
           submenu.style.left = '0';
