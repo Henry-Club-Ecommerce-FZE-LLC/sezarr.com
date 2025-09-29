@@ -1,0 +1,320 @@
+---
+// Universal Right Sidebar for Calculator Pages
+// Strategic ad placement with content optimization
+
+import AdSenseBlock from './AdSenseBlock.astro';
+
+interface Props {
+  calculatorType: 'auto' | 'home' | 'life' | 'business' | 'health' | 'disability' | 'pet' | 'travel' | 'professional' | 'workers';
+  currentState?: string;
+}
+
+const { calculatorType, currentState = 'US' } = Astro.props;
+
+const calculatorData = {
+  auto: {
+    title: 'Auto Insurance',
+    icon: '🚗',
+    tips: [
+      'Bundle auto + home for 25% savings',
+      'Good student discounts up to 20%',
+      'Safe driver discounts available',
+      'Increase deductibles to lower premiums'
+    ],
+    companies: ['GEICO', 'State Farm', 'Progressive', 'Allstate', 'USAA'],
+    avgPremium: '$1,588/year',
+    topFeatures: ['Accident forgiveness', 'Gap coverage', 'Roadside assistance']
+  },
+  home: {
+    title: 'Homeowners Insurance',
+    icon: '🏠',
+    tips: [
+      'Bundle with auto for discounts',
+      'Install security systems for savings',
+      'Maintain good credit score',
+      'Consider higher deductibles'
+    ],
+    companies: ['State Farm', 'Allstate', 'USAA', 'Liberty Mutual', 'Farmers'],
+    avgPremium: '$1,383/year',
+    topFeatures: ['Replacement cost coverage', 'Personal liability', 'Loss of use']
+  },
+  life: {
+    title: 'Life Insurance',
+    icon: '💰',
+    tips: [
+      'Buy while young for lower rates',
+      'Consider term for temporary needs',
+      'Review coverage every 5 years',
+      'Compare quotes from multiple insurers'
+    ],
+    companies: ['Northwestern Mutual', 'New York Life', 'MassMutual', 'Guardian', 'Prudential'],
+    avgPremium: '$158/month',
+    topFeatures: ['Level premiums', 'Conversion options', 'Accelerated benefits']
+  },
+  business: {
+    title: 'Business Insurance',
+    icon: '🏢',
+    tips: [
+      'Start with general liability',
+      'Consider professional liability',
+      'Protect business property',
+      'Review coverage annually'
+    ],
+    companies: ['The Hartford', 'Travelers', 'CNA', 'Liberty Mutual', 'Zurich'],
+    avgPremium: '$1,281/year',
+    topFeatures: ['General liability', 'Property coverage', 'Business interruption']
+  },
+  health: {
+    title: 'Health Insurance',
+    icon: '🏥',
+    tips: [
+      'Consider HSA-eligible plans',
+      'Compare network coverage',
+      'Review prescription benefits',
+      'Check preventive care coverage'
+    ],
+    companies: ['Anthem', 'UnitedHealth', 'Aetna', 'Cigna', 'Kaiser Permanente'],
+    avgPremium: '$456/month',
+    topFeatures: ['Preventive care', 'Prescription coverage', 'Telehealth']
+  },
+  disability: {
+    title: 'Disability Insurance',
+    icon: '🦽',
+    tips: [
+      'Replace 60-70% of income',
+      'Consider both short & long-term',
+      'Review employer benefits first',
+      'Buy individual policy for portability'
+    ],
+    companies: ['Guardian', 'Principal', 'Unum', 'MetLife', 'Mutual of Omaha'],
+    avgPremium: '$200/month',
+    topFeatures: ['Own occupation coverage', 'Partial benefits', 'Cost of living adjustments']
+  },
+  pet: {
+    title: 'Pet Insurance',
+    icon: '🐕',
+    tips: [
+      'Enroll pets while young',
+      'Compare coverage limits',
+      'Check hereditary conditions',
+      'Review waiting periods'
+    ],
+    companies: ['Lemonade', 'ASPCA', 'Petplan', 'Healthy Paws', 'Embrace'],
+    avgPremium: '$48/month',
+    topFeatures: ['Accident & illness', 'Hereditary conditions', 'Prescription drugs']
+  },
+  travel: {
+    title: 'Travel Insurance',
+    icon: '✈️',
+    tips: [
+      'Buy within 14 days of booking',
+      'Consider trip cost and duration',
+      'Check medical evacuation coverage',
+      'Review existing coverage first'
+    ],
+    companies: ['Travel Guard', 'Allianz', 'World Nomads', 'InsureMyTrip', 'Travelex'],
+    avgPremium: '$145/trip',
+    topFeatures: ['Trip cancellation', 'Medical emergencies', 'Baggage protection']
+  },
+  professional: {
+    title: 'Professional Liability',
+    icon: '⚖️',
+    tips: [
+      'Match coverage to profession',
+      'Consider prior acts coverage',
+      'Review policy exclusions',
+      'Maintain continuous coverage'
+    ],
+    companies: ['Hiscox', 'The Hartford', 'CNA', 'Travelers', 'Liberty Mutual'],
+    avgPremium: '$800/year',
+    topFeatures: ['Errors & omissions', 'Defense costs', 'Regulatory proceedings']
+  },
+  workers: {
+    title: 'Workers Compensation',
+    icon: '👷',
+    tips: [
+      'Required in most states',
+      'Premiums based on payroll',
+      'Safety programs reduce costs',
+      'Audit payroll classifications'
+    ],
+    companies: ['The Hartford', 'Travelers', 'Liberty Mutual', 'Zurich', 'CNA'],
+    avgPremium: '$936/year per $100k payroll',
+    topFeatures: ['Medical expenses', 'Lost wages', 'Disability benefits']
+  }
+};
+
+const currentData = calculatorData[calculatorType];
+---
+
+<!-- RIGHT SIDEBAR - Ads, Tips, and Additional Info -->
+<aside class="lg:col-span-3 order-3">
+  <div class="sticky top-8 space-y-6">
+    
+    <!-- Strategic Ad Placement #1 - Top of Sidebar -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <AdSenseBlock 
+        slot="calculator-sidebar-top"
+        format="rectangle"
+        className="min-h-[280px] w-full"
+      />
+    </div>
+
+    <!-- Insurance Tips & Savings -->
+    <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-6 border border-green-200 dark:border-green-700 shadow-lg">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center text-lg">
+        <span class="text-green-500 mr-2">{currentData.icon}</span>
+        {currentData.title} Money-Saving Tips
+      </h3>
+      <div class="space-y-3">
+        {currentData.tips.map((tip, index) => (
+          <div class="flex items-start space-x-3 p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+            <span class="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+              {index + 1}
+            </span>
+            <p class="text-sm text-gray-700 dark:text-gray-300 font-medium leading-relaxed">{tip}</p>
+          </div>
+        ))}
+      </div>
+      <div class="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg border border-green-300 dark:border-green-600">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-green-800 dark:text-green-200">Average Premium:</span>
+          <span class="text-lg font-bold text-green-700 dark:text-green-300">{currentData.avgPremium}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strategic Ad Placement #2 - Middle Sidebar -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <AdSenseBlock 
+        slot="calculator-sidebar-middle"
+        format="rectangle"
+        className="min-h-[250px] w-full"
+      />
+    </div>
+
+    <!-- Top Insurance Companies -->
+    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-700 shadow-lg">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center text-lg">
+        <span class="text-blue-500 mr-2">🏆</span>
+        Top-Rated Companies
+      </h3>
+      <div class="space-y-3">
+        {currentData.companies.map((company, index) => (
+          <div class="flex items-center justify-between p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors">
+            <div class="flex items-center space-x-3">
+              <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                {index + 1}
+              </span>
+              <span class="font-medium text-gray-900 dark:text-white">{company}</span>
+            </div>
+            <div class="flex items-center space-x-1">
+              {[1,2,3,4,5].map(star => (
+                <span class="text-yellow-400">★</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-4 text-center">
+        <a 
+          href={`/insurance-companies/${calculatorType}/`}
+          class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-colors text-sm"
+        >
+          Compare All Companies →
+        </a>
+      </div>
+    </div>
+
+    <!-- Key Features -->
+    <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-lg p-6 border border-purple-200 dark:border-purple-700 shadow-lg">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-4 flex items-center text-lg">
+        <span class="text-purple-500 mr-2">⭐</span>
+        Key Coverage Features
+      </h3>
+      <div class="space-y-3">
+        {currentData.topFeatures.map((feature, index) => (
+          <div class="flex items-center space-x-3 p-3 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+            <span class="text-purple-500">✓</span>
+            <span class="text-sm font-medium text-gray-900 dark:text-white">{feature}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Strategic Ad Placement #3 - Bottom Sidebar -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <AdSenseBlock 
+        slot="calculator-sidebar-bottom"
+        format="rectangle"
+        className="min-h-[280px] w-full"
+      />
+    </div>
+
+    <!-- Newsletter Signup -->
+    <div class="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-6 border border-orange-200 dark:border-orange-700 shadow-lg">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+        <span class="text-orange-500 mr-2">📧</span>
+        Insurance Rate Alerts
+      </h3>
+      <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+        Get notified when {currentData.title.toLowerCase()} rates drop in your area.
+      </p>
+      <form class="space-y-3" id="newsletter-signup">
+        <input 
+          type="email" 
+          placeholder="Enter your email"
+          class="w-full p-2 border border-orange-200 dark:border-orange-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 text-sm"
+          required
+        />
+        <button 
+          type="submit"
+          class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-2 rounded-lg transition-colors text-sm"
+        >
+          Get Rate Alerts
+        </button>
+      </form>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+        No spam. Unsubscribe anytime. Privacy protected.
+      </p>
+    </div>
+
+  </div>
+</aside>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('newsletter-signup');
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = form.querySelector('input[type="email"]').value;
+        
+        // Analytics tracking
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'newsletter_signup', {
+            'event_category': 'engagement',
+            'event_label': 'sidebar_newsletter',
+            'calculator_type': '{calculatorType}'
+          });
+        }
+        
+        // Simple success feedback
+        const button = form.querySelector('button');
+        const originalText = button.textContent;
+        button.textContent = 'Subscribed! ✓';
+        button.disabled = true;
+        button.classList.add('bg-green-500', 'hover:bg-green-500');
+        button.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+        
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+          button.classList.remove('bg-green-500', 'hover:bg-green-500');
+          button.classList.add('bg-orange-500', 'hover:bg-orange-600');
+          form.querySelector('input').value = '';
+        }, 3000);
+      });
+    }
+  });
+</script>

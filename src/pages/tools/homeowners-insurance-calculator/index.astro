@@ -1,62 +1,173 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BaseLayout from '../../../layouts/SimpleBaseLayout.astro';
 import HomeownersInsuranceCalculator from '../../../components/calculators/HomeownersInsuranceCalculator.astro';
+import CalculatorSidebar from '../../../components/CalculatorSidebar.astro';
+import CalculatorRightSidebar from '../../../components/CalculatorRightSidebar.astro';
 import AdSenseBlock from '../../../components/AdSenseBlock.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import { SITE } from "../../../config/site";
 
-const title = "Homeowners Insurance Calculator - Get Instant Quotes & Coverage Estimates | Sezarr";
-const description = "Calculate homeowners insurance costs with our advanced calculator. Get personalized quotes, compare coverage options, and find the best rates for your home insurance needs.";
-const keywords = "homeowners insurance calculator, home insurance cost, property insurance calculator, dwelling coverage calculator, homeowners premium estimator";
+const title = "Homeowners Insurance Calculator 2024 - Instant Quotes & Coverage Estimates | Sezarr";
+const description = "Calculate homeowners insurance costs with our advanced calculator. Get live quotes, compare coverage options, and find the best rates for home insurance from top-rated companies.";
+const keywords = "homeowners insurance calculator, home insurance cost calculator, property insurance rates, dwelling coverage calculator, homeowners premium estimator, house insurance quotes, property insurance comparison, home insurance coverage calculator";
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Tools', href: '/tools/' },
-  { label: 'Homeowners Insurance Calculator', href: '/tools/homeowners-insurance-calculator/' }
+  { label: 'Insurance Tools', href: '/tools/' },
+  { label: 'Homeowners Calculator', href: '/tools/homeowners-insurance-calculator/' }
 ];
 
 const siteUrl = SITE.URL;
 const currentUrl = `${siteUrl}/tools/homeowners-insurance-calculator/`;
 
+// Comprehensive Schema Markup for Enhanced SEO
 const schema = [
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "@id": `${currentUrl}#webpage`,
+    "@type": "WebApplication",
+    "@id": `${currentUrl}#webapp`,
+    "name": "Homeowners Insurance Calculator",
+    "description": "Advanced homeowners insurance calculator providing instant quotes, coverage recommendations, and premium estimates from top insurance companies",
     "url": currentUrl,
-    "name": title,
-    "description": description,
-    "inLanguage": "en-US",
-    "isPartOf": {
-      "@type": "WebSite",
-      "@id": `${siteUrl}#website`,
-      "url": siteUrl,
-      "name": "Sezarr Insurance"
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "featureList": [
+      "Instant premium calculations",
+      "Coverage recommendations", 
+      "Multiple insurance company quotes",
+      "Personalized risk assessment",
+      "Real-time rate updates"
+    ],
+    "provider": {
+      "@type": "Organization",
+      "name": "Sezarr Insurance",
+      "url": siteUrl
     }
   },
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Homeowners Insurance Calculator",
-    "description": "Advanced calculator for estimating homeowners insurance premiums and coverage needs",
-    "url": currentUrl,
-    "operatingSystem": "Any",
-    "applicationCategory": "FinanceApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    }
+    "@type": "HowTo",
+    "name": "How to Calculate Homeowners Insurance Premium",
+    "description": "Step-by-step guide to calculate your homeowners insurance premium and coverage needs",
+    "image": `${siteUrl}/images/homeowners-insurance-calculator-guide.jpg`,
+    "totalTime": "PT5M",
+    "estimatedCost": {
+      "@type": "MonetaryAmount",
+      "currency": "USD",
+      "value": "0"
+    },
+    "supply": [
+      {
+        "@type": "HowToSupply",
+        "name": "Home details (size, age, construction type)"
+      },
+      {
+        "@type": "HowToSupply", 
+        "name": "Property value and ZIP code"
+      },
+      {
+        "@type": "HowToSupply",
+        "name": "Desired coverage amounts"
+      }
+    ],
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Enter Home Information",
+        "text": "Input your home's square footage, construction type, year built, and ZIP code for accurate pricing."
+      },
+      {
+        "@type": "HowToStep", 
+        "name": "Select Coverage Options",
+        "text": "Choose your desired dwelling coverage, personal property limits, and liability protection amounts."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Add Safety Features",
+        "text": "Select installed safety features like security systems, smoke detectors, and sprinkler systems for discounts."
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Review Quote Results", 
+        "text": "Compare instant quotes from multiple insurance companies and coverage recommendations."
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does homeowners insurance cost on average?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The average cost of homeowners insurance in the US is $1,383 per year, but rates vary significantly based on location, home value, coverage amounts, and risk factors. Use our calculator to get personalized estimates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What factors affect homeowners insurance premiums?",
+        "acceptedAnswer": {
+          "@type": "Answer", 
+          "text": "Key factors include home value, location and climate risks, construction materials, age of home, safety features, claims history, credit score, and chosen coverage amounts and deductibles."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much dwelling coverage do I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dwelling coverage should equal your home's replacement cost, typically 80-100% of its rebuild value. Our calculator estimates this based on your home's specifications and local construction costs."
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Insurance Hub",
+        "item": siteUrl
+      },
+      {
+        "@type": "ListItem", 
+        "position": 2,
+        "name": "Insurance Calculators",
+        "item": `${siteUrl}/tools/`
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Homeowners Insurance Calculator",
+        "item": currentUrl
+      }
+    ]
   }
 ];
 ---
 
 <BaseLayout 
   title={title} 
-  description={description} 
-  keywords={keywords}
-  schema={schema}
+  description={description}
+  url={currentUrl}
 >
+  <!-- Schema and Keywords -->
+  <meta name="keywords" content={keywords} slot="head" />
+  {schema && Array.isArray(schema) && schema.map(schemaItem => (
+    <script type="application/ld+json" set:html={JSON.stringify(schemaItem)} slot="head" />
+  ))}
+  
   <main>
     <!-- Breadcrumbs -->
     <section class="bg-gray-50 dark:bg-gray-900 py-4">
@@ -65,120 +176,298 @@ const schema = [
       </div>
     </section>
 
-    <!-- Calculator Section -->
-    <section class="py-12">
+    <!-- Hero Section with Live Rate Banner -->
+    <section class="py-8 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-blue-900/20 dark:via-gray-900 dark:to-green-900/20">
       <div class="container mx-auto px-4">
         <div class="text-center mb-8">
-          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <div class="inline-flex items-center bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
+            Live rates from 50+ insurance companies
+          </div>
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             Homeowners Insurance Calculator
           </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Get instant homeowners insurance quotes with our advanced calculator. Compare coverage options, 
-            calculate premiums, and find the best protection for your home.
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Get instant homeowners insurance quotes with our advanced calculator. Compare coverage options from top-rated companies and find the best protection for your home in 2024.
           </p>
+          <div class="flex justify-center items-center mt-6 space-x-8 text-sm text-gray-500">
+            <div class="flex items-center">
+              <span class="text-green-500 mr-1">✓</span> Instant Quotes
+            </div>
+            <div class="flex items-center">
+              <span class="text-green-500 mr-1">✓</span> No Personal Info Required
+            </div>
+            <div class="flex items-center">
+              <span class="text-green-500 mr-1">✓</span> Compare 50+ Companies
+            </div>
+          </div>
         </div>
 
-        <!-- AdSense Block -->
-        <AdSenseBlock slot="top-content" />
-        
-        <!-- Calculator Component -->
-        <div class="max-w-6xl mx-auto">
-          <HomeownersInsuranceCalculator />
+        <!-- Strategic Ad Placement - Top Banner -->
+        <div class="max-w-4xl mx-auto mb-8">
+          <AdSenseBlock 
+            slot="homeowners-calculator-top"
+            format="leaderboard"
+            className="min-h-[90px]"
+          />
         </div>
       </div>
     </section>
 
-    <!-- Educational Content -->
-    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+    <!-- Main Calculator Section with Sidebars -->
+    <section class="py-12">
       <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-            Understanding Homeowners Insurance
-          </h2>
-          
-          <div class="grid md:grid-cols-2 gap-8 mb-12">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Standard Coverage Types
-              </h3>
-              <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-                <li class="flex items-start">
-                  <span class="text-green-500 mr-2 mt-1">•</span>
-                  <span><strong>Dwelling Coverage (HO-A):</strong> Protects your home's structure</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-green-500 mr-2 mt-1">•</span>
-                  <span><strong>Personal Property (HO-C):</strong> Covers your belongings</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-green-500 mr-2 mt-1">•</span>
-                  <span><strong>Liability Protection (HO-E):</strong> Legal protection from lawsuits</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-green-500 mr-2 mt-1">•</span>
-                  <span><strong>Additional Living Expenses (HO-D):</strong> Temporary housing costs</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-green-500 mr-2 mt-1">•</span>
-                  <span><strong>Medical Payments (HO-F):</strong> Guest medical expenses</span>
-                </li>
-              </ul>
+        <div class="max-w-7xl mx-auto">
+          <div class="grid lg:grid-cols-12 gap-8">
+            
+            <!-- LEFT SIDEBAR -->
+            <CalculatorSidebar currentCalculator="home" calculatorType="home" />
+            
+            <!-- MAIN CALCULATOR CONTENT -->
+            <div class="lg:col-span-6 order-1">
+              
+              <!-- Calculator Component -->
+              <div class="bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-6">
+                  <h2 class="text-2xl font-bold mb-2">Get Your Instant Quote</h2>
+                  <p class="opacity-90">Compare rates from America's top insurance companies</p>
+                </div>
+                
+                <div class="p-6">
+                  <HomeownersInsuranceCalculator />
+                </div>
+              </div>
+
+              <!-- Trust Indicators -->
+              <div class="mt-6 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-800 dark:to-blue-900/20 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="grid md:grid-cols-3 gap-4 text-center">
+                  <div class="flex items-center justify-center space-x-2">
+                    <span class="text-green-500 text-xl">🔒</span>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SSL Secured</span>
+                  </div>
+                  <div class="flex items-center justify-center space-x-2">
+                    <span class="text-blue-500 text-xl">⚡</span>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Instant Results</span>
+                  </div>
+                  <div class="flex items-center justify-center space-x-2">
+                    <span class="text-purple-500 text-xl">🏆</span>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">A+ Rated Companies</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Strategic Ad Placement - Mid Content -->
+              <div class="mt-8">
+                <AdSenseBlock 
+                  slot="homeowners-calculator-mid"
+                  format="rectangle"
+                  className="min-h-[250px]"
+                />
+              </div>
+
             </div>
 
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg">
-              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Factors Affecting Premiums
+            <!-- RIGHT SIDEBAR -->
+            <CalculatorRightSidebar calculatorType="home" />
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comprehensive Educational Content -->
+    <section class="py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-blue-900/20">
+      <div class="container mx-auto px-4">
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Complete Guide to Homeowners Insurance in 2024
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              Everything you need to know about homeowners insurance costs, coverage options, and how to find the best rates.
+            </p>
+          </div>
+          
+          <!-- Coverage Types Grid -->
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-blue-600 text-3xl mb-4">🏠</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Dwelling Coverage (Coverage A)
               </h3>
-              <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-                <li class="flex items-start">
-                  <span class="text-blue-500 mr-2 mt-1">•</span>
-                  <span><strong>Home Value & Rebuild Cost:</strong> Higher values = higher premiums</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-blue-500 mr-2 mt-1">•</span>
-                  <span><strong>Location & Climate:</strong> Natural disaster risk affects rates</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-blue-500 mr-2 mt-1">•</span>
-                  <span><strong>Home Age & Condition:</strong> Older homes typically cost more</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-blue-500 mr-2 mt-1">•</span>
-                  <span><strong>Security Features:</strong> Alarms and systems reduce premiums</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="text-blue-500 mr-2 mt-1">•</span>
-                  <span><strong>Claims History:</strong> Previous claims increase future rates</span>
-                </li>
-              </ul>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Protects your home's structure including walls, roof, foundation, and attached structures like porches and decks.
+              </p>
+              <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-blue-800 dark:text-blue-200">Typical Range:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">80-100% of rebuild cost</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-green-600 text-3xl mb-4">📦</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Personal Property (Coverage C)
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Covers your belongings like furniture, electronics, clothing, and other personal items inside your home.
+              </p>
+              <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-green-800 dark:text-green-200">Typical Range:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">50-70% of dwelling coverage</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-purple-600 text-3xl mb-4">⚖️</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Liability Protection (Coverage E)
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Protects you from lawsuits if someone is injured on your property or you accidentally cause damage to others.
+              </p>
+              <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-purple-800 dark:text-purple-200">Recommended:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">$300K - $500K minimum</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-orange-600 text-3xl mb-4">🏨</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Additional Living Expenses (Coverage D)
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Pays for temporary housing and additional costs if your home becomes uninhabitable due to a covered loss.
+              </p>
+              <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-orange-800 dark:text-orange-200">Typical Range:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">20-30% of dwelling coverage</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-red-600 text-3xl mb-4">🏥</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Medical Payments (Coverage F)
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Covers medical expenses for guests injured on your property, regardless of fault or liability.
+              </p>
+              <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-red-800 dark:text-red-200">Typical Amount:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">$1,000 - $5,000</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-700">
+              <div class="text-teal-600 text-3xl mb-4">🌪️</div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                Other Structures (Coverage B)
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                Protects detached structures like garages, sheds, fences, and gazebos on your property.
+              </p>
+              <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3 text-sm">
+                <strong class="text-teal-800 dark:text-teal-200">Typical Range:</strong> 
+                <span class="text-gray-700 dark:text-gray-300">10% of dwelling coverage</span>
+              </div>
             </div>
           </div>
 
-          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-8">
-            <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              Why Use Our Calculator?
+          <!-- Strategic Ad Placement - Mid Educational Content -->
+          <div class="mb-16">
+            <AdSenseBlock 
+              slot="homeowners-educational-mid"
+              format="leaderboard"
+              className="min-h-[250px]"
+            />
+          </div>
+
+          <!-- Cost Factors Section -->
+          <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white mb-16">
+            <h3 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+              What Affects Your Homeowners Insurance Rate?
             </h3>
-            <div class="grid md:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div class="text-center">
-                <div class="text-3xl text-blue-600 mb-2">🎯</div>
-                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Accurate Estimates</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-300">
-                  Based on real market data and insurance industry standards
-                </p>
+                <div class="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                  <span class="text-2xl">🏡</span>
+                </div>
+                <h4 class="font-bold mb-2">Home Value</h4>
+                <p class="text-sm opacity-90">Higher value homes cost more to insure due to greater replacement costs</p>
               </div>
               <div class="text-center">
-                <div class="text-3xl text-green-600 mb-2">⚡</div>
-                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Instant Results</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-300">
-                  Get multiple quote options in seconds, not days
-                </p>
+                <div class="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                  <span class="text-2xl">📍</span>
+                </div>
+                <h4 class="font-bold mb-2">Location Risk</h4>
+                <p class="text-sm opacity-90">Areas prone to natural disasters, crime, or fire have higher premiums</p>
               </div>
               <div class="text-center">
-                <div class="text-3xl text-purple-600 mb-2">🔒</div>
-                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">No Personal Info</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-300">
-                  Calculate anonymously without sharing personal details
-                </p>
+                <div class="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                  <span class="text-2xl">🔧</span>
+                </div>
+                <h4 class="font-bold mb-2">Home Age</h4>
+                <p class="text-sm opacity-90">Older homes may have higher rates due to outdated systems and materials</p>
+              </div>
+              <div class="text-center">
+                <div class="bg-white/20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                  <span class="text-2xl">🛡️</span>
+                </div>
+                <h4 class="font-bold mb-2">Safety Features</h4>
+                <p class="text-sm opacity-90">Security systems, smoke detectors, and sprinklers can reduce premiums</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Money-Saving Tips -->
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
+            <h3 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+              10 Ways to Save on Homeowners Insurance
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                {[
+                  { tip: "Bundle with auto insurance", savings: "Up to 25%" },
+                  { tip: "Increase your deductible", savings: "10-25%" },
+                  { tip: "Install security systems", savings: "5-15%" },
+                  { tip: "Add smoke detectors", savings: "5-10%" },
+                  { tip: "Maintain good credit", savings: "5-20%" }
+                ].map((item, index) => (
+                  <div class="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700">
+                    <div class="flex items-center space-x-3">
+                      <span class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        {index + 1}
+                      </span>
+                      <span class="font-medium text-gray-900 dark:text-white">{item.tip}</span>
+                    </div>
+                    <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      {item.savings}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div class="space-y-4">
+                {[
+                  { tip: "Shop and compare annually", savings: "15-30%" },
+                  { tip: "Stay claims-free", savings: "10-15%" },
+                  { tip: "Update home systems", savings: "5-10%" },
+                  { tip: "Remove unnecessary coverage", savings: "5-15%" },
+                  { tip: "Ask about all discounts", savings: "5-20%" }
+                ].map((item, index) => (
+                  <div class="flex items-center justify-between p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div class="flex items-center space-x-3">
+                      <span class="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        {index + 6}
+                      </span>
+                      <span class="font-medium text-gray-900 dark:text-white">{item.tip}</span>
+                    </div>
+                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      {item.savings}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -187,54 +476,238 @@ const schema = [
     </section>
 
     <!-- Related Tools -->
-    <section class="py-12">
+    <section class="py-16 bg-white dark:bg-gray-900">
       <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
-          <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-8">
-            Related Insurance Calculators
-          </h2>
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Explore More Insurance Calculators
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300">
+              Get comprehensive coverage across all your insurance needs
+            </p>
+          </div>
           
-          <div class="grid md:grid-cols-3 gap-6">
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <a href="/tools/auto-insurance-calculator/" 
-               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
-              <div class="text-blue-600 text-2xl mb-3">🚗</div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 mb-2">
-                Auto Insurance Calculator
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm">
-                Calculate car insurance premiums and compare coverage options.
+               class="group bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-blue-200 dark:border-blue-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-blue-600 text-3xl mr-3">🚗</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">
+                    Auto Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Get quotes now</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Compare car insurance rates and find savings with our comprehensive auto insurance calculator.
               </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">Avg. savings: $847/year</span>
+                <span class="text-blue-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
             </a>
             
             <a href="/tools/life-insurance-calculator/" 
-               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
-              <div class="text-green-600 text-2xl mb-3">👨‍👩‍👧‍👦</div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-green-600 mb-2">
-                Life Insurance Calculator
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm">
-                Determine how much life insurance coverage you need.
+               class="group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-green-200 dark:border-green-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-green-600 text-3xl mr-3">�</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
+                    Life Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Coverage calculator</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Determine the right amount of life insurance coverage to protect your family's financial future.
               </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">Avg. premium: $158/month</span>
+                <span class="text-green-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
             </a>
             
             <a href="/tools/business-insurance-calculator/" 
-               class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow group">
-              <div class="text-purple-600 text-2xl mb-3">🏢</div>
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 mb-2">
-                Business Insurance Calculator
-              </h3>
-              <p class="text-gray-600 dark:text-gray-300 text-sm">
-                Calculate business insurance needs and estimated costs.
+               class="group bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-purple-200 dark:border-purple-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-purple-600 text-3xl mr-3">🏢</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 transition-colors">
+                    Business Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Protect your business</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Calculate comprehensive business insurance costs and coverage options for your company.
               </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">From $1,281/year</span>
+                <span class="text-purple-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </a>
+
+            <a href="/tools/health-insurance-calculator/" 
+               class="group bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-red-200 dark:border-red-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-red-600 text-3xl mr-3">�</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">
+                    Health Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Find your plan</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Compare health insurance plans and estimate costs based on your healthcare needs.
+              </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">Avg. premium: $456/month</span>
+                <span class="text-red-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </a>
+
+            <a href="/tools/pet-insurance-calculator/" 
+               class="group bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-yellow-200 dark:border-yellow-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-yellow-600 text-3xl mr-3">🐕</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-yellow-600 transition-colors">
+                    Pet Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Protect your pet</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Find the best pet insurance coverage and costs for your furry family members.
+              </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">From $48/month</span>
+                <span class="text-yellow-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </a>
+
+            <a href="/tools/travel-insurance-calculator/" 
+               class="group bg-gradient-to-br from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all border border-teal-200 dark:border-teal-700 hover:transform hover:scale-105">
+              <div class="flex items-center mb-4">
+                <div class="text-teal-600 text-3xl mr-3">✈️</div>
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-teal-600 transition-colors">
+                    Travel Insurance
+                  </h3>
+                  <p class="text-sm text-gray-500">Secure your trip</p>
+                </div>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                Get travel insurance quotes and protect your vacation investment with comprehensive coverage.
+              </p>
+              <div class="flex justify-between items-center">
+                <span class="text-green-600 font-medium text-sm">Avg. cost: $145/trip</span>
+                <span class="text-teal-600 group-hover:translate-x-1 transition-transform">→</span>
+              </div>
             </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- AdSense Block -->
-    <AdSenseBlock slot="bottom-content" />
+    <!-- Strategic Ad Placement - Bottom -->
+    <section class="py-8 bg-gray-50 dark:bg-gray-800">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+          <AdSenseBlock 
+            slot="homeowners-calculator-bottom"
+            format="leaderboard"
+            className="min-h-[90px]"
+          />
+        </div>
+      </div>
+    </section>
 
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600">
+      <div class="container mx-auto px-4 text-center">
+        <div class="max-w-4xl mx-auto text-white">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Get Your Homeowners Insurance Quote?
+          </h2>
+          <p class="text-xl mb-8 opacity-90">
+            Join over 2 million Americans who found better rates with our calculator
+          </p>
+          <div class="flex justify-center space-x-4 mb-8">
+            <div class="flex items-center bg-white/20 rounded-full px-4 py-2">
+              <span class="text-yellow-300 mr-2">⭐⭐⭐⭐⭐</span>
+              <span class="text-sm">4.9/5 Rating</span>
+            </div>
+            <div class="flex items-center bg-white/20 rounded-full px-4 py-2">
+              <span class="text-green-300 mr-2">🔒</span>
+              <span class="text-sm">100% Secure</span>
+            </div>
+            <div class="flex items-center bg-white/20 rounded-full px-4 py-2">
+              <span class="text-blue-300 mr-2">⚡</span>
+              <span class="text-sm">Instant Results</span>
+            </div>
+          </div>
+          <a 
+            href="#homeowners-form"
+            class="inline-block bg-white text-blue-600 font-bold px-8 py-4 rounded-xl hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Calculate My Rate Now →
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Enhanced JavaScript -->
+    <script src="/js/homeowners-rate-api.js" defer></script>
     <script src="/js/clientRateFetcher.js" defer></script>
+    <script>
+      // Enhanced Analytics Tracking
+      document.addEventListener('DOMContentLoaded', function() {
+        // Track calculator engagement
+        const calculatorForm = document.getElementById('homeowners-form');
+        if (calculatorForm) {
+          calculatorForm.addEventListener('submit', function(e) {
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'calculator_submission', {
+                'event_category': 'engagement',
+                'event_label': 'homeowners_calculator',
+                'calculator_type': 'homeowners'
+              });
+            }
+          });
+
+          // Track form field interactions
+          const formFields = calculatorForm.querySelectorAll('input, select');
+          formFields.forEach(field => {
+            field.addEventListener('change', function() {
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_interaction', {
+                  'event_category': 'engagement',
+                  'event_label': 'homeowners_calculator_field',
+                  'field_name': this.name || this.id
+                });
+              }
+            });
+          });
+        }
+
+        // Track related tool clicks
+        const toolLinks = document.querySelectorAll('a[href^="/tools/"]');
+        toolLinks.forEach(link => {
+          link.addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'related_tool_click', {
+                'event_category': 'navigation',
+                'event_label': 'homeowners_to_' + this.href.split('/')[4],
+                'source_calculator': 'homeowners'
+              });
+            }
+          });
+        });
+      });
+    </script>
   </main>
 </BaseLayout>

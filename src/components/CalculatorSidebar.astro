@@ -1,0 +1,207 @@
+---
+// Universal Calculator Sidebar Component
+// Reusable across all insurance calculators with dynamic content
+
+interface Props {
+  currentCalculator: string;
+  calculatorType: 'auto' | 'home' | 'life' | 'business' | 'health' | 'disability' | 'pet' | 'travel' | 'professional' | 'workers';
+}
+
+const { currentCalculator, calculatorType } = Astro.props;
+
+const calculatorLinks = {
+  auto: { url: '/tools/auto-insurance-calculator/', title: '🚗 Auto Insurance', desc: 'Car insurance rates & quotes' },
+  home: { url: '/tools/homeowners-insurance-calculator/', title: '🏠 Home Insurance', desc: 'Property coverage calculator' },
+  life: { url: '/tools/life-insurance-calculator/', title: '💰 Life Insurance', desc: 'Coverage needs & premiums' },
+  business: { url: '/tools/business-insurance-calculator/', title: '🏢 Business Insurance', desc: 'Commercial coverage quotes' },
+  health: { url: '/tools/health-insurance-calculator/', title: '🏥 Health Insurance', desc: 'Medical coverage estimator' },
+  disability: { url: '/tools/disability-insurance-calculator/', title: '🦽 Disability Insurance', desc: 'Income protection calculator' },
+  pet: { url: '/tools/pet-insurance-calculator/', title: '🐕 Pet Insurance', desc: 'Veterinary coverage rates' },
+  travel: { url: '/tools/travel-insurance-calculator/', title: '✈️ Travel Insurance', desc: 'Trip protection quotes' },
+  professional: { url: '/tools/professional-liability-calculator/', title: '⚖️ Professional Liability', desc: 'E&O insurance rates' },
+  workers: { url: '/tools/workers-comp-calculator/', title: '👷 Workers Comp', desc: 'Employee injury coverage' }
+};
+
+const relatedArticles = {
+  auto: [
+    { title: 'Best Car Insurance Companies 2025', url: '/auto/best-car-insurance-companies-2025/', desc: 'Top-rated insurers comparison' },
+    { title: 'Auto Insurance Requirements by State', url: '/auto/auto-insurance-requirements-by-state-2025/', desc: 'State-specific minimums' },
+    { title: 'Factors That Affect Car Insurance Rates', url: '/auto/factors-that-affect-car-insurance-rates-2025/', desc: 'Premium calculation factors' }
+  ],
+  home: [
+    { title: 'Homeowners Insurance Guide 2025', url: '/homeowners/homeowners-insurance-guide-2025/', desc: 'Complete coverage guide' },
+    { title: 'Home Insurance Claims Process', url: '/homeowners/home-insurance-claims-process/', desc: 'Filing & settlement guide' },
+    { title: 'Save Money on Home Insurance', url: '/homeowners/save-money-home-insurance/', desc: 'Premium reduction tips' }
+  ],
+  life: [
+    { title: 'Life Insurance Buying Guide', url: '/life-insurance/', desc: 'Types & coverage amounts' },
+    { title: 'Term vs Whole Life Insurance', url: '/life-insurance/term-vs-whole/', desc: 'Policy comparison guide' },
+    { title: 'Life Insurance for Families', url: '/life-insurance/family-coverage/', desc: 'Family protection planning' }
+  ],
+  business: [
+    { title: 'Business Insurance Guide 2025', url: '/business/business-insurance-guide-2025/', desc: 'Commercial coverage types' },
+    { title: 'General Liability Insurance', url: '/business/general-liability-insurance-2025/', desc: 'Essential business protection' },
+    { title: 'Small Business Insurance Requirements', url: '/business/small-business-insurance-requirements/', desc: 'Required coverage by state' }
+  ],
+  health: [
+    { title: 'Health Insurance Marketplace Guide', url: '/health-insurance/', desc: 'ACA plan comparison' },
+    { title: 'Understanding Health Insurance Costs', url: '/health-insurance/costs/', desc: 'Premiums, deductibles, copays' },
+    { title: 'Health Savings Account Benefits', url: '/health-insurance/hsa/', desc: 'Tax-advantaged savings' }
+  ],
+  disability: [
+    { title: 'Disability Insurance Guide', url: '/disability-insurance/', desc: 'Income protection basics' },
+    { title: 'Short-term vs Long-term Disability', url: '/disability-insurance/short-vs-long/', desc: 'Coverage duration guide' },
+    { title: 'Group vs Individual Disability', url: '/disability-insurance/group-vs-individual/', desc: 'Employer vs private plans' }
+  ],
+  pet: [
+    { title: 'Pet Insurance Buying Guide', url: '/pet-insurance/', desc: 'Coverage options & costs' },
+    { title: 'Pet Emergency Fund Guide', url: '/pets/pet-emergency-fund-guide/', desc: 'Veterinary cost planning' },
+    { title: 'Choosing a Veterinarian', url: '/pets/choosing-veterinarian-guide/', desc: 'Finding quality pet care' }
+  ],
+  travel: [
+    { title: 'Travel Insurance Guide', url: '/travel-insurance/', desc: 'Trip protection coverage' },
+    { title: 'International Travel Insurance', url: '/travel-insurance/international/', desc: 'Global coverage needs' },
+    { title: 'Travel Insurance for Seniors', url: '/travel-insurance/seniors/', desc: 'Age-specific considerations' }
+  ],
+  professional: [
+    { title: 'Professional Liability Insurance', url: '/business/professional-liability-insurance-2025/', desc: 'E&O coverage guide' },
+    { title: 'Malpractice Insurance by Profession', url: '/business/malpractice-insurance/', desc: 'Industry-specific coverage' },
+    { title: 'Cyber Liability Insurance', url: '/business-insurance/cyber-liability/', desc: 'Data breach protection' }
+  ],
+  workers: [
+    { title: 'Workers Compensation Insurance', url: '/business/workers-compensation/', desc: 'Employee injury coverage' },
+    { title: 'Workers Comp by State', url: '/business/workers-comp-by-state/', desc: 'State requirement guide' },
+    { title: 'Workplace Safety Programs', url: '/business/workplace-safety/', desc: 'Risk reduction strategies' }
+  ]
+};
+
+const stateGuides = [
+  { state: 'CA', name: 'California', url: '/california-insurance-guide/' },
+  { state: 'TX', name: 'Texas', url: '/texas-insurance-guide/' },
+  { state: 'FL', name: 'Florida', url: '/florida-insurance-guide/' },
+  { state: 'NY', name: 'New York', url: '/new-york-insurance-guide/' },
+  { state: 'IL', name: 'Illinois', url: '/illinois-insurance-guide/' },
+  { state: 'OH', name: 'Ohio', url: '/ohio-insurance-guide/' }
+];
+
+const currentArticles = relatedArticles[calculatorType] || [];
+const otherCalculators = Object.entries(calculatorLinks).filter(([key]) => key !== calculatorType);
+---
+
+<!-- LEFT SIDEBAR - Quick Tools & Navigation -->
+<aside class="lg:col-span-2 order-2 lg:order-1">
+  <div class="sticky top-8 space-y-6">
+    
+    <!-- Quick Calculator Navigation -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 border">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+        <span class="text-blue-500 mr-2">🧮</span>
+        Quick Calculators
+      </h3>
+      <nav class="space-y-2">
+        {otherCalculators.slice(0, 5).map(([key, calc]) => (
+          <a 
+            href={calc.url} 
+            class="block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 py-1 px-2 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+            title={calc.desc}
+          >
+            {calc.title}
+          </a>
+        ))}
+        <a 
+          href="/tools/" 
+          class="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 py-1 px-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+        >
+          → All Calculators
+        </a>
+      </nav>
+    </div>
+
+    <!-- Related Articles -->
+    {currentArticles.length > 0 && (
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border border-green-200 dark:border-green-700">
+        <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+          <span class="text-green-500 mr-2">📚</span>
+          Related Guides
+        </h3>
+        <div class="space-y-3">
+          {currentArticles.map(article => (
+            <div class="border-b border-green-200/50 dark:border-green-700/50 pb-2 last:border-b-0">
+              <a 
+                href={article.url}
+                class="block text-sm font-medium text-gray-900 dark:text-white hover:text-green-700 dark:hover:text-green-300 transition-colors"
+              >
+                {article.title}
+              </a>
+              <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">{article.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- State Insurance Guides -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-700">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+        <span class="text-blue-500 mr-2">📍</span>
+        State Insurance Guides
+      </h3>
+      <div class="space-y-2">
+        {stateGuides.map(guide => (
+          <a 
+            href={guide.url}
+            class="flex items-center justify-between text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 py-1 px-2 rounded hover:bg-blue-100/50 dark:hover:bg-blue-800/20 transition-colors"
+          >
+            <span>{guide.name}</span>
+            <span class="text-xs bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-200 px-1.5 py-0.5 rounded">{guide.state}</span>
+          </a>
+        ))}
+        <a 
+          href="/states/" 
+          class="block text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 py-1 px-2 rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+        >
+          → All States
+        </a>
+      </div>
+    </div>
+
+    <!-- Trust Indicators -->
+    <div class="bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-700">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-3 flex items-center">
+        <span class="text-yellow-500 mr-2">🏆</span>
+        Why Choose Sezarr
+      </h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex items-start space-x-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <div>
+            <div class="font-medium text-gray-900 dark:text-white">Live Rate Data</div>
+            <div class="text-gray-600 dark:text-gray-400 text-xs">Real-time insurance quotes</div>
+          </div>
+        </div>
+        <div class="flex items-start space-x-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <div>
+            <div class="font-medium text-gray-900 dark:text-white">Expert Reviewed</div>
+            <div class="text-gray-600 dark:text-gray-400 text-xs">Licensed insurance professionals</div>
+          </div>
+        </div>
+        <div class="flex items-start space-x-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <div>
+            <div class="font-medium text-gray-900 dark:text-white">Always Free</div>
+            <div class="text-gray-600 dark:text-gray-400 text-xs">No hidden fees or charges</div>
+          </div>
+        </div>
+        <div class="flex items-start space-x-2">
+          <span class="text-green-500 mt-0.5">✓</span>
+          <div>
+            <div class="font-medium text-gray-900 dark:text-white">Privacy Protected</div>
+            <div class="text-gray-600 dark:text-gray-400 text-xs">Secure & confidential</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>
