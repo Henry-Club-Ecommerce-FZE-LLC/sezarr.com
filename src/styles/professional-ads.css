@@ -1,0 +1,202 @@
+/* Professional Ad Integration Styles */
+/* These styles ensure ads look professional and integrate well with the site's design */
+
+:root {
+  /* Ad-specific color variables */
+  --ad-bg: var(--bg-primary);
+  --ad-border: var(--border-color);
+  --ad-text: var(--text-muted);
+  --ad-hover-shadow: var(--shadow-medium);
+  --ad-label-color: var(--text-muted);
+}
+
+/* Professional Ad Sections */
+.professional-ad-section {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.professional-ad-container {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+}
+
+/* Ad Block Base Styles */
+.professional-ad-block {
+  background: var(--ad-bg);
+  border: 1px solid var(--ad-border);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: var(--shadow-small);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.professional-ad-block::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.professional-ad-block:hover::before {
+  left: 100%;
+}
+
+.professional-ad-block:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ad-hover-shadow);
+  border-color: var(--brand-300);
+}
+
+/* Specific Ad Type Styles */
+.hero-ad {
+  max-width: 728px;
+  min-height: 90px;
+  margin: 0 auto;
+}
+
+.calculator-ad {
+  width: 336px;
+  height: 280px;
+  max-width: 100%;
+}
+
+.content-ad {
+  max-width: 728px;
+  height: 90px;
+  margin: 0 auto;
+}
+
+/* Ad Labels */
+.professional-ad-section > div > p {
+  color: var(--ad-label-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+/* Ad responsiveness */
+@media (max-width: 768px) {
+  .professional-ad-container {
+    padding: 0 1rem;
+  }
+  
+  .professional-ad-block {
+    max-width: 100%;
+    min-width: 280px;
+  }
+  
+  .hero-ad {
+    max-width: 100%;
+    min-height: 250px;
+  }
+  
+  .calculator-ad {
+    width: 100%;
+    max-width: 336px;
+    height: 280px;
+  }
+  
+  .content-ad {
+    max-width: 100%;
+    height: auto;
+    min-height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .professional-ad-block {
+    border-radius: 8px;
+    padding: 0.75rem;
+  }
+  
+  .hero-ad {
+    min-height: 200px;
+  }
+}
+
+/* Dark theme specific adjustments */
+[data-theme="dark"] .professional-ad-block {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .professional-ad-block:hover {
+  border-color: var(--brand-400);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .professional-ad-block {
+    border-width: 2px;
+    border-color: var(--text-primary);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .professional-ad-block,
+  .professional-ad-container,
+  .professional-ad-section {
+    transition: none;
+  }
+  
+  .professional-ad-block::before {
+    display: none;
+  }
+  
+  .professional-ad-block:hover {
+    transform: none;
+  }
+}
+
+/* Ad loading states */
+.professional-ad-block:empty {
+  background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
+  background-size: 200% 100%;
+  animation: adLoading 2s ease-in-out infinite;
+}
+
+@keyframes adLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Accessibility improvements */
+.professional-ad-section[aria-label]::before {
+  content: attr(aria-label);
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Focus management for ad containers */
+.professional-ad-block:focus-within {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+}
+
+/* Print styles - hide ads in print */
+@media print {
+  .professional-ad-section,
+  .professional-ad-container,
+  .professional-ad-block {
+    display: none !important;
+  }
+}
